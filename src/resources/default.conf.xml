@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config>
+    <defaultMode>Demo mode</defaultMode>
+    <bluetoothSupport>Yes</bluetoothSupport>
+    <antSupport>Yes</antSupport>
+    <scanDevicesOnStartup>No</scanDevicesOnStartup>
+    <remoteDebugger>No</remoteDebugger>
+    <rdIP>10.10.10.10</rdIP>
+    <rdPort>8888</rdPort>
+</config>
