@@ -49,6 +49,7 @@ class TextWriter(IWriter):
         self.rr_values.append(rr)
 
     def close_writer(self):
+        self.logger.debug("Writing all rr values")
         with open(self.RRFile, "w") as f:
             for rr in self.rr_values:
                 f.write(str(rr) + "\n")

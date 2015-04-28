@@ -47,5 +47,6 @@ def paint(rr_file, tag_file):
 
     plt.ylabel('Heart rate (bpm)')
     plt.xlabel('Time (s)')
+    plt.ylim(ymin=min(min(y) - 10, 40), ymax=max(max(y) + 10, 150))
     plt.legend()
     plt.show()

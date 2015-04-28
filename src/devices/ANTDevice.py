@@ -6,6 +6,7 @@ from wx import PostEvent
 
 from ant.core import event
 from ant.core.message import *
+
 from devices.IDevice import IDevice
 from facade.ANTManager import ANTManager
 from Utils import run_in_thread
@@ -16,6 +17,7 @@ class ANTDevice(IDevice):
     def __init__(self):
         self.callback = None
         self.msg = None
+        self.end_adquisition = False
         self.ended_adquisition = False
         self.results_writed = False
         self.manager = ANTManager()
@@ -41,13 +43,16 @@ class ANTDevice(IDevice):
     def begin_adquisition(self, writer):
         if not self.manager.antnode.evm.running:
             self.manager.antnode.evm.start()
+            self.manager.antnode.evm.callbacks = set()
         self.callback = AdquisitionCallback(self, writer)
         self.manager.channel.registerCallback(self.callback)
 
     def finish_adquisition(self):
+        self.end_adquisition = True
+        while not self.ended_adquisition:
+            time.sleep(0.1)
         self.manager.antnode.evm.removeCallback(self.callback)
         self.manager.antnode.evm.stop()
-        self.ended_adquisition = True
 
 
 class AdquisitionCallback(event.EventCallback):
@@ -55,6 +60,7 @@ class AdquisitionCallback(event.EventCallback):
         self.device = device
         self.writer = writer
         self.hb_count = 0
+        self.previous_beat_time = -1
 
     def process(self, msg):
         print msg
@@ -62,10 +68,11 @@ class AdquisitionCallback(event.EventCallback):
         if isinstance(msg, ChannelBroadcastDataMessage):
             print "Ended adquisition: {0}".format(self.device.ended_adquisition)
             print "Results writed: {0}".format(self.device.results_writed)
-            if self.device.ended_adquisition:
+            if self.device.end_adquisition:
                 if not self.device.results_writed:
                     self.writer.close_writer()
                     self.device.results_writed = True
+                    self.device.ended_adquisition = True
                     return
             else:
                 unpacked_message = ANTManager.unpack_broadcast_message(msg)
@@ -78,9 +85,31 @@ class AdquisitionCallback(event.EventCallback):
                     print "self.hb_count = {0}".format(self.hb_count)
                     print "unpacked_message.heartbeat_count = {0}".format(unpacked_message.heartbeat_count)
                     if unpacked_message.heartbeat_count - self.hb_count > 0:
-                        rr = (unpacked_message.actual_beat_time - unpacked_message.previous_beat_time) * 1000 / 1024
+                        if unpacked_message.heartbeat_count - self.hb_count > 1 and self.previous_beat_time != -1:
+                            act = unpacked_message.previous_beat_time
+                            prev = self.previous_beat_time
+                            if act - prev < 0:
+                                rr = (65535 - prev + act) * 1000 / 1024
+                            else:
+                                rr = (act - prev) * 1000 / 1024
+                            self.writer.write_rr_value(rr)
+                            self.previous_beat_time = unpacked_message.previous_beat_time
+                        if self.previous_beat_time == -1:
+                            prev = unpacked_message.previous_beat_time
+                        else:
+                            prev = self.previous_beat_time
+                        act = unpacked_message.actual_beat_time
+                        if act - prev < 0:
+                            rr = (65535 - prev + act) * 1000 / 1024
+                        else:
+                            rr = (act - prev) * 1000 / 1024
+                        self.previous_beat_time = act
                         self.hb_count = unpacked_message.heartbeat_count
                         self.writer.write_rr_value(rr)
+                elif "{0:b}".format(unpacked_message.page_byte).endswith("000"):
+                    print "Page 0!!!!!!!!"
+                    print "Actual beat time: {0}".format(unpacked_message.actual_beat_time)
+                    print "HeartBeat count: {0}".format(unpacked_message.heartbeat_count)
 
 
 class TestCallback(event.EventCallback):

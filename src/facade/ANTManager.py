@@ -7,14 +7,13 @@ from collections import namedtuple
 
 import usb.core
 import usb.util
-
 from ant.core.node import Node, NetworkKey
 from ant.core.exceptions import DriverError, NodeError
 from ant.core import driver, event
-from ant.core.message import ChannelBroadcastDataMessage
+from ant.core.message import ChannelBroadcastDataMessage, MessageError
 from ant.core.constants import CHANNEL_TYPE_TWOWAY_RECEIVE, TIMEOUT_NEVER
+
 from Utils import HostDownError, Singleton
-from devices.ProxyDevice import ProxyDevice
 from logger import Logger
 from config import ant_lookup_timeout, ant_SERIAL, ant_NETKEY
 
@@ -28,45 +27,61 @@ class ANTManager:
         self.channel = None
         self.callback = None
         self.device_found = False
-        self.channel_opened = False
 
-    def open_channel(self):
-        if not self.channel_opened:
-            try:
-                # Initialize driver
-                stick = driver.USB2Driver(ant_SERIAL)
-                self.antnode = Node(stick)
-                self.antnode.start()
-                # Setup channel
-                key = NetworkKey('N:ANT+', ant_NETKEY)
-                self.antnode.setNetworkKey(0, key)
-                self.channel = self.antnode.getFreeChannel()
-                self.channel.name = 'C:HRM'
-                self.channel.assign('N:ANT+', CHANNEL_TYPE_TWOWAY_RECEIVE)
-                self.channel.setID(120, 0, 0)
-                self.channel.setSearchTimeout(TIMEOUT_NEVER)
-                self.channel.setPeriod(8070)
-                self.channel.setFrequency(57)
-                self.channel.open()
-                self.logger.debug("ANT channel opened")
-                self.channel_opened = True
+    def open_channel(self, trials=1):
+        try:
+            self.logger.debug("Trying to open a channel")
+            # Initialize driver
+            stick = driver.USB2Driver(ant_SERIAL)
+            self.antnode = Node(stick)
+            self.antnode.start()
+            # Setup channel
+            key = NetworkKey('N:ANT+', ant_NETKEY)
+            self.antnode.setNetworkKey(0, key)
+            self.channel = self.antnode.getFreeChannel()
+            self.channel.name = 'C:HRM'
+            self.channel.assign('N:ANT+', CHANNEL_TYPE_TWOWAY_RECEIVE)
+            self.channel.setID(120, 0, 0)
+            self.channel.setSearchTimeout(TIMEOUT_NEVER)
+            self.channel.setPeriod(8070)
+            self.channel.setFrequency(57)
+            self.channel.open()
+            self.logger.debug("ANT channel opened")
 
-            except DriverError:
-                raise HostDownError("ANT adapter not found")
+        except DriverError:
+            raise HostDownError("ANT adapter not found")
 
-            except usb.core.USBError:
-                raise HostDownError("ANT adapter busy")
+        except usb.core.USBError:
+            self.logger.warning("Ant adapter is busy. Resetting...")
+            self._reset_stick()
+            if trials == 2:
+                raise HostDownError("Ant adapter is busy")
+            else:
+                trials += 1
+                self.open_channel()
 
-            except NodeError:
-                raise HostDownError("Stick connection timeout\nPlease unplug the adapter and plug it back")
+        except NodeError:
+            self.logger.warning("Ant stick timeout. Retrying...")
+            self._reset_stick()
+            if trials == 2:
+                raise HostDownError("Ant stick timeout.\nPlease unplug stick and plug it back")
+            else:
+                trials += 1
+                self.open_channel()
 
-        else:
-            self.logger.info("Channel already opened")
+    @staticmethod
+    def _reset_stick():
+        dev = usb.core.find(idVendor=0x0fcf, idProduct=0x1008)
+        dev.reset()
 
     def close_channel(self):
-        self.channel.close()
-        self.channel.unassign()
-        self.antnode.stop()
+        try:
+            self.logger.debug("Closing channel")
+            self.channel.close()
+            self.channel.unassign()
+            self.antnode.stop()
+        except MessageError:
+            self._reset_stick()
 
     def get_nearby_devices(self):
         self.open_channel()
@@ -83,9 +98,11 @@ class ANTManager:
 
         self.antnode.evm.removeCallback(self.callback)
         self.antnode.evm.stop()
+        self.close_channel()
 
         if self.device_found:
-            return [ProxyDevice(name="ANT+ HR Band", dev_type="ANT+", mac="No mac")]
+            device = namedtuple("device", ["name", "type", "mac"])
+            return [device(name="ANT+ HR Band", type="ANT+", mac="No mac")]
         else:
             self.logger.info("Search timeout")
             return []
