@@ -6,6 +6,7 @@ Window template for insert and modify activities
 """
 
 from abc import abstractmethod
+
 import wx
 
 from view.wxUtils import ConfirmDialog, InfoDialog
@@ -15,11 +16,11 @@ from config import BACKGROUND_COLOUR, MAIN_ICON
 class InsModTemplate(wx.Frame):
     """
     Window template for insert and modify activities
-    :param size: Size of the window, as a tuple (Widht, Height). Must be in pixels
+    :param size: Size of the window, as a tuple (Width, Height). Must be in pixels
     :param parent: Main frame of application
     :param control: Controller of the application
     :param insmod_tag_window_type: Subclass of wx.Frame that performs the insert of modify of a specific tag
-    :param activity_id: If the frame is open to modify an activiy, this parameter is the id of that activity
+    :param activity_id: If the frame is open to modify an activity, this parameter is the id of that activity
     :param title: Title of the window
     If the frame is open to insert a new activity, this parameter gets the value of -1
     """
@@ -121,7 +122,7 @@ class InsModTemplate(wx.Frame):
     def refresh_tags(self):
         pass
 
-    def OnAddTag(self, e):
+    def OnAddTag(self, _):
         self.insmod_tag_window_class(self, self.controller)
 
     def AddTag(self, tag):
@@ -132,7 +133,7 @@ class InsModTemplate(wx.Frame):
         self.tag_ctrl.ModifyTag(pos, tag)
         self.refresh_tags()
 
-    def OnRemoveTag(self, e):
+    def OnRemoveTag(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             result = ConfirmDialog("Are you sure to delete that tag?", "Confirm delete operation").get_result()
@@ -143,7 +144,7 @@ class InsModTemplate(wx.Frame):
         else:
             InfoDialog("You must select a tag").show()
 
-    def OnTagUp(self, e):
+    def OnTagUp(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.tag_ctrl.UpTag(selected_row)
@@ -151,7 +152,7 @@ class InsModTemplate(wx.Frame):
         else:
             InfoDialog("You must select a tag").show()
 
-    def OnTagDown(self, e):
+    def OnTagDown(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.tag_ctrl.DownTag(selected_row)
@@ -159,7 +160,7 @@ class InsModTemplate(wx.Frame):
         else:
             InfoDialog("You must select a tag").show()
 
-    def OnEditTag(self, e):
+    def OnEditTag(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.insmod_tag_window_class(self, self.tag_ctrl, selected_row)
@@ -167,10 +168,10 @@ class InsModTemplate(wx.Frame):
             InfoDialog("You must select a tag").show()
 
     @abstractmethod
-    def OnSave(self, e):
+    def OnSave(self, _):
         pass
 
-    def OnCancel(self, e):
+    def OnCancel(self, _):
         self.Destroy()
 
 

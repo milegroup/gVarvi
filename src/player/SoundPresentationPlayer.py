@@ -2,20 +2,21 @@
 __author__ = 'nico'
 
 import os
-import pygame
 import time
 from random import shuffle
 import sys
 from datetime import datetime
 
-from player.Player import AbstractPlayer
+import pygame
+
+from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE, EXIT_FAIL_CODE
 from Utils import run_in_thread, get_sound_length
 from logger import Logger
 
 
-class SoundPresentationPlayer(AbstractPlayer):
+class SoundPresentationPlayer(Player):
     def __init__(self, random, tags):
         self.logger = Logger()
 

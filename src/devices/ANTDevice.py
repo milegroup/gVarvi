@@ -2,11 +2,11 @@
 __author__ = 'nico'
 
 import time
+
 from wx import PostEvent
 
 from ant.core import event
 from ant.core.message import *
-
 from devices.IDevice import IDevice
 from facade.ANTManager import ANTManager
 from Utils import run_in_thread
@@ -17,9 +17,9 @@ class ANTDevice(IDevice):
     def __init__(self):
         self.callback = None
         self.msg = None
-        self.end_adquisition = False
-        self.ended_adquisition = False
-        self.results_writed = False
+        self.end_acquisition = False
+        self.ended_acquisition = False
+        self.results_written = False
         self.manager = ANTManager()
 
     def connect(self, *args):
@@ -40,22 +40,22 @@ class ANTDevice(IDevice):
         self.manager.antnode.evm.stop()
 
     @run_in_thread
-    def begin_adquisition(self, writer):
+    def begin_acquisition(self, writer):
         if not self.manager.antnode.evm.running:
             self.manager.antnode.evm.start()
             self.manager.antnode.evm.callbacks = set()
-        self.callback = AdquisitionCallback(self, writer)
+        self.callback = AcquisitionCallback(self, writer)
         self.manager.channel.registerCallback(self.callback)
 
-    def finish_adquisition(self):
-        self.end_adquisition = True
-        while not self.ended_adquisition:
+    def finish_acquisition(self):
+        self.end_acquisition = True
+        while not self.ended_acquisition:
             time.sleep(0.1)
         self.manager.antnode.evm.removeCallback(self.callback)
         self.manager.antnode.evm.stop()
 
 
-class AdquisitionCallback(event.EventCallback):
+class AcquisitionCallback(event.EventCallback):
     def __init__(self, device, writer):
         self.device = device
         self.writer = writer
@@ -66,13 +66,10 @@ class AdquisitionCallback(event.EventCallback):
         print msg
 
         if isinstance(msg, ChannelBroadcastDataMessage):
-            print "Ended adquisition: {0}".format(self.device.ended_adquisition)
-            print "Results writed: {0}".format(self.device.results_writed)
             if self.device.end_adquisition:
-                if not self.device.results_writed:
+                if not self.device.results_written:
                     self.writer.close_writer()
-                    self.device.results_writed = True
-                    self.device.ended_adquisition = True
+                    self.device.results_written = True
                     return
             else:
                 unpacked_message = ANTManager.unpack_broadcast_message(msg)
@@ -84,6 +81,7 @@ class AdquisitionCallback(event.EventCallback):
                     print "Actual: {0}".format(unpacked_message.actual_beat_time)
                     print "self.hb_count = {0}".format(self.hb_count)
                     print "unpacked_message.heartbeat_count = {0}".format(unpacked_message.heartbeat_count)
+                    # If message carries a new beat
                     if unpacked_message.heartbeat_count - self.hb_count > 0:
                         if unpacked_message.heartbeat_count - self.hb_count > 1 and self.previous_beat_time != -1:
                             act = unpacked_message.previous_beat_time

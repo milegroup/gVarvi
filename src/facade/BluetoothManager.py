@@ -1,5 +1,6 @@
 # coding=utf-8
 from collections import namedtuple
+
 import bluetooth
 
 from config import bt_lookup_time
@@ -7,7 +8,8 @@ from Utils import HostDownError
 
 
 class BluetoothManager(object):
-    def get_nearby_devices(self):
+    @staticmethod
+    def get_nearby_devices():
         try:
             plain_list = bluetooth.discover_devices(duration=bt_lookup_time, lookup_names=True)
             device = namedtuple("device", ["name", "type", "mac"])

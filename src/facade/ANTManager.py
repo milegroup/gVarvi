@@ -3,16 +3,17 @@
 __author__ = 'nico'
 
 import time
+import sys
 from collections import namedtuple
 
 import usb.core
 import usb.util
+
 from ant.core.node import Node, NetworkKey
 from ant.core.exceptions import DriverError, NodeError
 from ant.core import driver, event
 from ant.core.message import ChannelBroadcastDataMessage, MessageError
 from ant.core.constants import CHANNEL_TYPE_TWOWAY_RECEIVE, TIMEOUT_NEVER
-
 from Utils import HostDownError, Singleton
 from logger import Logger
 from config import ant_lookup_timeout, ant_SERIAL, ant_NETKEY
@@ -52,22 +53,28 @@ class ANTManager:
             raise HostDownError("ANT adapter not found")
 
         except usb.core.USBError:
-            self.logger.warning("Ant adapter is busy. Resetting...")
-            self._reset_stick()
-            if trials == 2:
-                raise HostDownError("Ant adapter is busy")
+            if sys.platform != "win32":
+                self.logger.warning("Ant adapter is busy. Resetting...")
+                self._reset_stick()
+                if trials == 2:
+                    raise HostDownError("Ant adapter is busy")
+                else:
+                    trials += 1
+                    self.open_channel()
             else:
-                trials += 1
-                self.open_channel()
+                raise HostDownError("Ant adapter busy. Please unplug stick and plug it back")
 
         except NodeError:
-            self.logger.warning("Ant stick timeout. Retrying...")
-            self._reset_stick()
-            if trials == 2:
-                raise HostDownError("Ant stick timeout.\nPlease unplug stick and plug it back")
+            if sys.platform != "win32":
+                self.logger.warning("Ant stick timeout. Retrying...")
+                self._reset_stick()
+                if trials == 2:
+                    raise HostDownError("Ant stick timeout. Please unplug stick and plug it back")
+                else:
+                    trials += 1
+                    self.open_channel()
             else:
-                trials += 1
-                self.open_channel()
+                raise HostDownError("Ant stick timeout. Please unplug stick and plug it back")
 
     @staticmethod
     def _reset_stick():
@@ -81,7 +88,8 @@ class ANTManager:
             self.channel.unassign()
             self.antnode.stop()
         except MessageError:
-            self._reset_stick()
+            if not sys.platform == "win32":
+                self._reset_stick()
 
     def get_nearby_devices(self):
         self.open_channel()

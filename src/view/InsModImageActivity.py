@@ -2,6 +2,7 @@
 __author__ = 'nico'
 
 import os
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -90,9 +91,6 @@ class InsModImageActivity(InsModTemplate):
             self.Destroy()
         else:
             InfoDialog("Please, fill all fields\nAlso remember to add at least one tag").show()
-
-
-
 
 
 class InsModImageTag(wx.Frame):

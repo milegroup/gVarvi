@@ -2,6 +2,7 @@
 __author__ = 'nico'
 
 import os
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -65,7 +66,7 @@ class InsModSoundActivity(InsModTemplate):
         self.tags_grid.InsertColumn(3, 'Images', ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(3, -3)
 
-    def OnSave(self, e):
+    def OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         if self.randomCheckBox.IsChecked():
@@ -199,7 +200,7 @@ class InsModSoundTag(wx.Frame):
 
         self.Show()
 
-    def OnChangePath(self, e):
+    def OnChangePath(self, _):
 
         wildcard = "Audio source (*.mp3; *wav)|*.mp3;*.wav"
 
@@ -214,7 +215,7 @@ class InsModSoundTag(wx.Frame):
             self.path_text_ctrl.SetValue(path)
         dlg.Destroy()
 
-    def OnAddImage(self, e):
+    def OnAddImage(self, _):
         wildcard = "Image source (*.jpg; *.jpeg; *png)|*.jpg;*.JPG;*.jpeg;*.JPEG;*.png;*.PNG"
 
         dlg = wx.FileDialog(
@@ -229,26 +230,26 @@ class InsModSoundTag(wx.Frame):
                 self.images_listbox.Append(path)
         dlg.Destroy()
 
-    def OnRemoveImage(self, e):
+    def OnRemoveImage(self, _):
         sel = self.images_listbox.GetSelection()
         if sel != -1:
             self.images_listbox.Delete(sel)
 
-    def OnImageUp(self, e):
+    def OnImageUp(self, _):
         sel_pos = self.images_listbox.GetSelection()
         if sel_pos > 0:
             sel_path = self.images_listbox.GetStringSelection()
             self.images_listbox.Delete(sel_pos)
             self.images_listbox.Insert(sel_path, sel_pos - 1)
 
-    def OnImageDown(self, e):
+    def OnImageDown(self, _):
         sel_pos = self.images_listbox.GetSelection()
         if sel_pos < self.images_listbox.GetCount() - 1 and sel_pos != -1:
             sel_path = self.images_listbox.GetStringSelection()
             self.images_listbox.Delete(sel_pos)
             self.images_listbox.Insert(sel_path, sel_pos + 1)
 
-    def OnSave(self, e):
+    def OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
@@ -279,6 +280,5 @@ class InsModSoundTag(wx.Frame):
         else:
             InfoDialog("Please, don't forget to fill all fields with valid data").show()
 
-
-    def OnCancel(self, e):
+    def OnCancel(self, _):
         self.Destroy()

@@ -40,11 +40,9 @@ class TextWriter(IWriter):
     def write_tag_value(self, name, beg, end):
         with open(self.tagFile, "a") as f:
             line = "%s\t%s\t%.3f" % (str(timedelta(seconds=beg)), name.replace(' ', '_'), end - beg)
-            #self.logger.debug("Writing tag item:\n\t{0}".format(line))
             f.write(line + "\n")
 
     def write_rr_value(self, rr):
-        #self.logger.debug("RR value:\n\t{0}".format(rr))
         print "Writing {0} bpm".format(rr)
         self.rr_values.append(rr)
 

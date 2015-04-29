@@ -1,18 +1,19 @@
 # coding=utf-8
 __author__ = 'nico'
 
-import pygame
-from pygame.locals import Rect
 from random import shuffle
 from datetime import datetime
 
-from player.Player import AbstractPlayer
+import pygame
+from pygame.locals import Rect
+
+from player.Player import Player
 from config import FRAMERATE
 from config import ABORT_KEY
 from config import EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 
 
-class VideoPresentationPlayer(AbstractPlayer):
+class VideoPresentationPlayer(Player):
     def __init__(self, random, tags):
         self.random = random
         self.tags = tags

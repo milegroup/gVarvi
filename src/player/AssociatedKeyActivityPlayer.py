@@ -3,15 +3,16 @@ __author__ = 'nico'
 
 from collections import OrderedDict
 from datetime import datetime
+
 import pygame
 
-from player.Player import AbstractPlayer
+from player.Player import Player
 from config import ABORT_KEY, FINISH_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 from config import FRAMERATE
 from config import pygame_wx_evt_map
 
 
-class AssociatedKeyActivityPlayer(AbstractPlayer):
+class AssociatedKeyActivityPlayer(Player):
     def __init__(self, tags):
         self.dict_tags = OrderedDict()
         for tag in tags:

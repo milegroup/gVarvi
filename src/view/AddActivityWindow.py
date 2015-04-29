@@ -6,7 +6,7 @@ import wx
 from InsModImageActivity import InsModImageActivity
 from InsModSoundActivity import InsModSoundActivity
 from InsModVideoActivity import InsModVideoActivity
-from view import InsModAssociatedKey
+from InsModAssociatedKey import InsModAssociatedKey
 from InsModManualDefined import InsModManualDefined
 from config import MAIN_ICON, IMAGE_ICON, SOUND_ICON,\
     VIDEO_ICON, MANUAL_ICON, KEY_ICON
@@ -77,25 +77,25 @@ class AddActivityWindow(wx.Frame):
         main_sizer.Add(buttons_sizer, proportion=1, flag=wx.CENTER | wx.BOTTOM)
         self.SetSizer(main_sizer)
 
-    def OnCancel(self, e):
+    def OnCancel(self, _):
         self.Destroy()
 
-    def OnImageActivity(self, e):
+    def OnImageActivity(self, _):
         InsModImageActivity(self.parent, self.controller)
         self.Destroy()
 
-    def OnVideoActivity(self, e):
+    def OnVideoActivity(self, _):
         InsModVideoActivity(self.parent, self.controller)
         self.Destroy()
 
-    def OnSoundActivity(self, e):
+    def OnSoundActivity(self, _):
         InsModSoundActivity(self.parent, self.controller)
         self.Destroy()
 
-    def OnManualDefinedActivity(self, e):
+    def OnManualDefinedActivity(self, _):
         InsModManualDefined(self.parent, self.controller)
         self.Destroy()
 
-    def OnKeyAssociatedActivity(self, e):
+    def OnKeyAssociatedActivity(self, _):
         InsModAssociatedKey(self.parent, self.controller)
         self.Destroy()

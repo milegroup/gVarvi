@@ -2,8 +2,9 @@
 
 import sys
 import os
-from wx import PostEvent
 import threading
+
+from wx import PostEvent
 import wx.lib.agw.ultimatelistctrl as ULC
 
 from logger import Logger
@@ -11,7 +12,7 @@ from ConfWindow import *
 from wxUtils import InfoDialog, ErrorDialog, ConfirmDialog
 from config import ACTIVITIES_LIST_ID, DEVICES_LIST_ID, GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE
-from Utils import MissingFiles, AbortedAdquisiton, FailedAdquisition, HostDownError
+from Utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError
 from Utils import ResultEvent, EVT_RESULT_ID
 from view.DebugWindow import DebugWindow
 from view.AddActivityWindow import AddActivityWindow
@@ -53,9 +54,7 @@ class MainWindow(wx.Frame):
 
         self.build_menu()
 
-
         # ----- Begin of activities box -----
-
 
         self.activities_grid_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.VERTICAL)
 
@@ -103,26 +102,26 @@ class MainWindow(wx.Frame):
 
         # ----- Begin of control buttons -----
 
-        externalButtonsSizer = wx.BoxSizer(wx.VERTICAL)
-        externalButtonsSizer.Add(wx.StaticLine(self, wx.LI_HORIZONTAL), wx.ALIGN_CENTER | wx.BOTTOM, border=50)
-        controlButtonsSizer = wx.StaticBoxSizer(wx.StaticBox(self, label="Global options"), wx.HORIZONTAL)
+        external_buttons_sizer = wx.BoxSizer(wx.VERTICAL)
+        external_buttons_sizer.Add(wx.StaticLine(self, wx.LI_HORIZONTAL), wx.ALIGN_CENTER | wx.BOTTOM, border=50)
+        control_buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label="Global options"), wx.HORIZONTAL)
 
-        buttonQuit = wx.Button(self, -1, label="Quit")
-        controlButtonsSizer.Add(buttonQuit, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnClose, id=buttonQuit.GetId())
-        buttonQuit.SetToolTip(wx.ToolTip("Click to quit using VARVI"))
+        button_quit = wx.Button(self, -1, label="Quit")
+        control_buttons_sizer.Add(button_quit, flag=wx.ALL, border=10)
+        self.Bind(wx.EVT_BUTTON, self.OnClose, id=button_quit.GetId())
+        button_quit.SetToolTip(wx.ToolTip("Click to quit using VARVI"))
 
-        buttonAbout = wx.Button(self, -1, label="About")
-        controlButtonsSizer.Add(buttonAbout, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnAbout, id=buttonAbout.GetId())
-        buttonAbout.SetToolTip(wx.ToolTip("Click to see information about VARVI"))
+        button_about = wx.Button(self, -1, label="About")
+        control_buttons_sizer.Add(button_about, flag=wx.ALL, border=10)
+        self.Bind(wx.EVT_BUTTON, self.OnAbout, id=button_about.GetId())
+        button_about.SetToolTip(wx.ToolTip("Click to see information about VARVI"))
 
-        buttonConfig = wx.Button(self, -1, label="Config")
-        controlButtonsSizer.Add(buttonConfig, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnPreferences, id=buttonConfig.GetId())
-        buttonConfig.SetToolTip(wx.ToolTip("Click to open configuration window"))
+        button_config = wx.Button(self, -1, label="Config")
+        control_buttons_sizer.Add(button_config, flag=wx.ALL, border=10)
+        self.Bind(wx.EVT_BUTTON, self.OnPreferences, id=button_config.GetId())
+        button_config.SetToolTip(wx.ToolTip("Click to open configuration window"))
 
-        externalButtonsSizer.Add(controlButtonsSizer, flag=wx.ALIGN_CENTER | wx.BOTTOM)
+        external_buttons_sizer.Add(control_buttons_sizer, flag=wx.ALIGN_CENTER | wx.BOTTOM)
 
         # ----- End of control buttons -----
 
@@ -162,10 +161,10 @@ class MainWindow(wx.Frame):
 
         # ----- End of Connected Devices List -----
 
-        # ----- Begin of Start Adquisition Box ----
+        # ----- Begin of Start Acquisition Box ----
 
-        start_adquisition_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label='Adquisition Info'), wx.VERTICAL)
-        start_adquisition_sizer.AddSpacer(15)
+        start_acquisition_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label='Acquisition Info'), wx.VERTICAL)
+        start_acquisition_sizer.AddSpacer(15)
 
         bold_font = wx.Font(12, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         selected_items_sizer = wx.FlexGridSizer(cols=2, hgap=15, vgap=10)
@@ -178,17 +177,17 @@ class MainWindow(wx.Frame):
         selected_items_sizer.AddMany([selected_activity_label, self.selected_activity_text,
                                       selected_device_label, self.selected_device_text])
 
-        start_adquisition_sizer.Add(selected_items_sizer, proportion=1, flag=wx.LEFT, border=20)
-        start_adquisition_sizer.AddSpacer(15)
-        self.play_button = wx.Button(self, -1, label='Begin adquisition')
+        start_acquisition_sizer.Add(selected_items_sizer, proportion=1, flag=wx.LEFT, border=20)
+        start_acquisition_sizer.AddSpacer(15)
+        self.play_button = wx.Button(self, -1, label='Begin acquisition')
         self.play_button.MinSize = (200, 20)
         self.play_button.SetBackgroundColour("#A7DE9E")
-        self.play_button.SetToolTip(wx.ToolTip("Run selected activity and begin adquisition"))
-        self.Bind(wx.EVT_BUTTON, self.OnBeginAdquisition, id=self.play_button.GetId())
-        start_adquisition_sizer.Add(self.play_button, proportion=1, flag=wx.ALIGN_CENTER)
-        start_adquisition_sizer.AddSpacer(15)
+        self.play_button.SetToolTip(wx.ToolTip("Run selected activity and begin acquisition"))
+        self.Bind(wx.EVT_BUTTON, self.OnBeginAcquisition, id=self.play_button.GetId())
+        start_acquisition_sizer.Add(self.play_button, proportion=1, flag=wx.ALIGN_CENTER)
+        start_acquisition_sizer.AddSpacer(15)
 
-        # ----- End of Start Adquisition Box ----
+        # ----- End of Start Acquisition Box ----
 
         self.top_sizer.AddSpacer(20)
         self.top_sizer.Add(self.activities_grid_sizer, 1, wx.TOP | wx.EXPAND, border=15)
@@ -197,9 +196,9 @@ class MainWindow(wx.Frame):
         self.top_sizer.AddSpacer(20)
 
         self.bottom_sizer.AddSpacer(20)
-        self.bottom_sizer.Add(externalButtonsSizer, 1, wx.BOTTOM | wx.EXPAND, border=15)
+        self.bottom_sizer.Add(external_buttons_sizer, 1, wx.BOTTOM | wx.EXPAND, border=15)
         self.bottom_sizer.AddSpacer(20)
-        self.bottom_sizer.Add(start_adquisition_sizer, 1, wx.BOTTOM | wx.EXPAND, border=15)
+        self.bottom_sizer.Add(start_acquisition_sizer, 1, wx.BOTTOM | wx.EXPAND, border=15)
         self.bottom_sizer.AddSpacer(20)
 
         self.main_sizer.Add(self.top_sizer, proportion=1, flag=wx.EXPAND)
@@ -239,7 +238,7 @@ class MainWindow(wx.Frame):
         self.SetAcceleratorTable(accel_tbl)
 
 
-    def OnSelectActivity(self, e):
+    def OnSelectActivity(self, _):
         name_col = 1
         selected_row = self.activities_grid.GetFirstSelected()
         name = self.activities_grid.GetItem(selected_row, name_col).GetText()
@@ -248,17 +247,17 @@ class MainWindow(wx.Frame):
         else:
             self.selected_activity_text.SetLabel(name)
 
-    def OnSelectDevice(self, e):
+    def OnSelectDevice(self, _):
         name_col = 0
         selected_row = self.devicesGrid.GetFirstSelected()
         name = self.devicesGrid.GetItem(selected_row, name_col).GetText()
         self.selected_device_text.SetLabel(name)
 
-    def OnAddActivity(self, e):
+    def OnAddActivity(self, _):
         add_activity_window = AddActivityWindow(self, "Insert activity", control=self.controller)
         add_activity_window.Show()
 
-    def OnEditActivity(self, e):
+    def OnEditActivity(self, _):
         if self.is_activity_selected():
             activity_id = self.activities_grid.GetItem(self.activities_grid.GetFirstSelected(), 0).GetText()
             activity = self.controller.get_activity(activity_id)
@@ -273,7 +272,7 @@ class MainWindow(wx.Frame):
         else:
             InfoDialog("You must select an activity").show()
 
-    def OnRemoveActivity(self, e):
+    def OnRemoveActivity(self, _):
         if self.is_activity_selected():
             activity_id = int(self.activities_grid.GetItem(self.activities_grid.GetFirstSelected(), 0).GetText())
             result = ConfirmDialog("Are you sure to delete that activity?", "Confirm delete operation").get_result()
@@ -285,7 +284,7 @@ class MainWindow(wx.Frame):
         else:
             InfoDialog("You must select an activity").show()
 
-    def OnAbout(self, e):
+    def OnAbout(self, _):
         description = """gVARVI is a free software tool developed to perform heart
 rate variability (HRV) analysis in response to different visual stimuli.
 The tool was developed after realizing that
@@ -317,18 +316,15 @@ GNU General Public License for more details."""
 
         wx.AboutBox(info)
 
-    def OnClose(self, e):
+    def OnClose(self, _):
         result = ConfirmDialog("Quitting VARVI\nAre you sure?", "Confirm exit").get_result()
         if result == wx.ID_YES:
             try:
-                # if self.deviceRefreshThread.is_alive():
-                # self.deviceRefreshThread.join()
                 self.Destroy()  # Close the frame.
             except AttributeError:
                 pass
 
-
-    def OnPreferences(self, e):
+    def OnPreferences(self, _):
         conf_window = ConfWindow(self, "Preferences", control=self.controller)
         conf_window.Show()
 
@@ -371,8 +367,7 @@ GNU General Public License for more details."""
             err_message = "Bluetooth error\nCODE: {0}".format(e.message)
             ErrorDialog(err_message).show()
 
-
-    def OnBeginAdquisition(self, e):
+    def OnBeginAcquisition(self, _):
         correct_data = True
         dev_name = None
         dev_dir = None
@@ -407,7 +402,7 @@ GNU General Public License for more details."""
             InfoDialog("You must select an activity and a device").show()
 
         if correct_data:
-            dlg = wx.FileDialog(self, message="Select path and name for this adquisition",
+            dlg = wx.FileDialog(self, message="Select path and name for this acquisition",
                                 defaultDir="",
                                 defaultFile="",
                                 wildcard="All files(*.*)|*.*",
@@ -415,19 +410,18 @@ GNU General Public License for more details."""
             if dlg.ShowModal() == wx.ID_OK:
                 path = dlg.GetPath()
                 try:
-                    self.controller.begin_adquisition(path, activity_id, mode, dev_name, dev_type,
+                    self.controller.begin_acquisition(path, activity_id, mode, dev_name, dev_type,
                                                       dev_dir, output="text")
-                    OnFinishAdquisitonDialog(self, self.controller).Show()
+                    OnFinishAcquisitionDialog(self, self.controller).Show()
 
                 except MissingFiles:
                     ErrorDialog("Some of activity files has been deleted\nCheck them!").show()
-                except AbortedAdquisiton:
+                except AbortedAcquisition:
                     InfoDialog("Activity aborted. Data won't be saved").show()
-                except FailedAdquisition:
-                    ErrorDialog("Adquisition failed. Data will be saved anyway").show()
+                except FailedAcquisition:
+                    ErrorDialog("Acquisition failed. Data will be saved anyway").show()
                 except HostDownError:
                     ErrorDialog("It seems that device is down").show()
-
 
     def refresh_nearby_devices(self):
         self.button_rescan_devices.SetLabel("Searching...")
@@ -436,7 +430,6 @@ GNU General Public License for more details."""
         self.Disable()
         self.Connect(-1, -1, EVT_RESULT_ID, self.OnDeviceSearchFinished)
         return RefreshDevicesThread(self, self.controller)
-
 
     def OnDeviceSearchFinished(self, msg):
         data = msg.data
@@ -454,13 +447,12 @@ GNU General Public License for more details."""
             number_of_devices = len(devices)
 
             self.logger.info("Search finished")
-            self.showScanResult(number_of_devices)
+            self.show_scan_result(number_of_devices)
 
         self.button_rescan_devices.Enable()
         self.Disconnect(-1, -1, EVT_RESULT_ID, self.OnDeviceSearchFinished)
         self.button_rescan_devices.SetLabel("Rescan")
         self.Enable()
-
 
     def is_activity_selected(self):
         return self.activities_grid.GetFirstSelected() != -1
@@ -468,7 +460,7 @@ GNU General Public License for more details."""
     def is_device_selected(self):
         return self.devicesGrid.GetFirstSelected() != -1
 
-    def showScanResult(self, number):
+    def show_scan_result(self, number):
         if number == 0:
             msg = "No device found"
             self.logger.debug(msg)
@@ -476,7 +468,6 @@ GNU General Public License for more details."""
             msg = "{0} device(s) found".format(str(number))
             self.logger.debug(msg)
         InfoDialog(msg).show()
-
 
     def refresh_activities(self):
         self.activities_grid.DeleteAllItems()
@@ -488,9 +479,9 @@ GNU General Public License for more details."""
         self.logger.debug("Activities list updated")
 
 
-class OnFinishAdquisitonDialog(wx.Frame):
+class OnFinishAcquisitionDialog(wx.Frame):
     def __init__(self, parent, controller, *args, **kw):
-        super(OnFinishAdquisitonDialog, self).__init__(parent, *args, **kw)
+        super(OnFinishAcquisitionDialog, self).__init__(parent, *args, **kw)
         self.controller = controller
         pnl = wx.Panel(self)
 
@@ -515,25 +506,25 @@ class OnFinishAdquisitonDialog(wx.Frame):
         main_sizer.AddSpacer(20)
         pnl.SetSizer(main_sizer)
         self.SetSize((300, 200))
-        self.SetTitle('Adquisition finished')
+        self.SetTitle('Acquisition finished')
         self.Centre()
 
-    def OnOK(self, e):
+    def OnOK(self, _):
         self.Destroy()
 
-    def OnGHRV(self, e):
+    def OnGHRV(self, _):
         sysplat = sys.platform
         if sysplat == "linux2":
             sysexec_ghrv = "/usr/bin/gHRV"
             if os.path.isfile(sysexec_ghrv):
-                self.controller.open_gHRV()
+                self.controller.open_ghrv()
                 self.Destroy()
             else:
                 ErrorDialog("gHRV must be installed in the system").show()
         if sysplat == "win32":
             ErrorDialog("This feature is only available for Linux platforms").show()
 
-    def OnPlotResults(self, e):
+    def OnPlotResults(self, _):
         self.controller.plot_results()
         self.Destroy()
 

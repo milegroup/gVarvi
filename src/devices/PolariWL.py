@@ -6,16 +6,18 @@ from wx import PostEvent
 from devices.IDevice import BTAbstractDevice
 from Utils import run_in_thread
 from Utils import ResultEvent
+from logger import Logger
 
 
 class PolariWL(BTAbstractDevice):
     def __init__(self, mac):
         BTAbstractDevice.__init__(self, mac)
+        self.logger = Logger()
         self.socket = None
         self.end_test = False
         self.ended_test = False
-        self.end_adquisition = False
-        self.ended_adquisition = False
+        self.end_acquisition = False
+        self.ended_acquisition = False
         self.correct_data = False
         self.error = False
         self.min_rr = 550
@@ -35,13 +37,13 @@ class PolariWL(BTAbstractDevice):
 
                 chk = int(data3[0:2], 16)
                 if chk + ll != 255:
-                    print "*** ERROR: Package not Ok ***"
+                    self.logger.error("Package not ok")
 
                 test_dict['hr'] = int(data3[6:8], 16)
                 # print "Heart rate:", hr, "bpm"
                 nextbit = 8
 
-                for i in range((ll - 6) / 2):  # No. de valores RR por paquete
+                for i in range((ll - 6) / 2):  # rr values per packet
                     rr1 = int(data3[nextbit:nextbit + 2], 16)
                     rr2 = int(data3[nextbit + 2:nextbit + 4], 16)
                     test_dict['rr'] = (rr1 << 8) | rr2
@@ -49,33 +51,23 @@ class PolariWL(BTAbstractDevice):
                         return
                     PostEvent(notify_window, ResultEvent(test_dict))
 
-                    nextbit = nextbit + 4
+                    nextbit += 4
 
-
-            except ValueError as e:
+            except ValueError:
                 if not self.end_test:  # Exception only works if BT is still connected
-                    print "*** Exception ValueError raised: data not Ok ***"
-                    import traceback, os.path
+                    self.logger.exception("ValueError raised: data not Ok")
+                    import traceback
+                    import os.path
 
                     top = traceback.extract_stack()[-1]
-                    print "Program:", os.path.basename(top[0]), " -  Line:", str(top[1])
-                    print "Data:"
-                    print data1
-                    print data2
-                    print data3
+                    self.logger.debug("Program:", os.path.basename(top[0]), " -  Line:", str(top[1]))
+                    self.logger.debug("Data1: {0}".format(data1))
+                    self.logger.debug("Data2: {0}".format(data2))
+                    self.logger.debug("Data3: {0}".format(data3))
+
                     self.error = True
                 else:
-                    print "*** Warning: ValueError raised at the end of the adquisition"
-
-
-            # except Exception as e:
-            #     print e.message
-            #     import traceback, os.path
-            #
-            #     top = traceback.extract_stack()[-1]
-            #     print "*** Exception:", type(e).__name__, " -  Program:", os.path.basename(top[0]), " -  Line:", str(
-            #         top[1]), "***"
-            #     self.error = True
+                    self.logger.warning("ValueError raised at the end of the acquisition")
 
             if self.end_test:
                 self.ended_test = True
@@ -85,11 +77,11 @@ class PolariWL(BTAbstractDevice):
         self.end_test = True
 
     @run_in_thread
-    def begin_adquisition(self, writer):
-        self.end_adquisition = False
-        self.ended_adquisition = False
+    def begin_acquisition(self, writer):
+        self.end_acquisition = False
+        self.ended_acquisition = False
         self.error = False
-        while not self.end_adquisition:
+        while not self.end_acquisition:
             try:
                 data1 = self.receive(1)
                 data2 = self.receive(1)
@@ -97,68 +89,66 @@ class PolariWL(BTAbstractDevice):
                 data3 = self.receive(ll - 2)
                 chk = int(data3[0:2], 16)
                 if chk + ll != 255:
-                    print "*** ERROR: Package not Ok ***"
+                    self.logger.error("Package not OK")
 
                 seq = int(data3[2:4], 16)
-                print "Package seq:", seq
+                self.logger.debug("Package seq: {0}".format(seq))
 
                 status = int(data3[4:6], 16)
-                print "Package status:", status
+                self.logger.debug("Package status: {0}".format(status))
 
                 hr = int(data3[6:8], 16)
-                print "Heart rate:", hr, "bpm"
+                self.logger.debug("Heart rate: {0} bpm".format(hr))
                 nextbit = 8
 
-                print "Package contains", (ll - 6) / 2, "beats"
+                self.logger.debug("Package contains {0} beats".format((ll - 6) / 2))
 
-                for i in range((ll - 6) / 2):  # No. de valores RR por paquete
+                for i in range((ll - 6) / 2):  # rr values per packet
                     rr1 = int(data3[nextbit:nextbit + 2], 16)
                     rr2 = int(data3[nextbit + 2:nextbit + 4], 16)
                     rr = (rr1 << 8) | rr2
 
-                    print "    RR:", rr, "mseg."
+                    self.logger.debug("RR: {0} mseg".format(rr))
 
                     if rr > self.min_rr and not self.correct_data:
                         self.correct_data = True
 
                     writer.write_rr_value(rr)
 
-                    nextbit = nextbit + 4
+                    nextbit += 4
 
-
-            except ValueError as e:
-                if not self.end_adquisition:  # Exception only works if BT is still connected
-                    print "*** Exception ValueError raised: data not Ok ***"
+            except ValueError:
+                if not self.end_acquisition:  # Exception only works if BT is still connected
+                    self.logger.exception("ValueError raised: data not Ok")
                     import traceback
                     import os.path
 
                     top = traceback.extract_stack()[-1]
-                    print "Program:", os.path.basename(top[0]), " -  Line:", str(top[1])
-                    print "Data:"
-                    print data1
-                    print data2
-                    print data3
+                    self.logger.debug("Program:", os.path.basename(top[0]), " -  Line:", str(top[1]))
+                    self.logger.debug("Data1: {0}".format(data1))
+                    self.logger.debug("Data2: {0}".format(data2))
+                    self.logger.debug("Data3: {0}".format(data3))
                     self.error = True
                 else:
-                    print "*** Warning: ValueError raised at the end of the adquisition"
-
+                    self.logger.warning("ValueError raised at the end of the acquisition")
 
             except Exception as e:
                 import traceback
                 import os.path
 
                 top = traceback.extract_stack()[-1]
-                print "*** Exception:", type(e).__name__, " -  Program:", os.path.basename(top[0]), " -  Line:", str(
-                    top[1]), "***"
+                self.logger.exception("*** Exception:", type(e).__name__, " -  Program:", os.path.basename(top[0]),
+                                      " -  Line:", str(
+                        top[1]), "***")
                 self.error = True
 
-            if self.end_adquisition:
-                self.ended_adquisition = True
+            if self.end_acquisition:
+                self.ended_acquisition = True
                 writer.close_writer()
                 break
 
-    def finish_adquisition(self):
-        self.end_adquisition = True
+    def finish_acquisition(self):
+        self.end_acquisition = True
 
 
 

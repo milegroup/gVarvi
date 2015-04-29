@@ -174,6 +174,5 @@ class InsModManualTag(wx.Frame):
         else:
             InfoDialog("Please, don't forget to fill all fields with valid data").show()
 
-
     def OnCancel(self, e):
         self.Destroy()

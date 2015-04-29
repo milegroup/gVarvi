@@ -13,8 +13,8 @@ class DemoBand(IDevice):
         self.connected = False
         self.end_test = False
         self.ended_test = False
-        self.end_adquisition = False
-        self.ended_adquisition = False
+        self.end_acquisition = False
+        self.ended_acquisition = False
 
     def connect(self, *args):
         self.connected = True
@@ -29,21 +29,21 @@ class DemoBand(IDevice):
         pass
 
     @run_in_thread
-    def begin_adquisition(self, writer=None):
-        self.end_adquisition = False
-        self.ended_adquisition = False
-        while not self.end_adquisition:
-            waitvalue = randint(800, 900)
-            sleep(waitvalue / 1000.0)
-            rr = waitvalue
+    def begin_acquisition(self, writer=None):
+        self.end_acquisition = False
+        self.ended_acquisition = False
+        while not self.end_acquisition:
+            wait_value = randint(800, 900)
+            sleep(wait_value / 1000.0)
+            rr = wait_value
             if writer:
                 writer.write_rr_value(rr)
-        self.ended_adquisition = True
+        self.ended_acquisition = True
         if writer:
             writer.close_writer()
 
-    def finish_adquisition(self):
-        self.end_adquisition = True
+    def finish_acquisition(self):
+        self.end_acquisition = True
 
 
 

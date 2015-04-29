@@ -1,8 +1,10 @@
 # coding=utf-8
 from abc import ABCMeta, abstractmethod
-import bluetooth
 import socket as socketlib
 import sys
+
+import bluetooth
+
 
 __author__ = 'nico'
 
@@ -29,11 +31,11 @@ class IDevice:
         pass
 
     @abstractmethod
-    def begin_adquisition(self, writer):
+    def begin_acquisition(self, writer):
         pass
 
     @abstractmethod
-    def finish_adquisition(self):
+    def finish_acquisition(self):
         pass
 
 
@@ -65,11 +67,11 @@ class BTAbstractDevice(IDevice):
         pass
 
     @abstractmethod
-    def begin_adquisition(self, writer):
+    def begin_acquisition(self, writer):
         pass
 
     @abstractmethod
-    def finish_adquisition(self):
+    def finish_acquisition(self):
         pass
 
     def receive(self, n):

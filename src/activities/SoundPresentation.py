@@ -19,7 +19,6 @@ class SoundPresentation(AbstractActivity):
         player = SoundPresentationPlayer(self.random, self.tags)
         player.play(writer)
 
-
     def __str__(self):
         toret = "Sound presentation acivity:\n" \
                 "Id: {id}\n" \

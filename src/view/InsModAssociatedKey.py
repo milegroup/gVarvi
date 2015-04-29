@@ -183,6 +183,5 @@ class InsModKeyAssociatedTag(wx.Frame):
 - Make you sure that you aren't using this key in
 other tag""").show()
 
-
     def OnCancel(self, e):
         self.Destroy()

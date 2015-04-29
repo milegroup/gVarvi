@@ -2,20 +2,24 @@
 _author__ = 'nico'
 
 import threading
-import wx
+import os
 import contextlib
 import itertools
 import wave
-import mutagen.mp3
 import logging
-import signal
+
+import wx
+import mutagen.mp3
+from PIL import Image
 
 from config import EVT_RESULT_ID
 
 
 
+
 # Custom classes
 # --------------------------------
+
 
 class ResultEvent(wx.PyEvent):
     """
@@ -82,33 +86,6 @@ def run_in_thread(fn):
     return _run
 
 
-def timeout(timeout):
-    """
-    Return a decorator that raises a TimedOutExc exception
-    after timeout seconds, if the decorated function did not return.
-    """
-
-    def decorate(f):
-        def _handler(signum, frame):
-            raise TimedOutError()
-
-        def _new_f(*args, **kwargs):
-            old_handler = signal.signal(signal.SIGALRM, _handler)
-            signal.alarm(timeout)
-
-            result = f(*args, **kwargs)
-
-            signal.signal(signal.SIGALRM, old_handler)
-            signal.alarm(0)
-
-            return result
-
-        _new_f.func_name = f.func_name
-        return _new_f
-
-    return decorate
-
-
 def get_sound_length(sound_path):
     """
     Gets total duration of a sound
@@ -164,6 +141,15 @@ def hex2bin(a):
         a = "0" + a
         return hex2bin(a)[4:]
 
+
+def convert_folder_images_to_jpeg(folder_path):
+    print
+    if os.path.isdir(folder_path):
+        for img in os.listdir(folder_path):
+            if img.endswith((".png", ".PNG")):
+                im = Image.open(os.path.join(folder_path, img))
+                im.save(img[0:img.upper().index("PNG")] + ".jpeg")
+
     # Custom exceptions
 # ---------------------------------
 
@@ -175,16 +161,16 @@ class HostDownError(Exception):
     pass
 
 
-class FailedAdquisition(Exception):
+class FailedAcquisition(Exception):
     """
     Raised on activity playing error
     """
     pass
 
 
-class AbortedAdquisiton(Exception):
+class AbortedAcquisition(Exception):
     """
-    Raised when the user aborts adquisition
+    Raised when the user aborts acquisition
     """
     pass
 

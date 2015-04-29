@@ -1,9 +1,10 @@
 # coding=utf-8
 __author__ = 'nico'
 
+import os
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
-import os
 
 from config import GRID_STYLE, MAIN_ICON
 from activities.VideoPresentation import VideoTag
@@ -42,7 +43,7 @@ class InsModVideoActivity(InsModTemplate):
                 self.randomCheckBox.SetValue(False)
 
         self.general_data_sizer.AddMany([self.name_label, (self.name_text_ctrl, 1, wx.EXPAND),
-                                    self.random_label, self.randomCheckBox])
+                                         self.random_label, self.randomCheckBox])
 
         self.general_data_sizer.AddGrowableCol(1, 1)
 
@@ -124,8 +125,6 @@ class InsModVideoTag(wx.Frame):
 
         general_data_sizer.AddGrowableCol(1, 1)
 
-
-
         buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
 
         button_save = wx.Button(self, -1, label="Save")
@@ -144,7 +143,7 @@ class InsModVideoTag(wx.Frame):
 
         self.Show()
 
-    def OnChangePath(self, e):
+    def OnChangePath(self, _):
 
         wildcard = "Video source (*.mpg)|*.mpg"
 
@@ -159,8 +158,7 @@ class InsModVideoTag(wx.Frame):
             self.path_text_ctrl.SetValue(path)
         dlg.Destroy()
 
-
-    def OnSave(self, e):
+    def OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
@@ -179,6 +177,5 @@ class InsModVideoTag(wx.Frame):
         else:
             InfoDialog("Please, don't forget to fill all fields with valid data").show()
 
-
-    def OnCancel(self, e):
+    def OnCancel(self, _):
         self.Destroy()

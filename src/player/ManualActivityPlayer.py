@@ -1,17 +1,18 @@
 # coding=utf-8
 __author__ = 'nico'
 
-import pygame
 from datetime import datetime
 import time
 
-from player.Player import AbstractPlayer
+import pygame
+
+from player.Player import Player
 from config import EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 from config import NEXT_TAG_KEY, ABORT_KEY
 from config import FRAMERATE
 
 
-class ManualActivityPlayer(AbstractPlayer):
+class ManualActivityPlayer(Player):
     def __init__(self, tags):
         self.tags = tags
         self.done = False
@@ -51,8 +52,8 @@ class ManualActivityPlayer(AbstractPlayer):
             screen.blit(text,
                         (screen_width / 2 - text.get_width() // 2, screen_height / 2 - text.get_height() // 2))
             pygame.display.flip()
-            while not self.done and not (tag.finish_type == "Timed" and time.time() - start > tag.time) and not (
-                            tag.finish_type == "Key (SPACE BAR)" and self.ended_tag):
+            while not self.done and not (tag.finish_type == "Timed" and time.time() - start > tag.time) \
+                    and not (tag.finish_type == "Key (SPACE BAR)" and self.ended_tag):
                 for event in pygame.event.get(pygame.KEYDOWN):
                     if event.key == ABORT_KEY:
                         self.done = True

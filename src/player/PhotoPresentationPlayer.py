@@ -2,32 +2,35 @@
 __author__ = 'nico'
 
 import os
-import pygame
 import time
 from random import shuffle
-import sys
 from collections import OrderedDict
 from datetime import datetime
 
-from player.Player import AbstractPlayer
+import pygame
+
+from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 from config import SUPPORTED_IMG_EXTENSIONS
 from Utils import run_in_thread
+from logger import Logger
 
 
-class PhotoPresentationPlayer(AbstractPlayer):
+class PhotoPresentationPlayer(Player):
     """
     Plays the Photo presentation activity and listen for keyboard events
     :param gap: Duration of each activity (in seconds)
     :type gap: int
-    :param random: If is setted to "Yes" tags will be played in a random way. It can be setted to "Yes" or "No"
+    :param random: If is set to "Yes" tags will be played in a random way. It can be set to "Yes" or "No"
     :type random: str
     :param tags: list of PhotoPresentationTag objects that contain all tag info.
     :type tags: list
     """
 
     def __init__(self, gap, random, tags):
+        self.logger = Logger()
+
         self.gap = gap
         self.random = random
         self.tags = tags
@@ -44,7 +47,7 @@ class PhotoPresentationPlayer(AbstractPlayer):
                       img.endswith(SUPPORTED_IMG_EXTENSIONS)]
             shuffle(images)
             self.images[tag] = images
-        self.zerotime = None
+        self.zero_time = None
 
     def play(self, writer):
 
@@ -61,14 +64,14 @@ class PhotoPresentationPlayer(AbstractPlayer):
         pygame.mouse.set_visible(False)
 
         pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
-        self.zerotime = datetime.now()
+        self.zero_time = datetime.now()
 
         for tag in self.tags:
             self.ended_tag = False
             self.sound_player_thread = None
             if tag.sound_associated == "Yes":
                 self.sound_player_thread = self.play_tag_sounds([sound.path for sound in tag.sounds])
-            beg = (datetime.now() - self.zerotime).total_seconds()
+            beg = (datetime.now() - self.zero_time).total_seconds()
             for img in self.images[tag]:
                 start = time.time()
                 img = pygame.image.load(img).convert()
@@ -92,10 +95,10 @@ class PhotoPresentationPlayer(AbstractPlayer):
             if self.sound_player_thread:
                 self.sound_player_thread.join()
             if self.done:
-                end = (datetime.now() - self.zerotime).total_seconds()
+                end = (datetime.now() - self.zero_time).total_seconds()
                 writer.write_tag_value(tag.name, beg, end)
                 break
-            end = (datetime.now() - self.zerotime).total_seconds()
+            end = (datetime.now() - self.zero_time).total_seconds()
             writer.write_tag_value(tag.name, beg, end)
         self._stop()
         self.raise_if_needed(self.return_code)
@@ -118,7 +121,6 @@ class PhotoPresentationPlayer(AbstractPlayer):
         # volvemos a reproducir os sons
         while not self.ended_tag:
             for sound in sounds:
-
                 try:
                     clock = pygame.time.Clock()
                     pygame.mixer.music.load(sound)
@@ -128,5 +130,5 @@ class PhotoPresentationPlayer(AbstractPlayer):
                     if self.ended_tag or self.done:
                         return
                 except pygame.error, exc:
-                    print >> sys.stderr, "Could not play sound file: %s" % sound
-                    print exc
+                    self.logger.error("Could not play sound file: {0}".format(sound))
+                    self.logger.exception(exc)

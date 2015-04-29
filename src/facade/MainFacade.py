@@ -7,7 +7,7 @@ from dao.XMLMapper import XMLMapper
 from BluetoothManager import *
 from ANTManager import *
 from Utils import Singleton
-from facade.AdquisitionFacade import AdquisitionFacade
+from facade.AcquisitionFacade import AcquisitionFacade
 from devices.PolariWL import PolariWL
 from devices.DemoBand import DemoBand
 from devices.ANTDevice import ANTDevice
@@ -33,7 +33,7 @@ class MainFacade:
         self.valid_devices = ["Polar iWL", "ANT+ HR Band"]
         self.conf = None
         self.test_thread = None
-        self.adquisition_path = None
+        self.acquisition_path = None
 
     def activate_remote_debug(self, ip, port):
         self.logger.activate_datagram_logging(ip, port)
@@ -103,43 +103,44 @@ class MainFacade:
             self.test_thread.join()
         device.disconnect()
 
-    def get_supported_devices(self):
+    @staticmethod
+    def get_supported_devices():
         return ["Polar iWL", "ANT+ HR Band"]
 
     def is_demo_mode(self):
         return self.conf.defaultMode == "Demo mode"
 
-    def begin_adquisition(self, file_path, activity_id, mode, dev_name, dev_type, dev_dir=None, output="text"):
+    def begin_acquisition(self, file_path, activity_id, mode, dev_name, dev_type, dev_dir=None, output="text"):
         if output == "text":
-            self.adquisition_path = file_path
+            self.acquisition_path = file_path
             writer = TextWriter(file_path + ".tag.txt", file_path + ".rr.txt")
         if mode == DEMO_MODE:
             device = DemoBand()
             activity = self.xmlMapper.get_activity(activity_id)
-            ad = AdquisitionFacade(activity, device, writer)
+            ad = AcquisitionFacade(activity, device, writer)
             ad.start()
         elif mode == DEVICE_CONNECTED_MODE:
             if dev_type == "BT" and dev_name == "Polar iWL":
                 device = PolariWL(dev_dir)
                 activity = self.xmlMapper.get_activity(activity_id)
-                ad = AdquisitionFacade(activity, device, writer)
+                ad = AcquisitionFacade(activity, device, writer)
                 ad.start()
             elif dev_type == "ANT+" and dev_name == "ANT+ HR Band":
                 device = ANTDevice()
                 activity = self.xmlMapper.get_activity(activity_id)
-                ad = AdquisitionFacade(activity, device, writer)
+                ad = AcquisitionFacade(activity, device, writer)
                 ad.start()
 
     @run_in_thread
-    def open_gHRV(self):
-        rr_file = str(self.adquisition_path) + ".rr.txt"
-        tag_file = str(self.adquisition_path) + ".tag.txt"
+    def open_ghrv(self):
+        rr_file = str(self.acquisition_path) + ".rr.txt"
+        tag_file = str(self.acquisition_path) + ".tag.txt"
         os.system("/usr/bin/gHRV -loadBeatTXT {0} -loadEpTXT {1}".format(rr_file, tag_file))
 
     @run_in_thread
     def plot_results(self):
-        rr_file = str(self.adquisition_path) + ".rr.txt"
-        tag_file = str(self.adquisition_path) + ".tag.txt"
+        rr_file = str(self.acquisition_path) + ".rr.txt"
+        tag_file = str(self.acquisition_path) + ".tag.txt"
         paint(rr_file, tag_file)
 
 
