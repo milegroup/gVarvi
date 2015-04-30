@@ -49,7 +49,7 @@ BUFFER = 1024  # audio buffer size in no. of samples
 FRAMERATE = 30  # how often to check if playback has finished
 
 # Image player
-SUPPORTED_IMG_EXTENSIONS = (".jpg", ".JPG", ".jpeg", "JPEG")
+SUPPORTED_IMG_EXTENSIONS = (".JPG", ".JPEG")
 
 # Bluetooth Test Result Event ID
 EVT_RESULT_ID = wx.NewId()

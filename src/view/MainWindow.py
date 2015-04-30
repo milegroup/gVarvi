@@ -3,7 +3,6 @@
 import sys
 import os
 import threading
-
 from wx import PostEvent
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -407,8 +406,25 @@ GNU General Public License for more details."""
                                 defaultFile="",
                                 wildcard="All files(*.*)|*.*",
                                 style=wx.FD_SAVE)
-            if dlg.ShowModal() == wx.ID_OK:
-                path = dlg.GetPath()
+
+            close_dialog = False
+            acquisition = False
+            while not close_dialog:
+                if dlg.ShowModal() == wx.ID_OK:
+                    path = dlg.GetPath()
+                    if os.path.isfile(path + ".rr.txt") or os.path.isfile(path) or os.path.isfile(path + ".tag.txt"):
+                        result = ConfirmDialog("File already exists. Do you want to overwrite it?",
+                                               "Confirm").get_result()
+                        if result == wx.ID_YES:
+                            close_dialog = True
+                            acquisition = True
+                    else:
+                        close_dialog = True
+                        acquisition = True
+                else:
+                    close_dialog = True
+
+            if acquisition:
                 try:
                     self.controller.begin_acquisition(path, activity_id, mode, dev_name, dev_type,
                                                       dev_dir, output="text")

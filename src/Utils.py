@@ -7,12 +7,14 @@ import contextlib
 import itertools
 import wave
 import logging
-
 import wx
 import mutagen.mp3
 from PIL import Image
 
 from config import EVT_RESULT_ID
+
+
+
 
 
 
@@ -143,12 +145,14 @@ def hex2bin(a):
 
 
 def convert_folder_images_to_jpeg(folder_path):
-    print
+    # Should be appear all extensions accepted by Pillow library
+    extensions_accepted = [".PNG"]
     if os.path.isdir(folder_path):
         for img in os.listdir(folder_path):
-            if img.endswith((".png", ".PNG")):
+            file_name, file_extension = os.path.splitext(img)
+            if file_extension.upper() in extensions_accepted and not os.path.isfile(file_name + ".JPG"):
                 im = Image.open(os.path.join(folder_path, img))
-                im.save(img[0:img.upper().index("PNG")] + ".jpeg")
+                im.save(os.path.join(folder_path, file_name + ".JPG"), 'jpeg')
 
     # Custom exceptions
 # ---------------------------------

@@ -6,14 +6,13 @@ import time
 from random import shuffle
 from collections import OrderedDict
 from datetime import datetime
-
 import pygame
 
 from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 from config import SUPPORTED_IMG_EXTENSIONS
-from Utils import run_in_thread
+from Utils import run_in_thread, convert_folder_images_to_jpeg
 from logger import Logger
 
 
@@ -43,8 +42,9 @@ class PhotoPresentationPlayer(Player):
         self.event_thread = None
         self.images = OrderedDict()
         for tag in self.tags:
+            convert_folder_images_to_jpeg(tag.path)
             images = [os.path.join(tag.path, img) for img in os.listdir(tag.path) if
-                      img.endswith(SUPPORTED_IMG_EXTENSIONS)]
+                      os.path.splitext(img)[1].upper() in SUPPORTED_IMG_EXTENSIONS]
             shuffle(images)
             self.images[tag] = images
         self.zero_time = None
