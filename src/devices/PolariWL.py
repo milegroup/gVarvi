@@ -3,15 +3,15 @@ __author__ = 'nico'
 
 from wx import PostEvent
 
-from devices.IDevice import BTAbstractDevice
+from devices.BTDevice import BTDevice
 from Utils import run_in_thread
 from Utils import ResultEvent
 from logger import Logger
 
 
-class PolariWL(BTAbstractDevice):
+class PolariWL(BTDevice):
     def __init__(self, mac):
-        BTAbstractDevice.__init__(self, mac)
+        BTDevice.__init__(self, mac)
         self.logger = Logger()
         self.socket = None
         self.end_test = False

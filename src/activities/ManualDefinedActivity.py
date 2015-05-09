@@ -1,7 +1,7 @@
 # coding=utf-8
 __author__ = 'nico'
 
-from activities.AbstractActivity import AbstractActivity, AbstractTag
+from activities.AbstractActivity import AbstractActivity
 from player.ManualActivityPlayer import ManualActivityPlayer
 
 
@@ -13,13 +13,12 @@ class ManualDefinedActivity(AbstractActivity):
         self.tags = tags
 
     def run(self, writer):
-        self.player = ManualActivityPlayer(self.tags)
-        self.player.play(writer)
+        ManualActivityPlayer(self.tags).play(writer)
 
 
-class ManualDefinedTag(AbstractTag):
+class ManualDefinedTag(object):
     def __init__(self, name, screentext, finish_type, time):
-        AbstractTag.__init__(self, name)
+        self.name = name
         self.screentext = screentext
         self.finish_type = finish_type
         self.time = time

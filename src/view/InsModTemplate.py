@@ -1,12 +1,7 @@
 # coding=utf-8
 __author__ = 'nico'
 
-"""
-Window template for insert and modify activities
-"""
-
 from abc import abstractmethod
-
 import wx
 
 from view.wxUtils import ConfirmDialog, InfoDialog
@@ -18,16 +13,16 @@ class InsModTemplate(wx.Frame):
     Window template for insert and modify activities
     :param size: Size of the window, as a tuple (Width, Height). Must be in pixels
     :param parent: Main frame of application
-    :param control: Controller of the application
+    :param main_facade: Controller of the application
     :param insmod_tag_window_type: Subclass of wx.Frame that performs the insert of modify of a specific tag
     :param activity_id: If the frame is open to modify an activity, this parameter is the id of that activity
     :param title: Title of the window
     If the frame is open to insert a new activity, this parameter gets the value of -1
     """
 
-    def __init__(self, size, parent, control, insmod_tag_window_type, activity_id=-1, title=None):
+    def __init__(self, size, parent, main_facade, insmod_tag_window_type, activity_id=-1, title=None):
         self.main_window = parent
-        self.controller = control
+        self.main_facade = main_facade
         self.insmod_tag_window_class = insmod_tag_window_type
         self.modifying = activity_id != -1
         self.activity_id = activity_id
@@ -39,7 +34,7 @@ class InsModTemplate(wx.Frame):
             wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
                               title="Modifying Activity (id: {0})".format(activity_id),
                               size=size)
-            self.activity = self.controller.get_activity(activity_id)
+            self.activity = self.main_facade.get_activity(activity_id)
             self.tag_ctrl = TagControl(self.activity.tags)
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
@@ -123,14 +118,14 @@ class InsModTemplate(wx.Frame):
         pass
 
     def OnAddTag(self, _):
-        self.insmod_tag_window_class(self, self.controller)
+        self.insmod_tag_window_class(self, self.main_facade)
 
-    def AddTag(self, tag):
-        self.tag_ctrl.AddTag(tag)
+    def add_tag(self, tag):
+        self.tag_ctrl.add_tag(tag)
         self.refresh_tags()
 
-    def ModifyTag(self, pos, tag):
-        self.tag_ctrl.ModifyTag(pos, tag)
+    def modify_tag(self, pos, tag):
+        self.tag_ctrl.modify_tag(pos, tag)
         self.refresh_tags()
 
     def OnRemoveTag(self, _):
@@ -138,7 +133,7 @@ class InsModTemplate(wx.Frame):
         if selected_row != -1:
             result = ConfirmDialog("Are you sure to delete that tag?", "Confirm delete operation").get_result()
             if result == wx.ID_YES:
-                self.tag_ctrl.RemoveTag(selected_row)
+                self.tag_ctrl.remove_tag(selected_row)
                 self.refresh_tags()
 
         else:
@@ -147,7 +142,7 @@ class InsModTemplate(wx.Frame):
     def OnTagUp(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
-            self.tag_ctrl.UpTag(selected_row)
+            self.tag_ctrl.up_tag(selected_row)
             self.refresh_tags()
         else:
             InfoDialog("You must select a tag").show()
@@ -155,7 +150,7 @@ class InsModTemplate(wx.Frame):
     def OnTagDown(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
-            self.tag_ctrl.DownTag(selected_row)
+            self.tag_ctrl.down_tag(selected_row)
             self.refresh_tags()
         else:
             InfoDialog("You must select a tag").show()
@@ -179,19 +174,19 @@ class TagControl(object):
     def __init__(self, tags=[]):
         self.tags = tags
 
-    def AddTag(self, tag):
+    def add_tag(self, tag):
         self.tags.append(tag)
 
-    def RemoveTag(self, pos):
+    def remove_tag(self, pos):
         self.tags.pop(pos)
 
-    def UpTag(self, pos):
+    def up_tag(self, pos):
         if pos > 0 and len(self.tags) > 1:
             self.tags[pos], self.tags[pos - 1] = self.tags[pos - 1], self.tags[pos]
 
-    def DownTag(self, pos):
+    def down_tag(self, pos):
         if len(self.tags) > 1 and pos < len(self.tags) - 1:
             self.tags[pos], self.tags[pos + 1] = self.tags[pos + 1], self.tags[pos]
 
-    def ModifyTag(self, pos, tag):
+    def modify_tag(self, pos, tag):
         self.tags[pos] = tag

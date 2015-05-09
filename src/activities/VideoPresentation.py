@@ -3,7 +3,7 @@ __author__ = 'nico'
 
 import os
 
-from activities.AbstractActivity import AbstractActivity, AbstractTag
+from activities.AbstractActivity import AbstractActivity
 from player.VideoPresentationPlayer import VideoPresentationPlayer
 from config import EXIT_ABORT_CODE
 
@@ -17,15 +17,14 @@ class VideoPresentation(AbstractActivity):
         self.tags = tags
 
     def run(self, writer):
-        self.player = VideoPresentationPlayer(self.random, self.tags)
-        exit_code = self.player.play(writer)
+        exit_code = VideoPresentationPlayer(self.random, self.tags).play(writer)
         if exit_code == EXIT_ABORT_CODE:
             raise KeyboardInterrupt()
 
 
-class VideoTag(AbstractTag):
+class VideoTag(object):
     def __init__(self, name, path):
-        AbstractTag.__init__(self, name)
+        self.name = name
         self.path = path
 
     def check_files(self):

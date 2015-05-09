@@ -12,9 +12,9 @@ from InsModTemplate import InsModTemplate
 
 
 class InsModAssociatedKey(InsModTemplate):
-    def __init__(self, parent, control, activity_id=-1):
-        super(InsModAssociatedKey, self).__init__(size=(800, 600), parent=parent, control=control,
-                                                  insmod_tag_window_type=InsModKeyAssociatedTag,
+    def __init__(self, parent, main_facade, activity_id=-1):
+        super(InsModAssociatedKey, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
+                                                  insmod_tag_window_type=InsModAssociatedKeyTag,
                                                   activity_id=activity_id,
                                                   title="New Associated-Key Activity")
         self.Show()
@@ -58,22 +58,19 @@ class InsModAssociatedKey(InsModTemplate):
             correct_data = False
         if correct_data:
             if self.modifying:
-                self.controller.update_activity(AssociatedKeyActivity, self.activity_id, name, tags)
+                self.main_facade.update_activity(AssociatedKeyActivity, self.activity_id, name, tags)
             else:
-                self.controller.add_activity(AssociatedKeyActivity, -1, name, tags)
+                self.main_facade.add_activity(AssociatedKeyActivity, -1, name, tags)
             self.main_window.refresh_activities()
             self.Destroy()
         else:
             InfoDialog("Please, don't forget to fill all fields\nAlso remember to add at least one tag").show()
 
     def used_keys(self):
-        to_ret = []
-        for t in self.tag_ctrl.tags:
-            to_ret.append(t.key)
-        return to_ret
+        return [t.key for t in self.tag_ctrl.tags]
 
 
-class InsModKeyAssociatedTag(wx.Frame):
+class InsModAssociatedKeyTag(wx.Frame):
     def __init__(self, parent, tag_control, tag_id=-1):
         self.parent = parent
         self.tag_control = tag_control
@@ -108,7 +105,7 @@ class InsModKeyAssociatedTag(wx.Frame):
         key_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.key_text_ctrl = wx.TextCtrl(self, -1, size=(350, -1), style=wx.TE_READONLY)
         self.change_key_button = wx.Button(self, -1, label="Change")
-        self.Bind(wx.EVT_BUTTON, self.OnChangeKey, id=self.change_key_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnChangeKey, id=self.change_key_button.GetId())
         key_sizer.Add(self.key_text_ctrl, 1, wx.EXPAND)
         key_sizer.AddSpacer(20)
         key_sizer.Add(self.change_key_button, 0, wx.RIGHT)
@@ -128,12 +125,12 @@ class InsModKeyAssociatedTag(wx.Frame):
 
         button_save = wx.Button(self, -1, label="Save")
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnSave, id=button_save.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
         button_save.SetToolTip(wx.ToolTip("Save the tag"))
 
         button_cancel = wx.Button(self, -1, label="Cancel")
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, id=button_cancel.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
         button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
@@ -142,17 +139,17 @@ class InsModKeyAssociatedTag(wx.Frame):
 
         self.Show()
 
-    def OnChangeKey(self, e):
-        self.change_key_button.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+    def _OnChangeKey(self, _):
+        self.change_key_button.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown)
         self.change_key_button.SetLabel("Listening...")
 
-    def OnKeyDown(self, e):
+    def _OnKeyDown(self, e):
         key = e.GetUniChar()
         self.key_text_ctrl.SetValue(unichr(key))
         self.change_key_button.SetLabel("Change")
         self.change_key_button.Unbind(wx.EVT_KEY_DOWN)
 
-    def OnSave(self, e):
+    def _OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         screentext = self.screentext_text_ctrl.GetValue()
@@ -170,10 +167,10 @@ class InsModKeyAssociatedTag(wx.Frame):
 
         if correct_data:
             if self.modifying:
-                self.parent.ModifyTag(self.tag_id, tag)
+                self.parent.modify_tag(self.tag_id, tag)
                 self.Destroy()
             else:
-                self.parent.AddTag(tag)
+                self.parent.add_tag(tag)
                 self.Destroy()
         else:
             InfoDialog(
@@ -183,5 +180,5 @@ class InsModKeyAssociatedTag(wx.Frame):
 - Make you sure that you aren't using this key in
 other tag""").show()
 
-    def OnCancel(self, e):
+    def _OnCancel(self, _):
         self.Destroy()

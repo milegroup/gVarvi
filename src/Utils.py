@@ -8,13 +8,13 @@ import itertools
 import wave
 import logging
 import wx
-import mutagen.mp3
 from PIL import Image
+import matplotlib.pyplot as plt
+from random import shuffle
+
+import mutagen.mp3
 
 from config import EVT_RESULT_ID
-
-
-
 
 
 
@@ -26,7 +26,7 @@ from config import EVT_RESULT_ID
 class ResultEvent(wx.PyEvent):
     """
     Simple event to carry arbitrary result data.
-    :param data: The data to be carried
+    @param data: The data to be carried
     """
 
     def __init__(self, data):
@@ -51,8 +51,8 @@ class Singleton(type):
 class CustomConsoleHandler(logging.StreamHandler):
     """
     Handler that send log to a TextCtrl object
-    :param textctrl: The TextCtrl object
-    :type textctrl: wx.TextCtrl
+    @param textctrl: The TextCtrl object
+    @type textctrl: wx.TextCtrl
     """
 
     def __init__(self, textctrl):
@@ -63,7 +63,7 @@ class CustomConsoleHandler(logging.StreamHandler):
     def emit(self, record):
         """
         Format the message and send it to the TextCtrl
-        :param record: The unformatted message
+        @param record: Unformatted message
         """
         msg = self.format(record)
         self.textctrl.WriteText(msg + "\n")
@@ -76,8 +76,8 @@ class CustomConsoleHandler(logging.StreamHandler):
 def run_in_thread(fn):
     """
     Function decorator that runs function in a separated thread
-    :param fn: The function that wants to be decorated
-    :return: A reference to Thread that executes the function
+    @param fn: The function that wants to be decorated
+    @return: A reference to Thread that executes the function
     """
 
     def _run(*k, **kw):
@@ -91,9 +91,9 @@ def run_in_thread(fn):
 def get_sound_length(sound_path):
     """
     Gets total duration of a sound
-    :param sound_path: Absolute path to the sound file
-    :type sound_path: str
-    :return: Sound duration, in seconds
+    @param sound_path: Absolute path to the sound file
+    @type sound_path: str
+    @return: Sound duration, in seconds
     """
 
     def _combinations(string):
@@ -114,9 +114,9 @@ def get_sound_length(sound_path):
 def valid_ip(address):
     """
     Checks if an string is an IP
-    :param address: The string
-    :type address: str
-    :return: True if string is an IP address. Otherwise returs False
+    @param address: The string
+    @type address: str
+    @return: True if string is an IP address. Otherwise returns False
     """
     try:
         host_bytes = address.split('.')
@@ -130,8 +130,8 @@ def valid_ip(address):
 def hex2bin(a):
     """
     Convert hexadecimal to binary and keep (1 character -> 4 digits) structure
-    :param a: The hexadecimal string
-    :type a: str
+    @param a: The hexadecimal string
+    @type a: str
     Ex: convert 8af1 to 1000101011110001
     """
 
@@ -146,6 +146,12 @@ def hex2bin(a):
 
 def convert_folder_images_to_jpeg(folder_path):
     # Should be appear all extensions accepted by Pillow library
+    """
+    Converts all PNG images in a specific folder into JPEG images.
+    If images are already converted the function has no effect.
+    @param folder_path: The folder that contains the images
+    @type folder_path: str
+    """
     extensions_accepted = [".PNG"]
     if os.path.isdir(folder_path):
         for img in os.listdir(folder_path):
@@ -153,6 +159,62 @@ def convert_folder_images_to_jpeg(folder_path):
             if file_extension.upper() in extensions_accepted and not os.path.isfile(file_name + ".JPG"):
                 im = Image.open(os.path.join(folder_path, img))
                 im.save(os.path.join(folder_path, file_name + ".JPG"), 'jpeg')
+
+
+def parse_rr_file(rr_file):
+    """
+    Parses file that contains rr values and return a list with all integer values
+    @param rr_file: Path to file
+    @return: The list with all rr values converted to integer
+    """
+    with open(rr_file, "rt") as f:
+        rr_values = [int(l) for l in f]
+        return rr_values
+
+
+def parse_tag_file(tag_file):
+    """
+    Parses file that contains tag values and return a list with all information
+    @param tag_file: Path to file
+    @return: A list of lists with this structure: [beg_seconds, tag_name, duration_seconds]
+    """
+    with open(tag_file, "rt") as f:
+        tag_list = []
+        next(f)  # Skipping header row
+        for l in f:
+            l = l.split()
+            beg_list = map(float, l[0].split(":"))
+            beg_seconds = beg_list[0] * 3600 + beg_list[1] * 60 + beg_list[2]
+            name = l[1]
+            duration_seconds = float(l[2])
+            tag_list.append([beg_seconds, name, duration_seconds])
+        return tag_list
+
+
+def paint(rr_file, tag_file):
+    """
+    Paint results of acquisition
+    @param rr_file: Path to file that contains rr values
+    @param tag_file: Path to file that contains tag values
+    """
+    colors = ['orange', 'green', 'lightblue', 'grey', 'brown', 'red', 'white', 'yellow']
+    shuffle(colors)
+    rr_values = parse_rr_file(rr_file)
+    hr_values = map(lambda x: 60 / (float(x) / 1000), rr_values)
+    tag_values = parse_tag_file(tag_file)
+    x = [x / 1000 for x in [sum(rr_values[:i + 1]) for i in xrange(len(rr_values))]]
+    y = hr_values
+    plt.plot(x, y)
+
+    for tag in tag_values:
+        c = colors.pop()
+        plt.axvspan(tag[0], tag[0] + tag[2], facecolor=c, alpha=.8, label=tag[1])
+
+    plt.ylabel('Heart rate (bpm)')
+    plt.xlabel('Time (s)')
+    plt.ylim(ymin=min(min(y) - 10, 40), ymax=max(max(y) + 10, 150))
+    plt.legend()
+    plt.show()
 
     # Custom exceptions
 # ---------------------------------

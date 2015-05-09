@@ -90,7 +90,7 @@ ant_LOG = None
 class UserConfig(object):
     """
     Class that represents the user configuration.
-    :param config_dict: A dictionary with all parameters and their respective values
+    @param config_dict: A dictionary with all parameters and their respective values
     """
 
     def __init__(self, config_dict):

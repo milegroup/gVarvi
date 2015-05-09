@@ -2,7 +2,6 @@
 __author__ = 'nico'
 
 import os
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -12,11 +11,12 @@ from view.wxUtils import InfoDialog
 from InsModTemplate import InsModTemplate
 
 
-class InsModSoundActivity(InsModTemplate):
-    def __init__(self, parent, control, activity_id=-1):
-        super(InsModSoundActivity, self).__init__(size=(800, 600), parent=parent, control=control,
-                                                  insmod_tag_window_type=InsModSoundTag, activity_id=activity_id,
-                                                  title="New Sound Activity")
+class InsModSoundPresentation(InsModTemplate):
+    def __init__(self, parent, main_facade, activity_id=-1):
+        super(InsModSoundPresentation, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
+                                                      insmod_tag_window_type=InsModSoundPresentationTag,
+                                                      activity_id=activity_id,
+                                                      title="New Sound Activity")
         self.Show()
 
     def refresh_tags(self):
@@ -24,11 +24,11 @@ class InsModSoundActivity(InsModTemplate):
         for tag in self.tag_ctrl.tags:
             if tag.images:
                 self.tags_grid.Append(
-                    [tag.name, tag.path, tag.image_associated,
+                    [tag.name, tag.path, tag.associated_image,
                      ";".join([image.path for image in tag.images])])
             else:
                 self.tags_grid.Append(
-                    [tag.name, tag.path, tag.image_associated, ""])
+                    [tag.name, tag.path, tag.associated_image, ""])
 
     def build_general_data_sizer(self):
         self.general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
@@ -61,7 +61,7 @@ class InsModSoundActivity(InsModTemplate):
         self.tags_grid.SetColumnWidth(0, 115)
         self.tags_grid.InsertColumn(1, 'Path', ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(1, 200)
-        self.tags_grid.InsertColumn(2, 'Image associated', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(2, 'Associated image', ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(2, 140)
         self.tags_grid.InsertColumn(3, 'Images', ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(3, -3)
@@ -78,16 +78,16 @@ class InsModSoundActivity(InsModTemplate):
             correct_data = False
         if correct_data:
             if self.modifying:
-                self.controller.update_activity(SoundPresentation, self.activity_id, name, random, tags)
+                self.main_facade.update_activity(SoundPresentation, self.activity_id, name, random, tags)
             else:
-                self.controller.add_activity(SoundPresentation, -1, name, random, tags)
+                self.main_facade.add_activity(SoundPresentation, -1, name, random, tags)
             self.main_window.refresh_activities()
             self.Destroy()
         else:
             InfoDialog("Please, don't forget to fill all fields\nAlso remember to add at least one tag").show()
 
 
-class InsModSoundTag(wx.Frame):
+class InsModSoundPresentationTag(wx.Frame):
     def __init__(self, parent, tag_control, tag_id=-1):
         self.parent = parent
         self.tag_control = tag_control
@@ -123,7 +123,7 @@ class InsModSoundTag(wx.Frame):
         if self.modifying:
             self.path_text_ctrl.SetValue(tag.path)
         self.path_button = wx.Button(self, -1, label="...")
-        self.Bind(wx.EVT_BUTTON, self.OnChangePath, id=self.path_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnChangePath, id=self.path_button.GetId())
         self.path_button.SetMinSize((40, 25))
         path_sizer.Add(self.path_text_ctrl, 1, wx.EXPAND)
         path_sizer.AddSpacer(20)
@@ -134,15 +134,15 @@ class InsModSoundTag(wx.Frame):
         if self.modifying and tag.random == "Yes":
             self.random_checkbox.SetValue(True)
 
-        image_associated_label = wx.StaticText(self, label='Image associated')
-        self.image_associated_checkbox = wx.CheckBox(self)
-        if self.modifying and tag.image_associated == "Yes":
-            self.image_associated_checkbox.SetValue(True)
+        associated_image_label = wx.StaticText(self, label='Associated image')
+        self.associated_image_checkbox = wx.CheckBox(self)
+        if self.modifying and tag.associated_image == "Yes":
+            self.associated_image_checkbox.SetValue(True)
 
         general_data_sizer.AddMany([name_label, (self.name_text_ctrl, 0, wx.EXPAND),
                                     path_label, (path_sizer, 0, wx.EXPAND),
                                     random_label, self.random_checkbox,
-                                    image_associated_label, self.image_associated_checkbox])
+                                    associated_image_label, self.associated_image_checkbox])
 
         general_data_sizer.AddGrowableCol(1, 1)
 
@@ -161,22 +161,22 @@ class InsModSoundTag(wx.Frame):
 
         add_tag_bt = wx.Button(self, -1, label="Add")
         tag_buttons_sizer.Add(add_tag_bt, flag=wx.ALL, border=0)
-        self.Bind(wx.EVT_BUTTON, self.OnAddImage, id=add_tag_bt.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnAddImage, id=add_tag_bt.GetId())
         add_tag_bt.SetToolTip(wx.ToolTip("Add new tag"))
 
         remove_tag_bt = wx.Button(self, -1, label="Remove")
         tag_buttons_sizer.Add(remove_tag_bt, flag=wx.ALL, border=0)
-        self.Bind(wx.EVT_BUTTON, self.OnRemoveImage, id=remove_tag_bt.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnRemoveImage, id=remove_tag_bt.GetId())
         remove_tag_bt.SetToolTip(wx.ToolTip("Remove the selected tag"))
 
         up_tag_bt = wx.Button(self, -1, label="Up")
         tag_buttons_sizer.Add(up_tag_bt, flag=wx.ALL, border=0)
-        self.Bind(wx.EVT_BUTTON, self.OnImageUp, id=up_tag_bt.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnImageUp, id=up_tag_bt.GetId())
         up_tag_bt.SetToolTip(wx.ToolTip("Up selected tag in the list"))
 
         down_tag_bt = wx.Button(self, -1, label="Down")
         tag_buttons_sizer.Add(down_tag_bt, flag=wx.ALL, border=0)
-        self.Bind(wx.EVT_BUTTON, self.OnImageDown, id=down_tag_bt.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnImageDown, id=down_tag_bt.GetId())
         down_tag_bt.SetToolTip(wx.ToolTip("Down selected tag in the list"))
 
         images_sizer.Add(tag_buttons_sizer, 0, wx.ALIGN_CENTER | wx.ALL, border=10)
@@ -185,7 +185,7 @@ class InsModSoundTag(wx.Frame):
 
         button_save = wx.Button(self, -1, label="Save")
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnSave, id=button_save.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
         button_save.SetToolTip(wx.ToolTip("Save the activity"))
 
         button_cancel = wx.Button(self, -1, label="Cancel")
@@ -200,7 +200,7 @@ class InsModSoundTag(wx.Frame):
 
         self.Show()
 
-    def OnChangePath(self, _):
+    def _OnChangePath(self, _):
 
         wildcard = "Audio source (*.mp3; *wav)|*.mp3;*.wav"
 
@@ -215,7 +215,7 @@ class InsModSoundTag(wx.Frame):
             self.path_text_ctrl.SetValue(path)
         dlg.Destroy()
 
-    def OnAddImage(self, _):
+    def _OnAddImage(self, _):
         wildcard = "Image source (*.jpg; *.jpeg; *png)|*.jpg;*.JPG;*.jpeg;*.JPEG;*.png;*.PNG"
 
         dlg = wx.FileDialog(
@@ -230,26 +230,26 @@ class InsModSoundTag(wx.Frame):
                 self.images_listbox.Append(path)
         dlg.Destroy()
 
-    def OnRemoveImage(self, _):
+    def _OnRemoveImage(self, _):
         sel = self.images_listbox.GetSelection()
         if sel != -1:
             self.images_listbox.Delete(sel)
 
-    def OnImageUp(self, _):
+    def _OnImageUp(self, _):
         sel_pos = self.images_listbox.GetSelection()
         if sel_pos > 0:
             sel_path = self.images_listbox.GetStringSelection()
             self.images_listbox.Delete(sel_pos)
             self.images_listbox.Insert(sel_path, sel_pos - 1)
 
-    def OnImageDown(self, _):
+    def _OnImageDown(self, _):
         sel_pos = self.images_listbox.GetSelection()
         if sel_pos < self.images_listbox.GetCount() - 1 and sel_pos != -1:
             sel_path = self.images_listbox.GetStringSelection()
             self.images_listbox.Delete(sel_pos)
             self.images_listbox.Insert(sel_path, sel_pos + 1)
 
-    def OnSave(self, _):
+    def _OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
@@ -257,7 +257,7 @@ class InsModSoundTag(wx.Frame):
             random = "Yes"
         else:
             random = "No"
-        if self.image_associated_checkbox.IsChecked():
+        if self.associated_image_checkbox.IsChecked():
             image_associated = "Yes"
         else:
             image_associated = "No"
@@ -272,10 +272,10 @@ class InsModSoundTag(wx.Frame):
 
         if correct_data:
             if self.modifying:
-                self.parent.ModifyTag(self.tag_id, tag)
+                self.parent.modify_tag(self.tag_id, tag)
                 self.Destroy()
             else:
-                self.parent.AddTag(tag)
+                self.parent.add_tag(tag)
                 self.Destroy()
         else:
             InfoDialog("Please, don't forget to fill all fields with valid data").show()

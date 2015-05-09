@@ -16,8 +16,8 @@ class XMLMapper(object):
     """
     Class that performs CRUD operations over the activities
     in xml and manipulates the xml config file
-    :param actfile: Absolute path to xml activities file
-    :param conffile: Absolute path to xml config file
+    @param actfile: Absolute path to xml activities file
+    @param conffile: Absolute path to xml config file
     """
 
     def __init__(self, actfile, conffile):
@@ -36,101 +36,8 @@ class XMLMapper(object):
         activities = []
         self.used_ids = []
         for element in root:
-            activity = None
-            if element.attrib["type"] == PhotoPresentation.name:
-                tags = []
-                for tagelement in element.findall("tag"):
-                    if tagelement.attrib["soundAssociated"] == "Yes":
-                        sounds = []
-                        for soundElement in tagelement.findall("sound"):
-                            sound = Sound(soundElement.attrib["path"])
-                            sounds.append(sound)
-                        tag = PhotoPresentationTag(
-                            tagelement.attrib["name"],
-                            tagelement.attrib["path"],
-                            tagelement.attrib["soundAssociated"],
-                            sounds
-                        )
-                    else:
-                        tag = PhotoPresentationTag(
-                            tagelement.attrib["name"],
-                            tagelement.attrib["path"],
-                            tagelement.attrib["soundAssociated"],
-                        )
-
-                    tags.append(tag)
-                activity = PhotoPresentation(
-                    element.attrib["id"],
-                    element.attrib["name"],
-                    element.attrib["random"],
-                    element.attrib["gap"],
-                    tags)
-
-            elif element.attrib["type"] == VideoPresentation.name:
-                tags = []
-                for tagelement in element.findall("tag"):
-                    tag = VideoTag(
-                        tagelement.attrib["name"],
-                        tagelement.attrib["path"])
-                    tags.append(tag)
-                activity = VideoPresentation(
-                    element.attrib["id"],
-                    element.attrib["name"],
-                    element.attrib["random"],
-                    tags
-                )
-
-            elif element.attrib["type"] == SoundPresentation.name:
-                tags = []
-                for tagelement in element.findall("tag"):
-                    images = []
-                    for image_element in tagelement.findall("image"):
-                        image = Image(image_element.attrib["path"])
-                        images.append(image)
-                    tag = SoundPresentationTag(
-                        tagelement.attrib["name"],
-                        tagelement.attrib["path"],
-                        tagelement.attrib["random"],
-                        tagelement.attrib["imageAssociated"],
-                        images)
-                    tags.append(tag)
-                activity = SoundPresentation(
-                    element.attrib["id"],
-                    element.attrib["name"],
-                    element.attrib["random"],
-                    tags
-                )
-
-            elif element.attrib["type"] == ManualDefinedActivity.name:
-                tags = []
-                for tag_element in element.findall("tag"):
-                    tag = ManualDefinedTag(
-                        tag_element.attrib["name"],
-                        tag_element.attrib["text"],
-                        tag_element.attrib["finishType"],
-                        int(tag_element.attrib["time"])
-                    )
-                    tags.append(tag)
-                activity = ManualDefinedActivity(
-                    element.attrib["id"],
-                    element.attrib["name"],
-                    tags
-                )
-
-            elif element.attrib["type"] == AssociatedKeyActivity.name:
-                tags = []
-                for tag_element in element.findall("tag"):
-                    tag = AssociatedKeyTag(
-                        tag_element.attrib["name"],
-                        tag_element.attrib["text"],
-                        tag_element.attrib["key"]
-                    )
-                    tags.append(tag)
-                activity = AssociatedKeyActivity(
-                    element.attrib["id"],
-                    element.attrib["name"],
-                    tags
-                )
+            activity_id = int(element.attrib["id"])
+            activity = self.get_activity(activity_id)
             self.used_ids.append(int(element.attrib["id"]))
             activities.append(activity)
         return sorted(activities, key=lambda x: x.id)
@@ -150,14 +57,14 @@ class XMLMapper(object):
                     tags = []
                     for tagelement in element.findall("tag"):
                         sounds = []
-                        if tagelement.attrib["soundAssociated"] == "Yes":
+                        if tagelement.attrib["associatedSound"] == "Yes":
                             for soundElement in tagelement.findall("sound"):
                                 sound = Sound(soundElement.attrib["path"])
                                 sounds.append(sound)
                         tag = PhotoPresentationTag(
                             tagelement.attrib["name"],
                             tagelement.attrib["path"],
-                            tagelement.attrib["soundAssociated"],
+                            tagelement.attrib["associatedSound"],
                             sounds
                         )
 
@@ -187,7 +94,7 @@ class XMLMapper(object):
                     tags = []
                     for tagelement in element.findall("tag"):
                         images = []
-                        if tagelement.attrib["imageAssociated"] == "Yes":
+                        if tagelement.attrib["associatedImage"] == "Yes":
                             for image_element in tagelement.findall("image"):
                                 image = Image(image_element.attrib["path"])
                                 images.append(image)
@@ -195,7 +102,7 @@ class XMLMapper(object):
                             tagelement.attrib["name"],
                             tagelement.attrib["path"],
                             tagelement.attrib["random"],
-                            tagelement.attrib["imageAssociated"],
+                            tagelement.attrib["associatedImage"],
                             images
                         )
                         tags.append(tag)
@@ -242,8 +149,8 @@ class XMLMapper(object):
     def save_activity(self, activity, updating=False):
         """
         Save the activity passed by parameter to xml
-        :param updating: Indicate if saving is performed inside an update process
-        :param activity: The activity object
+        @param updating: Indicate if saving is performed inside an update process
+        @param activity: The activity object
         """
         tree = eT.ElementTree(file=self.act_file)
         root = tree.getroot()
@@ -265,7 +172,7 @@ class XMLMapper(object):
                 tag_element = eT.Element("tag")
                 tag_element.attrib["name"] = tag.name
                 tag_element.attrib["path"] = tag.path
-                tag_element.attrib["soundAssociated"] = tag.sound_associated
+                tag_element.attrib["associatedSound"] = tag.associated_sound
                 for sound in tag.sounds:
                     sound_element = eT.Element("sound")
                     sound_element.attrib["path"] = sound.path
@@ -280,7 +187,7 @@ class XMLMapper(object):
                 tag_element.attrib["name"] = tag.name
                 tag_element.attrib["path"] = tag.path
                 tag_element.attrib["random"] = tag.random
-                tag_element.attrib["imageAssociated"] = tag.image_associated
+                tag_element.attrib["associatedImage"] = tag.associated_image
                 for image in tag.images:
                     image_element = eT.Element("image")
                     image_element.attrib["path"] = image.path
@@ -320,8 +227,9 @@ class XMLMapper(object):
 
     def remove_activity(self, activity_id):
         """
-        Removes an activity wich id is passed as a parameter
-        :param activity_id: The id of the activity
+        Removes an activity which id is passed as a parameter
+        @param activity_id: The id of the activity
+        @type activity_id: int
         """
         tree = eT.ElementTree(file=self.act_file)
         root = tree.getroot()
@@ -333,11 +241,11 @@ class XMLMapper(object):
 
     def update_activity(self, activity_id, activity):
         """
-        Modifies the activity wich id is passed as a parameter
+        Modifies the activity which id is passed as a parameter
         with the data of the object activity passed as a parameter.
         Also change activity id to the minimum possible
-        :param activity_id: The id of that activity
-        :param activity: The activity object with the new data
+        @param activity_id: The id of that activity
+        @param activity: The activity object with the new data
         """
         self.remove_activity(activity_id)
         self.save_activity(activity, updating=True)
@@ -345,7 +253,7 @@ class XMLMapper(object):
     def read_config_file(self):
         """
         Parses the xml config file and return the configuration
-        :return: A Config object with the configuration data
+        @return: A Config object with the configuration data
         """
         tree = eT.ElementTree(file=self.conf_file)
         root = tree.getroot()
@@ -365,7 +273,7 @@ class XMLMapper(object):
     def save_config(self, attr_dict):
         """
         Saves the actual configuration to xml config file
-        :param attr_dict: A dictonary with param configurations and their values
+        @param attr_dict: A dictonary with param configurations and their values
         """
         tree = eT.parse(self.conf_file)
         doc = tree.getroot()

@@ -3,7 +3,7 @@ __author__ = 'nico'
 
 import os
 
-from activities.AbstractActivity import AbstractActivity, AbstractTag
+from activities.AbstractActivity import AbstractActivity
 from player.PhotoPresentationPlayer import PhotoPresentationPlayer
 from config import SUPPORTED_IMG_EXTENSIONS
 
@@ -20,11 +20,7 @@ class PhotoPresentation(AbstractActivity):
         self.player = None
 
     def run(self, writer):
-        self.player = PhotoPresentationPlayer(self.gap, self.random, self.tags)
-        self.player.play(writer)
-
-    def stop(self):
-        self.player.stop()
+        PhotoPresentationPlayer(self.gap, self.random, self.tags).play(writer)
 
     def __str__(self):
         toret = "Photo presentation acivity:\n" \
@@ -48,11 +44,11 @@ class PhotoPresentation(AbstractActivity):
         return toret
 
 
-class PhotoPresentationTag(AbstractTag):
-    def __init__(self, name, path, sound_associated, sounds=[]):
-        AbstractTag.__init__(self, name)
+class PhotoPresentationTag(object):
+    def __init__(self, name, path, associated_sound, sounds=[]):
+        self.name = name
         self.path = path
-        self.sound_associated = sound_associated
+        self.associated_sound = associated_sound
         self.sounds = sounds
 
     def check_files(self):
@@ -66,6 +62,6 @@ class PhotoPresentationTag(AbstractTag):
         return True
 
 
-class Sound:
+class Sound(object):
     def __init__(self, path):
         self.path = path

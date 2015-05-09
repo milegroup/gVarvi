@@ -10,9 +10,9 @@ class AcquisitionFacade(object):
     Class that directs all the acquisition process,
     including the communication with acquisition devices
     and activities
-    :param activity: The activity to be played
-    :param device: The device that performs HRV acquisition
-    :param writer: Class that write the results
+    @param activity: The activity to be played
+    @param device: The device that performs HRV acquisition
+    @param writer: Class that write the results
     """
 
     def __init__(self, activity, device, writer):
@@ -30,7 +30,6 @@ class AcquisitionFacade(object):
                 self.logger.info("Connecting to device")
                 self.device.connect()
                 self.logger.info("Starting acquisition")
-                import time
 
                 self.acquisition_thread = self.device.begin_acquisition(self.writer)
                 # Run device acquisition before activity because
@@ -40,7 +39,8 @@ class AcquisitionFacade(object):
                 self.activity.run(self.writer)
                 self.logger.info("Activity ended. Finishing device acquisition")
                 self.device.finish_acquisition()
-                self.acquisition_thread.join()
+                if self.acquisition_thread.is_alive():
+                    self.acquisition_thread.join()
                 self.logger.info("Disconnecting device")
                 self.device.disconnect()
                 self.logger.info("Device disconnected. Acquisition finished")
@@ -49,9 +49,13 @@ class AcquisitionFacade(object):
                 raise MissingFiles()
 
         except HostDownError:
+            if self.acquisition_thread and self.acquisition_thread.is_alive():
+                self.acquisition_thread.join()
             self.logger.exception("Unable to connect to device (host down)")
             raise
         except FailedAcquisition:
+            if self.acquisition_thread and self.acquisition_thread.is_alive():
+                self.acquisition_thread.join()
             self.logger.exception("Acquisition failed. Data will be saved anyway")
             raise
         except AbortedAcquisition:
@@ -61,7 +65,7 @@ class AcquisitionFacade(object):
 
     def _abort(self):
         self.device.finish_acquisition()
-        if self.acquisition_thread:
+        if self.acquisition_thread and self.acquisition_thread.is_alive():
             self.acquisition_thread.join()
         self.device.disconnect()
         self.writer.abort()

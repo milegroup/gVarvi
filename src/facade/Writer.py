@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from datetime import timedelta
 
 __author__ = 'nico'
@@ -28,35 +30,34 @@ class IWriter:
 
 
 class TextWriter(IWriter):
-    def __init__(self, tagfile, rrfile):
+    def __init__(self, tag_file, rr_file):
         self.logger = Logger()
 
-        self.tagFile = tagfile
-        with open(self.tagFile, "w") as f:
+        self.tag_file = tag_file
+        with open(self.tag_file, "w") as f:
             f.write("Init_time\tEvent\tDurat\n")
-        self.RRFile = rrfile
+        self.rr_file = rr_file
         self.rr_values = []
 
     def write_tag_value(self, name, beg, end):
-        with open(self.tagFile, "a") as f:
+        with open(self.tag_file, "a") as f:
             line = "%s\t%s\t%.3f" % (str(timedelta(seconds=beg)), name.replace(' ', '_'), end - beg)
             f.write(line + "\n")
 
     def write_rr_value(self, rr):
-        print "Writing {0} bpm".format(rr)
         self.rr_values.append(rr)
 
     def close_writer(self):
         self.logger.debug("Writing all rr values")
-        with open(self.RRFile, "w") as f:
+        with open(self.rr_file, "w") as f:
             for rr in self.rr_values:
                 f.write(str(rr) + "\n")
 
     def abort(self):
-        if os.path.isfile(self.RRFile):
-            os.remove(self.RRFile)
-        if os.path.isfile(self.tagFile):
-            os.remove(self.tagFile)
+        if os.path.isfile(self.rr_file):
+            os.remove(self.rr_file)
+        if os.path.isfile(self.tag_file):
+            os.remove(self.tag_file)
 
 
 

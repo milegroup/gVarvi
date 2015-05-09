@@ -3,7 +3,7 @@ __author__ = 'nico'
 
 import os
 
-from activities.AbstractActivity import AbstractActivity, AbstractTag
+from activities.AbstractActivity import AbstractActivity
 from player.SoundPresentationPlayer import SoundPresentationPlayer
 
 
@@ -16,8 +16,7 @@ class SoundPresentation(AbstractActivity):
         self.tags = tags
 
     def run(self, writer):
-        player = SoundPresentationPlayer(self.random, self.tags)
-        player.play(writer)
+        SoundPresentationPlayer(self.random, self.tags).play(writer)
 
     def __str__(self):
         toret = "Sound presentation acivity:\n" \
@@ -41,12 +40,12 @@ class SoundPresentation(AbstractActivity):
         return toret
 
 
-class SoundPresentationTag(AbstractTag):
-    def __init__(self, name, path, random, image_associated="No", images=[]):
-        AbstractTag.__init__(self, name)
+class SoundPresentationTag(object):
+    def __init__(self, name, path, random, associated_image="No", images=[]):
+        self.name = name
         self.path = path
         self.random = random
-        self.image_associated = image_associated
+        self.associated_image = associated_image
         self.images = images
 
     def check_files(self):

@@ -12,8 +12,8 @@ from InsModTemplate import InsModTemplate
 
 
 class InsModManualDefined(InsModTemplate):
-    def __init__(self, parent, control, activity_id=-1):
-        super(InsModManualDefined, self).__init__(size=(800, 600), parent=parent, control=control,
+    def __init__(self, parent, main_facade, activity_id=-1):
+        super(InsModManualDefined, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                   insmod_tag_window_type=InsModManualTag, activity_id=activity_id,
                                                   title="New Manual Activity")
         self.Show()
@@ -63,9 +63,9 @@ class InsModManualDefined(InsModTemplate):
             correct_data = False
         if correct_data:
             if self.modifying:
-                self.controller.update_activity(ManualDefinedActivity, self.activity_id, name, tags)
+                self.main_facade.update_activity(ManualDefinedActivity, self.activity_id, name, tags)
             else:
-                self.controller.add_activity(ManualDefinedActivity, -1, name, tags)
+                self.main_facade.add_activity(ManualDefinedActivity, -1, name, tags)
             self.main_window.refresh_activities()
             self.Destroy()
         else:
@@ -107,7 +107,7 @@ class InsModManualTag(wx.Frame):
                                             style=wx.CB_READONLY)
         if not self.modifying:
             self.finish_type_ctrl.SetValue("Timed")
-        self.finish_type_ctrl.Bind(wx.EVT_COMBOBOX, self.OnSelectFinishType)
+        self.finish_type_ctrl.Bind(wx.EVT_COMBOBOX, self._OnSelectFinishType)
         time_label = wx.StaticText(self, label='Time')
         self.time_ctrl = wx.SpinCtrl(self, value='120', min=5, max=1200)
         if self.modifying:
@@ -131,12 +131,12 @@ class InsModManualTag(wx.Frame):
 
         button_save = wx.Button(self, -1, label="Save")
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnSave, id=button_save.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
         button_save.SetToolTip(wx.ToolTip("Save the tag"))
 
         button_cancel = wx.Button(self, -1, label="Cancel")
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, id=button_cancel.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
         button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
@@ -145,7 +145,7 @@ class InsModManualTag(wx.Frame):
 
         self.Show()
 
-    def OnSelectFinishType(self, e):
+    def _OnSelectFinishType(self, e):
         selected_string = e.GetString()
         if selected_string == "Key (SPACE BAR)":
             self.time_ctrl.Disable()
@@ -153,7 +153,7 @@ class InsModManualTag(wx.Frame):
         else:
             self.time_ctrl.Enable()
 
-    def OnSave(self, e):
+    def _OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         screentext = self.screentext_text_ctrl.GetValue()
@@ -166,13 +166,13 @@ class InsModManualTag(wx.Frame):
 
         if correct_data:
             if self.modifying:
-                self.parent.ModifyTag(self.tag_id, tag)
+                self.parent.modify_tag(self.tag_id, tag)
                 self.Destroy()
             else:
-                self.parent.AddTag(tag)
+                self.parent.add_tag(tag)
                 self.Destroy()
         else:
             InfoDialog("Please, don't forget to fill all fields with valid data").show()
 
-    def OnCancel(self, e):
+    def _OnCancel(self, _):
         self.Destroy()

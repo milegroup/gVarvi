@@ -11,16 +11,16 @@ from Utils import valid_ip
 class ConfWindow(wx.Frame):
     """
     Window that allows user to config general parameters.
-    :param parent: Main gVARVI window
-    :param title: Title of the window
-    :param control: A reference to business logic facade.
+    @param parent: Main gVARVI window
+    @param main_facade: A reference to business logic facade.
     """
 
-    def __init__(self, parent, title, control):
-        self.controller = control
-        self.conf = self.controller.conf
+    def __init__(self, parent, main_facade):
+        self.main_facade = main_facade
+        self.conf = self.main_facade.conf
 
-        wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, title=title, size=(400, 420))
+        wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, title="Preferences",
+                          size=(400, 420))
 
         icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
         self.SetIcon(icon)
@@ -129,7 +129,7 @@ class ConfWindow(wx.Frame):
             self.rd_port_text_ctrl.Disable()
 
     def OnSavePreferences(self, _):
-        new_config = self.controller.conf
+        new_config = self.main_facade.conf
         new_config.defaultMode = self.default_mode_list_box.GetStringSelection()
         new_config.bluetoothSupport = "Yes" if self.bluetooth_support_check_box.IsChecked() else "No"
         new_config.antSupport = "Yes" if self.ant_support_check_box.IsChecked() else "No"
@@ -140,11 +140,11 @@ class ConfWindow(wx.Frame):
         new_config.rdIP = self.rd_ip_text_ctrl.GetValue()
         if valid_ip(new_config.rdIP):
             new_config.rdPort = self.rd_port_text_ctrl.GetValue()
-            self.controller.save_config()
+            self.main_facade.save_config()
             if new_config.remoteDebugger == "Yes":
-                self.controller.activate_remote_debug(new_config.rdIP, int(new_config.rdPort))
+                self.main_facade.activate_remote_debug(new_config.rdIP, int(new_config.rdPort))
             else:
-                self.controller.deactivate_remote_debug()
+                self.main_facade.deactivate_remote_debug()
             self.Destroy()
         else:
             ErrorDialog("Remote debugger IP field must be a valid ip, although it had not been activated.").show()
@@ -155,5 +155,5 @@ class ConfWindow(wx.Frame):
     def OnResetPreferences(self, _):
         result = ConfirmDialog("Are you sure to reset preferences?", "Confirm").get_result()
         if result == wx.ID_YES:
-            self.controller.reset_config()
+            self.main_facade.reset_config()
             self.Destroy()

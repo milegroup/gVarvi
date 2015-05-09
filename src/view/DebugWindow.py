@@ -22,10 +22,10 @@ class DebugWindow(wx.Frame):
 
         txt_handler = CustomConsoleHandler(log_text)
         self.logger.addHandler(txt_handler)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_CLOSE, self._OnClose)
         self.Centre()
 
-    def OnClose(self, e):
+    def _OnClose(self, e):
         self.Hide()
 
 

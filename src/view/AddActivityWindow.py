@@ -3,9 +3,9 @@ __author__ = 'nico'
 
 import wx
 
-from InsModImageActivity import InsModImageActivity
-from InsModSoundActivity import InsModSoundActivity
-from InsModVideoActivity import InsModVideoActivity
+from InsModPhotoPresentation import InsModPhotoPresentation
+from InsModSoundPresentation import InsModSoundPresentation
+from InsModVideoPresentation import InsModVideoPresentation
 from InsModAssociatedKey import InsModAssociatedKey
 from InsModManualDefined import InsModManualDefined
 from config import MAIN_ICON, IMAGE_ICON, SOUND_ICON,\
@@ -14,9 +14,9 @@ from config import BACKGROUND_COLOUR
 
 
 class AddActivityWindow(wx.Frame):
-    def __init__(self, parent, title, control):
+    def __init__(self, parent, title, main_facade):
         self.parent = parent
-        self.controller = control
+        self.main_facade = main_facade
         wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, title=title, size=(900, 250))
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
@@ -32,27 +32,27 @@ class AddActivityWindow(wx.Frame):
         image_button = wx.BitmapButton(self, id=wx.ID_ANY, style=wx.NO_BORDER, bitmap=image_bitmap,
                                        size=(150, 150))
         image_button.SetToolTip(wx.ToolTip("Image presentation"))
-        self.Bind(wx.EVT_BUTTON, self.OnImageActivity, id=image_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnImageActivity, id=image_button.GetId())
         video_bitmap = wx.Bitmap(VIDEO_ICON, wx.BITMAP_TYPE_ANY)
         video_button = wx.BitmapButton(self, id=wx.ID_ANY, style=wx.NO_BORDER, bitmap=video_bitmap,
                                        size=(150, 150))
         video_button.SetToolTip(wx.ToolTip("Video presentation"))
-        self.Bind(wx.EVT_BUTTON, self.OnVideoActivity, id=video_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnVideoActivity, id=video_button.GetId())
         sound_bitmap = wx.Bitmap(SOUND_ICON, wx.BITMAP_TYPE_ANY)
         sound_button = wx.BitmapButton(self, id=wx.ID_ANY, style=wx.NO_BORDER, bitmap=sound_bitmap,
                                        size=(150, 150))
         sound_button.SetToolTip(wx.ToolTip("Sound audition"))
-        self.Bind(wx.EVT_BUTTON, self.OnSoundActivity, id=sound_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnSoundActivity, id=sound_button.GetId())
         manual_bitmap = wx.Bitmap(MANUAL_ICON, wx.BITMAP_TYPE_ANY)
         manual_button = wx.BitmapButton(self, id=wx.ID_ANY, style=wx.NO_BORDER, bitmap=manual_bitmap,
                                         size=(150, 150))
         manual_button.SetToolTip(wx.ToolTip("Manual-defined tagged activity"))
-        self.Bind(wx.EVT_BUTTON, self.OnManualDefinedActivity, id=manual_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnManualDefinedActivity, id=manual_button.GetId())
         key_bitmap = wx.Bitmap(KEY_ICON, wx.BITMAP_TYPE_ANY)
         key_button = wx.BitmapButton(self, id=wx.ID_ANY, style=wx.NO_BORDER, bitmap=key_bitmap,
                                      size=(150, 150))
         key_button.SetToolTip(wx.ToolTip("Associated-Key tagged activity"))
-        self.Bind(wx.EVT_BUTTON, self.OnKeyAssociatedActivity, id=key_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnKeyAssociatedActivity, id=key_button.GetId())
 
         top_sizer.AddSpacer(10)
         top_sizer.Add(image_button, proportion=0, border=20)
@@ -68,7 +68,7 @@ class AddActivityWindow(wx.Frame):
 
         button_cancel = wx.Button(self, -1, label="Cancel")
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=5)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, id=button_cancel.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
         button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
 
         main_sizer.AddSpacer(20)
@@ -77,25 +77,25 @@ class AddActivityWindow(wx.Frame):
         main_sizer.Add(buttons_sizer, proportion=1, flag=wx.CENTER | wx.BOTTOM)
         self.SetSizer(main_sizer)
 
-    def OnCancel(self, _):
+    def _OnCancel(self, _):
         self.Destroy()
 
-    def OnImageActivity(self, _):
-        InsModImageActivity(self.parent, self.controller)
+    def _OnImageActivity(self, _):
+        InsModPhotoPresentation(self.parent, self.main_facade)
         self.Destroy()
 
-    def OnVideoActivity(self, _):
-        InsModVideoActivity(self.parent, self.controller)
+    def _OnVideoActivity(self, _):
+        InsModVideoPresentation(self.parent, self.main_facade)
         self.Destroy()
 
-    def OnSoundActivity(self, _):
-        InsModSoundActivity(self.parent, self.controller)
+    def _OnSoundActivity(self, _):
+        InsModSoundPresentation(self.parent, self.main_facade)
         self.Destroy()
 
-    def OnManualDefinedActivity(self, _):
-        InsModManualDefined(self.parent, self.controller)
+    def _OnManualDefinedActivity(self, _):
+        InsModManualDefined(self.parent, self.main_facade)
         self.Destroy()
 
-    def OnKeyAssociatedActivity(self, _):
-        InsModAssociatedKey(self.parent, self.controller)
+    def _OnKeyAssociatedActivity(self, _):
+        InsModAssociatedKey(self.parent, self.main_facade)
         self.Destroy()

@@ -6,7 +6,6 @@ import time
 from random import shuffle
 import sys
 from datetime import datetime
-
 import pygame
 
 from player.Player import Player
@@ -59,7 +58,7 @@ class SoundPresentationPlayer(Player):
             for tag in self.tags:
                 self.ended_tag = False
                 self.image_player_thread = None
-                if tag.image_associated == "Yes":
+                if tag.associated_image == "Yes":
                     gap = get_sound_length(tag.path) / len(tag.images)
                     self.image_player_thread = self.play_tag_images([img.path for img in tag.images], gap, size, screen,
                                                                     background)

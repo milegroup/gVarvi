@@ -11,6 +11,8 @@ from view.MainWindow import MainWindow
 from logger import Logger
 
 
+
+
 # Creating files and dirs if not exist
 if not os.path.isdir(CONF_DIR):
     os.mkdir(CONF_DIR)
@@ -32,7 +34,7 @@ conf = controller.parse_config_file()
 if conf.remoteDebugger == "Yes":
     logger.activate_datagram_logging(conf.rdIP, int(conf.rdPort))
 app = wx.App()
-frame = MainWindow(None, "gVARVI", controller)
+frame = MainWindow("gVARVI", controller)
 frame.Show()
 app.MainLoop()
 

@@ -16,6 +16,10 @@ class DemoBand(IDevice):
         self.end_acquisition = False
         self.ended_acquisition = False
 
+    @classmethod
+    def find(cls):
+        pass
+
     def connect(self, *args):
         self.connected = True
 

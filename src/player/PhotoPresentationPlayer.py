@@ -19,12 +19,12 @@ from logger import Logger
 class PhotoPresentationPlayer(Player):
     """
     Plays the Photo presentation activity and listen for keyboard events
-    :param gap: Duration of each activity (in seconds)
-    :type gap: int
-    :param random: If is set to "Yes" tags will be played in a random way. It can be set to "Yes" or "No"
-    :type random: str
-    :param tags: list of PhotoPresentationTag objects that contain all tag info.
-    :type tags: list
+    @param gap: Duration of each activity (in seconds)
+    @type gap: int
+    @param random: If is set to "Yes" tags will be played in a random way. It can be set to "Yes" or "No"
+    @type random: str
+    @param tags: list of PhotoPresentationTag objects that contain all tag info.
+    @type tags: list
     """
 
     def __init__(self, gap, random, tags):
@@ -69,7 +69,7 @@ class PhotoPresentationPlayer(Player):
         for tag in self.tags:
             self.ended_tag = False
             self.sound_player_thread = None
-            if tag.sound_associated == "Yes":
+            if tag.associated_sound == "Yes":
                 self.sound_player_thread = self.play_tag_sounds([sound.path for sound in tag.sounds])
             beg = (datetime.now() - self.zero_time).total_seconds()
             for img in self.images[tag]:
@@ -116,9 +116,9 @@ class PhotoPresentationPlayer(Player):
         if pygame.mixer.music.get_busy():
             pygame.mixer.stop()
 
-        # Se a reproducion de sons acaba
-        # pero a etiqueta ainda sigue
-        # volvemos a reproducir os sons
+        # If sounds playing ends
+        # but tag playing goes on,
+        # sounds will be played again
         while not self.ended_tag:
             for sound in sounds:
                 try:

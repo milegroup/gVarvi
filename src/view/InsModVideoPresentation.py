@@ -2,7 +2,6 @@
 __author__ = 'nico'
 
 import os
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -13,11 +12,12 @@ from view.wxUtils import InfoDialog
 from InsModTemplate import InsModTemplate
 
 
-class InsModVideoActivity(InsModTemplate):
-    def __init__(self, parent, control, activity_id=-1):
-        super(InsModVideoActivity, self).__init__(size=(800, 600), parent=parent, control=control,
-                                                  insmod_tag_window_type=InsModVideoTag, activity_id=activity_id,
-                                                  title="New Video Activity")
+class InsModVideoPresentation(InsModTemplate):
+    def __init__(self, parent, main_facade, activity_id=-1):
+        super(InsModVideoPresentation, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
+                                                      insmod_tag_window_type=InsModVideoPresentationTag,
+                                                      activity_id=activity_id,
+                                                      title="New Video Activity")
         self.Show()
 
     def refresh_tags(self):
@@ -69,16 +69,16 @@ class InsModVideoActivity(InsModTemplate):
             correct_data = False
         if correct_data:
             if self.modifying:
-                self.controller.update_activity(VideoPresentation, self.activity_id, name, random, tags)
+                self.main_facade.update_activity(VideoPresentation, self.activity_id, name, random, tags)
             else:
-                self.controller.add_activity(VideoPresentation, -1, name, random, tags)
+                self.main_facade.add_activity(VideoPresentation, -1, name, random, tags)
             self.main_window.refresh_activities()
             self.Destroy()
         else:
             InfoDialog("Please, don't forget to fill all fields\nAlso remember to add at least one tag").show()
 
 
-class InsModVideoTag(wx.Frame):
+class InsModVideoPresentationTag(wx.Frame):
     def __init__(self, parent, tag_control, tag_id=-1):
         self.parent = parent
         self.tag_control = tag_control
@@ -114,7 +114,7 @@ class InsModVideoTag(wx.Frame):
         if self.modifying:
             self.path_text_ctrl.SetValue(tag.path)
         self.path_button = wx.Button(self, -1, label="...")
-        self.Bind(wx.EVT_BUTTON, self.OnChangePath, id=self.path_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnChangePath, id=self.path_button.GetId())
         self.path_button.SetMinSize((40, 25))
         path_sizer.Add(self.path_text_ctrl, 1, wx.EXPAND)
         path_sizer.AddSpacer(20)
@@ -129,12 +129,12 @@ class InsModVideoTag(wx.Frame):
 
         button_save = wx.Button(self, -1, label="Save")
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnSave, id=button_save.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
         button_save.SetToolTip(wx.ToolTip("Save the tag"))
 
         button_cancel = wx.Button(self, -1, label="Cancel")
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, id=button_cancel.GetId())
+        self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
         button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
@@ -143,7 +143,7 @@ class InsModVideoTag(wx.Frame):
 
         self.Show()
 
-    def OnChangePath(self, _):
+    def _OnChangePath(self, _):
 
         wildcard = "Video source (*.mpg)|*.mpg"
 
@@ -158,7 +158,7 @@ class InsModVideoTag(wx.Frame):
             self.path_text_ctrl.SetValue(path)
         dlg.Destroy()
 
-    def OnSave(self, _):
+    def _OnSave(self, _):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
@@ -169,13 +169,13 @@ class InsModVideoTag(wx.Frame):
 
         if correct_data:
             if self.modifying:
-                self.parent.ModifyTag(self.tag_id, tag)
+                self.parent.modify_tag(self.tag_id, tag)
                 self.Destroy()
             else:
-                self.parent.AddTag(tag)
+                self.parent.add_tag(tag)
                 self.Destroy()
         else:
             InfoDialog("Please, don't forget to fill all fields with valid data").show()
 
-    def OnCancel(self, _):
+    def _OnCancel(self, _):
         self.Destroy()
