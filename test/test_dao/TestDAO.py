@@ -3,7 +3,7 @@ __author__ = 'nico'
 
 import unittest
 
-from src.dao.XMLMapper import XMLMapper
+from gvarvi.dao.XMLMapper import XMLMapper
 
 
 class TestDAO(unittest.TestCase):
@@ -40,7 +40,7 @@ class TestDAO(unittest.TestCase):
         <tag key="A" name="Tag 1" text="Tag 1 text"/>
         <tag key="B" name="Tag 2" text="Tag 2 text"/>
     </activity>
-    <activity id="5" name="Manual defined test activity" type="Manual-defined tagged activity">
+    <activity id="5" name="Manual defined test activity" type="Manual defined activity">
         <tag finishType="Timed" name="Tag 1" text="Tag 1 text" time="6"/>
         <tag finishType="Key (SPACE BAR)" name="Tag 2" text="Tag 2 text" time="5"/>
     </activity>
