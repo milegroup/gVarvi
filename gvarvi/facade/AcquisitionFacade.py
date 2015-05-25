@@ -1,7 +1,7 @@
 # coding=utf-8
 __author__ = 'nico'
 
-from Utils import HostDownError, FailedAcquisition, AbortedAcquisition, MissingFiles
+from utils import HostDownError, FailedAcquisition, AbortedAcquisition, MissingFiles
 from logger import Logger
 
 
@@ -25,6 +25,10 @@ class AcquisitionFacade(object):
         self.event_thread = None
 
     def start(self):
+        """
+        Starts acquisition.
+        @raise MissingFiles: If there are missing activity files.
+        """
         try:
             if self.activity.check_before_run():
                 self.logger.info("Connecting to device")
@@ -39,13 +43,14 @@ class AcquisitionFacade(object):
                 self.activity.run(self.writer)
                 self.logger.info("Activity ended. Finishing device acquisition")
                 self.device.finish_acquisition()
-                if self.acquisition_thread.is_alive():
+                if self.acquisition_thread and self.acquisition_thread.is_alive():
                     self.acquisition_thread.join()
                 self.logger.info("Disconnecting device")
                 self.device.disconnect()
                 self.logger.info("Device disconnected. Acquisition finished")
             else:
                 self.logger.exception("Some of activity files has been deleted")
+                self.writer.abort()
                 raise MissingFiles()
 
         except HostDownError:

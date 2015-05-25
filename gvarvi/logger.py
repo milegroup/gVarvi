@@ -5,10 +5,13 @@ import logging
 import logging.handlers
 
 from config import LOG_FILE
-from Utils import Singleton
+from utils import Singleton
 
 
 class Logger(logging.Logger):
+    """
+    Custom class for send debug messages to console (standard output), file (log) and net (datagram socket)
+    """
     __metaclass__ = Singleton
 
     def __init__(self):
@@ -36,10 +39,18 @@ class Logger(logging.Logger):
         self.addHandler(self.console_handler)
 
     def activate_datagram_logging(self, ip, port):
+        """
+        Activates remote debugging system.
+        @param ip: ip of remote debugger.
+        @param port: port of remote debugger.
+        """
         self.datagram_handler.host = ip
         self.datagram_handler.port = port
         self.addHandler(self.datagram_handler)
 
     def deactivate_datagram_logging(self):
+        """
+        Deactivates remote debugging system.
+        """
         if self.datagram_handler in self.handlers:
             self.removeHandler(self.datagram_handler)

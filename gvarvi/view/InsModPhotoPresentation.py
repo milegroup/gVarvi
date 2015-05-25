@@ -7,11 +7,20 @@ import wx.lib.agw.ultimatelistctrl as ULC
 
 from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
-from view.wxUtils import InfoDialog
+from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
 
 class InsModPhotoPresentation(InsModTemplate):
+    """
+    Window for insert and modify photo presentation activities.
+    @param parent: An instance of InsModTemplate class, that have common methods and parameter for all windows created
+    for insert and modify activities.
+    @param main_facade: Main facade of application.
+    @param activity_id: If the frame is open to modify an activity, this parameter is the id of that activity.
+    Otherwise, this parameter gets the value of -1.
+    """
+
     def __init__(self, parent, main_facade, activity_id=-1):
         super(InsModPhotoPresentation, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                       insmod_tag_window_type=InsModPhotoPresentationTag,
@@ -94,6 +103,14 @@ class InsModPhotoPresentation(InsModTemplate):
 
 
 class InsModPhotoPresentationTag(wx.Frame):
+    """
+    Window for insert and modify photo presentation tags.
+    @param parent: An instance of InsModPhotoPresentation that triggered actual frame.
+    @param tag_control: Object that controls all operations in tag list (insertions, deletions and updates).
+    @param tag_id: If the frame is open to modify a tag, this parameter is the id of that tag.
+    Otherwise, this parameter gets the value of -1.
+    """
+
     def __init__(self, parent, tag_control, tag_id=-1):
         self.parent = parent
         self.tag_control = tag_control
@@ -110,7 +127,7 @@ class InsModPhotoPresentationTag(wx.Frame):
 
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
         self.CenterOnScreen()
 
@@ -119,13 +136,13 @@ class InsModPhotoPresentationTag(wx.Frame):
         general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
         name_label = wx.StaticText(self, label='Name')
-        self.name_text_ctrl = wx.TextCtrl(self, -1, size=((400, -1)))
+        self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
         if self.modifying:
             self.name_text_ctrl.SetValue(tag.name)
 
         path_label = wx.StaticText(self, label='Path')
         path_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.path_text_ctrl = wx.TextCtrl(self, -1, size=((350, -1)))
+        self.path_text_ctrl = wx.TextCtrl(self, -1, size=(350, -1))
         if self.modifying:
             self.path_text_ctrl.SetValue(tag.path)
         self.path_button = wx.Button(self, -1, label="...")

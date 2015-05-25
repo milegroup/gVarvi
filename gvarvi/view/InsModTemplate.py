@@ -4,7 +4,7 @@ __author__ = 'nico'
 from abc import abstractmethod
 import wx
 
-from view.wxUtils import ConfirmDialog, InfoDialog
+from view.wxutils import ConfirmDialog, InfoDialog
 from config import BACKGROUND_COLOUR, MAIN_ICON
 
 
@@ -38,7 +38,7 @@ class InsModTemplate(wx.Frame):
             self.tag_ctrl = TagControl(self.activity.tags)
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
         self.CenterOnScreen()
 

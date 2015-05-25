@@ -3,9 +3,9 @@ __author__ = 'nico'
 
 import wx
 
-from view.wxUtils import ConfirmDialog, ErrorDialog
+from view.wxutils import ConfirmDialog, ErrorDialog
 from config import MAIN_ICON
-from Utils import valid_ip
+from utils import valid_ip
 
 
 class ConfWindow(wx.Frame):
@@ -22,7 +22,7 @@ class ConfWindow(wx.Frame):
         wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, title="Preferences",
                           size=(400, 420))
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
 
         self.CenterOnScreen()

@@ -6,11 +6,20 @@ import wx.lib.agw.ultimatelistctrl as ULC
 
 from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.AssociatedKeyActivity import AssociatedKeyTag, AssociatedKeyActivity
-from view.wxUtils import InfoDialog
+from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
 
 class InsModAssociatedKey(InsModTemplate):
+    """
+    Window for insert and modify associated-key tagged activities.
+    @param parent: An instance of InsModTemplate class, that have common methods and parameter for all windows created
+    for insert and modify activities.
+    @param main_facade: Main facade of application.
+    @param activity_id: If the frame is open to modify an activity, this parameter is the id of that activity.
+    Otherwise, this parameter gets the value of -1.
+    """
+
     def __init__(self, parent, main_facade, activity_id=-1):
         super(InsModAssociatedKey, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                   insmod_tag_window_type=InsModAssociatedKeyTag,
@@ -70,6 +79,14 @@ class InsModAssociatedKey(InsModTemplate):
 
 
 class InsModAssociatedKeyTag(wx.Frame):
+    """
+    Window for insert and modify associated key tags.
+    @param parent: An instance of InsModAssociatedKey that triggered actual frame.
+    @param tag_control: Object that controls all operations in tag list (insertions, deletions and updates).
+    @param tag_id: If the frame is open to modify a tag, this parameter is the id of that tag.
+    Otherwise, this parameter gets the value of -1.
+    """
+
     def __init__(self, parent, tag_control, tag_id=-1):
         self.parent = parent
         self.tag_control = tag_control
@@ -78,17 +95,17 @@ class InsModAssociatedKeyTag(wx.Frame):
         self.used_keys = self.parent.used_keys()
         self.previous_key = None
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title="New Key Associated Tag",
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title="New Associated Key Tag",
                               size=(600, 245))
         else:
             wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
-                              title="Modifying Key Associated Tag (id: {0})".format(tag_id),
+                              title="Modifying Associated Key Tag (id: {0})".format(tag_id),
                               size=(600, 245))
             tag = self.tag_control.tags[self.tag_id]
 
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
         self.CenterOnScreen()
 

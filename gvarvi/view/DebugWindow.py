@@ -4,10 +4,15 @@ __author__ = 'nico'
 import wx
 
 from logger import Logger
-from Utils import CustomConsoleHandler
+from utils import CustomConsoleHandler
 
 
 class DebugWindow(wx.Frame):
+    """
+    Window where logger shows debug data to user.
+    :param parent: Reference to MainWindow object
+    """
+
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, title="Debug Window", size=(400, 400))
 
@@ -25,7 +30,7 @@ class DebugWindow(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self._OnClose)
         self.Centre()
 
-    def _OnClose(self, e):
+    def _OnClose(self, _):
         self.Hide()
 
 

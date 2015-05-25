@@ -11,7 +11,7 @@ from facade.AcquisitionFacade import AcquisitionFacade
 from devices.IDevice import IDevice
 from facade.Writer import IWriter
 from activities.AbstractActivity import AbstractActivity
-from Utils import MissingFiles, HostDownError, AbortedAcquisition
+from utils import MissingFiles, HostDownError, AbortedAcquisition
 
 
 class TestAcquisitionFacade(unittest.TestCase):

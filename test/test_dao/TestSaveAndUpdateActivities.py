@@ -101,7 +101,7 @@ class TestSaveActivities(TestDAO):
     def test_save_sound_presentation_activity(self):
         tag1 = SoundPresentationTag("Tag 1", "/path/to/tag1", "No", "Yes", [Image("/path/to/some/image1"),
                                                                             Image("/path/to/some/image2")])
-        tag2 = SoundPresentationTag("Tag 2", "/path/to/tag2", "Yes", "No")
+        tag2 = SoundPresentationTag("Tag 2", "/path/to/tag2", "Yes")
         tags = [tag1, tag2]
         activity = SoundPresentation(-1, "Sound presentation test activity", "Yes", tags)
         self.mapper.save_activity(activity)

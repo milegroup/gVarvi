@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <config>
-    <defaultMode>Device connected mode</defaultMode>
+    <defaultMode>Demo mode</defaultMode>
     <bluetoothSupport>No</bluetoothSupport>
-    <antSupport>Yes</antSupport>
+    <antSupport>No</antSupport>
     <scanDevicesOnStartup>Yes</scanDevicesOnStartup>
-    <remoteDebugger>Yes</remoteDebugger>
-    <rdIP>1.1.1.1</rdIP>
-    <rdPort>1943</rdPort>
+    <remoteDebugger>No</remoteDebugger>
+    <rdIP>10.20.30.40</rdIP>
+    <rdPort>4444</rdPort>
 </config>

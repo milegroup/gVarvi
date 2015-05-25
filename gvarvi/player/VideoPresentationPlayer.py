@@ -13,6 +13,14 @@ from config import EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 
 
 class VideoPresentationPlayer(Player):
+    """
+    Plays a Video presentation activity and listen for keyboard events
+    @param random: If is set to "Yes" tags will be played in a random way. It can be set to "Yes" or "No"
+    @type random: str
+    @param tags: list of VideoPresentationTag objects that contain all tag info.
+    @type tags: list
+    """
+
     def __init__(self, random, tags):
         self.random = random
         self.tags = tags
@@ -26,6 +34,11 @@ class VideoPresentationPlayer(Player):
         self.zerotime = None
 
     def play(self, writer):
+        """
+        Plays activity tags.
+        @param writer: Object that write tags info.
+        """
+
         pygame.init()
         pygame.mixer.quit()
         pygame.display.init()

@@ -8,11 +8,11 @@ import wx.lib.agw.ultimatelistctrl as ULC
 
 from logger import Logger
 from ConfWindow import *
-from wxUtils import InfoDialog, ErrorDialog, ConfirmDialog
+from wxutils import InfoDialog, ErrorDialog, ConfirmDialog
 from config import ACTIVITIES_LIST_ID, DEVICES_LIST_ID, GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE
-from Utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError
-from Utils import ResultEvent, EVT_RESULT_ID
+from utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError
+from utils import ResultEvent, EVT_RESULT_ID
 from view.DebugWindow import DebugWindow
 from view.AddActivityWindow import AddActivityWindow
 from view.InsModPhotoPresentation import InsModPhotoPresentation
@@ -20,6 +20,11 @@ from view.InsModSoundPresentation import InsModSoundPresentation
 from view.InsModAssociatedKey import InsModAssociatedKey
 from view.InsModManualDefined import InsModManualDefined
 from view.InsModVideoPresentation import InsModVideoPresentation
+from activities.PhotoPresentation import PhotoPresentation
+from activities.SoundPresentation import SoundPresentation
+from activities.VideoPresentation import VideoPresentation
+from activities.AssociatedKeyActivity import AssociatedKeyActivity
+from activities.ManualDefinedActivity import ManualDefinedActivity
 
 
 class MainWindow(wx.Frame):
@@ -33,7 +38,7 @@ class MainWindow(wx.Frame):
 
         self.debug_window = DebugWindow(self)
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
 
         self.CenterOnScreen()
@@ -213,6 +218,13 @@ class MainWindow(wx.Frame):
         self.busy_dlg = None
         self.refresh_activities()
 
+        # Mapping between activities and frames that insert and modify each activity
+        self.ins_mod_windows = {PhotoPresentation: InsModPhotoPresentation,
+                                VideoPresentation: InsModVideoPresentation,
+                                SoundPresentation: InsModSoundPresentation,
+                                AssociatedKeyActivity: InsModAssociatedKey,
+                                ManualDefinedActivity: InsModManualDefined}
+
     def _build_menu(self):
         menu_file = wx.Menu()
         menu_preferences = menu_file.Append(wx.ID_PREFERENCES, "Preferences", "Configuration window")
@@ -257,13 +269,8 @@ class MainWindow(wx.Frame):
         if self._is_activity_selected():
             activity_id = self.activities_grid.GetItem(self.activities_grid.GetFirstSelected()).GetText()
             activity = self.main_facade.get_activity(activity_id)
-            types_dict = {"Photo presentation": InsModPhotoPresentation,
-                          "Video presentation": InsModVideoPresentation,
-                          "Sound presentation": InsModSoundPresentation,
-                          "Associated-Key tagged activity": InsModAssociatedKey,
-                          "Manual defined activity": InsModManualDefined}
-            act_type = activity.__class__.name
-            edit_activity_window = types_dict[act_type](self, self.main_facade, activity_id)
+
+            edit_activity_window = self.ins_mod_windows[activity.__class__](self, self.main_facade, activity_id)
             edit_activity_window.Show()
         else:
             InfoDialog("You must select an activity").show()
@@ -290,7 +297,7 @@ the lack of specific tools for this purpose."""
 
         licence = """-------------------------------------------------------------------------
    gVARVI: graphic heart rate Variability Adquisition in Response to audioVisual stImuli
-   Copyright (C) 2014  Milegroup - Dpt. Informatics
+   Copyright (C) 2015  Milegroup - Dpt. Informatics
       University of Vigo - Spain
       www.milegroup.net
 
@@ -869,9 +876,9 @@ copy of the Program in return for a fee.
 
         info = wx.AboutDialogInfo()
 
-        info.SetIcon(wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO))
+        info.SetIcon(wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG))
         info.SetName('gVarvi')
-        info.SetVersion('1.0')
+        info.SetVersion('0.1')
         info.SetDescription(description)
         info.SetCopyright('(C) 2014-2015 MileGroup')
         info.SetWebSite('http://milegroup.net/')
@@ -1072,25 +1079,30 @@ class OnFinishAcquisitionDialog(wx.Frame):
         self.main_facade = main_facade
         pnl = wx.Panel(self)
 
-        main_sizer = wx.BoxSizer(wx.VERTICAL)
-        main_sizer.AddSpacer(10)
+        main_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        main_sizer.AddSpacer(10)
+        internal_sizer = wx.BoxSizer(wx.VERTICAL)
+        internal_sizer.AddSpacer(20)
+
         ok_btn = wx.Button(pnl, label='Do nothing')
         ok_btn.Bind(wx.EVT_BUTTON, self._OnOK)
-        main_sizer.Add(ok_btn, 1, wx.ALIGN_CENTER)
+        internal_sizer.Add(ok_btn, 1, wx.EXPAND)
 
-        main_sizer.AddSpacer(10)
-        ghrv_btn = wx.Button(pnl, label='Open data with gHRV')
+        internal_sizer.AddSpacer(10)
+        ghrv_btn = wx.Button(pnl, label='Open in gHRV')
         ghrv_btn.Bind(wx.EVT_BUTTON, self._OnGHRV)
-        main_sizer.Add(ghrv_btn, 1, wx.ALIGN_CENTER)
+        internal_sizer.Add(ghrv_btn, 1, wx.EXPAND)
 
-        main_sizer.AddSpacer(10)
+        internal_sizer.AddSpacer(10)
         plot_btn = wx.Button(pnl, label='Plot results')
         plot_btn.Bind(wx.EVT_BUTTON, self._OnPlotResults)
-        main_sizer.Add(plot_btn, 1, wx.ALIGN_CENTER)
+        internal_sizer.Add(plot_btn, 1, wx.EXPAND)
+        internal_sizer.AddSpacer(20)
 
         main_sizer.AddSpacer(20)
+        main_sizer.Add(internal_sizer, 1, wx.EXPAND)
+        main_sizer.AddSpacer(20)
+
         pnl.SetSizer(main_sizer)
         self.SetSize((300, 200))
         self.SetTitle('Acquisition finished')

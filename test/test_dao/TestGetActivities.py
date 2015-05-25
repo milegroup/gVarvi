@@ -2,6 +2,7 @@
 
 __author__ = 'nico'
 
+from activities.AbstractActivity import AbstractActivity
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag
 from activities.VideoPresentation import VideoPresentation, VideoTag
 from activities.SoundPresentation import SoundPresentation, SoundPresentationTag
@@ -17,6 +18,8 @@ class TestGetActivities(TestDAO):
     def test_read_activities_file(self):
         activities = self.mapper.read_activities_file()
         self.assertEqual(len(activities), 5, "Activities list must have 5 activities")
+        for act in activities:
+            self.assertIsInstance(act, AbstractActivity, "Element is not an activity")
 
     def test_get_non_existent_activity(self):
         self.assertRaises(KeyError, self.mapper.get_activity, 100)

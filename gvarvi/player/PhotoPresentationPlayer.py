@@ -12,14 +12,14 @@ from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
 from config import SUPPORTED_IMG_EXTENSIONS
-from Utils import run_in_thread
+from utils import run_in_thread
 from logger import Logger
 
 
 class PhotoPresentationPlayer(Player):
     """
-    Plays the Photo presentation activity and listen for keyboard events
-    @param gap: Duration of each activity (in seconds)
+    Plays a Photo presentation activity and listen for keyboard events
+    @param gap: Duration of each picture (in seconds)
     @type gap: int
     @param random: If is set to "Yes" tags will be played in a random way. It can be set to "Yes" or "No"
     @type random: str
@@ -49,6 +49,10 @@ class PhotoPresentationPlayer(Player):
         self.zero_time = None
 
     def play(self, writer):
+        """
+        Plays activity tags.
+        @param writer: Object that write tags info.
+        """
 
         self.return_code = EXIT_SUCCESS_CODE
 

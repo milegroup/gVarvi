@@ -9,7 +9,8 @@ from config import CONF_DIR, DEFAULT_CONF_FILE, DEFAULT_ACTIV_FILE, CONF_FILE, A
 
 
 
-# Creating files and dirs if not exist
+
+# Creating necessary files and dirs if not exist
 if not os.path.isdir(CONF_DIR):
     os.mkdir(CONF_DIR)
 if not os.path.isfile(CONF_FILE):
@@ -24,18 +25,17 @@ from view.MainWindow import MainWindow
 from logger import Logger
 
 
-# Initialization of application logger
-
+# Application logger initialization
 logger = Logger()
-
 logger.debug("Starting app")
-
-controller = MainFacade(ACTIV_FILE, CONF_FILE)
-conf = controller.parse_config_file()
+main_facade = MainFacade(ACTIV_FILE, CONF_FILE)
+conf = main_facade.parse_config_file()
 if conf.remoteDebugger == "Yes":
     logger.activate_datagram_logging(conf.rdIP, int(conf.rdPort))
+
+# Application initialization
 app = wx.App()
-frame = MainWindow("gVARVI", controller)
+frame = MainWindow("gVARVI", main_facade)
 frame.Show()
 app.MainLoop()
 

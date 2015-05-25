@@ -4,14 +4,14 @@ __author__ = 'nico'
 import os
 
 from dao.XMLMapper import XMLMapper
-from Utils import Singleton
+from utils import Singleton
 from facade.AcquisitionFacade import AcquisitionFacade
 from devices.PolariWL import PolariWL
 from devices.DemoBand import DemoBand
 from devices.ANTDevice import ANTDevice
 from facade.Writer import TextWriter
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE
-from Utils import run_in_thread, paint
+from utils import run_in_thread, paint
 from logger import Logger
 from devices.BTDevice import BTDevice
 
@@ -20,8 +20,8 @@ class MainFacade:
     """
     Class that manages all view operations and delegates
     their execution to specific classes.
-    @param activ_file: Path to activities file
-    @param conf_file: Path to configuration file
+    @param activ_file: Path to activities file.
+    @param conf_file: Path to configuration file.
     """
     __metaclass__ = Singleton
 
@@ -91,7 +91,7 @@ class MainFacade:
 
     def run_test(self, notify_window, name, mac, dev_type):
         device = None
-        if dev_type == "BT":
+        if dev_type == "BT" and name == "Polar iWL":
             device = PolariWL(mac)
         elif dev_type == "ANT+":
             device = ANTDevice()
@@ -144,7 +144,7 @@ class MainFacade:
     @run_in_thread
     def plot_results(self):
         """
-        Plots adquisition results in a new window
+        Plots acquisition results in a new window
         """
         rr_file = str(self.acquisition_path) + ".rr.txt"
         tag_file = str(self.acquisition_path) + ".tag.txt"

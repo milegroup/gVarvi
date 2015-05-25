@@ -14,14 +14,18 @@ from third_party.ant.core import driver, event
 from third_party.ant.core.message import ChannelBroadcastDataMessage, MessageError
 from third_party.ant.core.constants import CHANNEL_TYPE_TWOWAY_RECEIVE, TIMEOUT_NEVER
 from devices.IDevice import IDevice
-from Utils import run_in_thread
-from Utils import ResultEvent
-from Utils import HostDownError
+from utils import run_in_thread
+from utils import ResultEvent
+from utils import HostDownError
 from logger import Logger
 from config import ant_SERIAL, ant_NETKEY, ant_lookup_timeout
 
 
 class ANTDevice(IDevice):
+    """
+    Class that represents an ANT+ Heart rate monitor.
+    """
+
     connected = False
     logger = Logger()
 
@@ -40,24 +44,42 @@ class ANTDevice(IDevice):
         self.connected = False
 
     def connect(self, *args):
+        """
+        Connects to ANT+ device by opening a communication channel.
+        @param args: List of parameter values (not used).
+        """
         self._open_channel()
 
     def disconnect(self):
+        """
+        Disconnects ANT+ device.
+        """
         pass
 
     @run_in_thread
     def run_test(self, notify_window):
+        """
+        Run test for ANT+ device.
+        @param notify_window: Window that device will send test data.
+        """
         if not self.antnode.evm.running:
             self.antnode.evm.start()
         self.callback = TestCallback(notify_window)
         self.channel.registerCallback(self.callback)
 
     def finish_test(self):
+        """
+        Finishes test for ANT+ device.
+        """
         self.antnode.evm.removeCallback(self.callback)
         self.antnode.evm.stop()
 
     @run_in_thread
     def begin_acquisition(self, writer):
+        """
+        Starts acquisition by registering custom acquisition callback.
+        @param writer: Object that writes acquisition results.
+        """
         if not self.antnode.evm.running:
             self.antnode.evm.start()
             self.antnode.evm.callbacks = set()
@@ -65,6 +87,9 @@ class ANTDevice(IDevice):
         self.channel.registerCallback(self.callback)
 
     def finish_acquisition(self):
+        """
+        Finishes acquisition for ANT+ device.
+        """
         self.end_acquisition = True
         while not self.ended_acquisition:
             time.sleep(0.1)
@@ -120,6 +145,10 @@ class ANTDevice(IDevice):
 
     @classmethod
     def find(cls):
+        """
+        Static method that finds nearby ANT+ devices.
+        @return: A list of nearby devices.
+        """
         dev = ANTDevice()
         if dev._is_device_connected():
             device = namedtuple("device", ["name", "type", "mac"])
@@ -149,10 +178,20 @@ class ANTDevice(IDevice):
 
     @staticmethod
     def finish_lookup(device_found):
+        """
+        Finishes devices lookup.
+        @param device_found: True if any nearby device has been found.
+        """
         ANTDevice.connected = device_found
 
     @classmethod
     def unpack_broadcast_message(cls, msg):
+        """
+        Unpack raw message from ANT+ device for make it
+        easy-readable.
+        @param msg: Raw message from ANT+ device.
+        @return: A namedtuple with all necessary parameters.
+        """
         message = namedtuple("message",
                              ["page_byte", "previous_beat_time", "actual_beat_time", "heartbeat_count",
                               "computed_heart_rate"])
@@ -185,6 +224,12 @@ class ANTDevice(IDevice):
 
 
 class AcquisitionCallback(event.EventCallback):
+    """
+    Custom callback to process an ANT+ message for acquisition.
+    @param device: Reference to ANTDevice object.
+    @param writer: Object that writes obtained rr values.
+    """
+
     def __init__(self, device, writer):
         self.logger = Logger()
 
@@ -194,9 +239,12 @@ class AcquisitionCallback(event.EventCallback):
         self.previous_beat_time = -1
 
     def process(self, msg):
-
+        """
+        Does the message processing.
+        @param msg: The message
+        """
         if isinstance(msg, ChannelBroadcastDataMessage):
-            if self.device.end_adquisition:
+            if self.device.end_acquisition:
                 if not self.device.results_written:
                     self.writer.close_writer()
                     self.device.results_written = True
@@ -240,13 +288,20 @@ class AcquisitionCallback(event.EventCallback):
 
 
 class TestCallback(event.EventCallback):
+    """
+    Custom message to process an ANT+ message for testing a device.
+    @param notify_window: Window where testing messages will be sent to.
+    """
+
     def __init__(self, notify_window):
         self.logger = Logger()
-
         self.notify_window = notify_window
 
     def process(self, msg):
-
+        """
+        Does the message processing.
+        @param msg: The message.
+        """
         if isinstance(msg, ChannelBroadcastDataMessage):
             unpacked_message = ANTDevice.unpack_broadcast_message(msg)
             # Only read page 4
@@ -265,9 +320,18 @@ class TestCallback(event.EventCallback):
 
 
 class LookupCallback(event.EventCallback):
+    """
+    Custom callback that process ANT+ device for lookup purposes.
+    @param finish_lookup_fn: Function that sets the finish_lookup flag to True.
+    """
+
     def __init__(self, finish_lookup_fn):
         self.finish_lookup_fn = finish_lookup_fn
 
     def process(self, msg):
+        """
+        Does the message processing.
+        :param msg: The message.
+        """
         if isinstance(msg, ChannelBroadcastDataMessage):
             self.finish_lookup_fn(True)

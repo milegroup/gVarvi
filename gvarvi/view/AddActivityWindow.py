@@ -17,14 +17,18 @@ class AddActivityWindow(wx.Frame):
     def __init__(self, parent, title, main_facade):
         self.parent = parent
         self.main_facade = main_facade
-        wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER, title=title, size=(900, 265))
+        wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=title, size=(900, 300))
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
         self.CenterOnScreen()
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
+
+        # ---------- Begin icon buttons sizer ----------
+
+
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
         buttons_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -88,20 +92,30 @@ class AddActivityWindow(wx.Frame):
         top_sizer.Add(key_button, proportion=0, border=20)
         top_sizer.AddSpacer(10)
 
+        # ---------- End icon buttons sizer ----------
+
+        # ---------- Begin line sizer ----------
+
         line = wx.StaticLine(self, -1, size=(1, 1), style=wx.LI_HORIZONTAL)
         line.SetForegroundColour(wx.Colour(0, 0, 255))
+
+        # ---------- End line sizer ----------
+
+        # ---------- Begin cancel button sizer ----------
 
         button_cancel = wx.Button(self, -1, label="Cancel")
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=5)
         self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
         button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
 
+        # ---------- End cancel button sizer ----------
+
         main_sizer.AddSpacer(20)
         main_sizer.Add(top_sizer, proportion=1, flag=wx.CENTER)
         main_sizer.AddSpacer(10)
-        main_sizer.Add(line, 0, wx.EXPAND | wx.ALL, border=10)
+        main_sizer.Add(line, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
         main_sizer.AddSpacer(10)
-        main_sizer.Add(buttons_sizer, proportion=1, flag=wx.CENTER | wx.BOTTOM)
+        main_sizer.Add(buttons_sizer, proportion=1, flag=wx.CENTER | wx.BOTTOM, border=10)
         self.SetSizer(main_sizer)
 
     def _OnCancel(self, _):

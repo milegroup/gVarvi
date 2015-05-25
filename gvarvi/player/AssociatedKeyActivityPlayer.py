@@ -12,6 +12,11 @@ from config import pygame_wx_evt_map
 
 
 class AssociatedKeyActivityPlayer(Player):
+    """
+    Player for associated key activities
+    @param tags: Tags of actual activity.
+    """
+
     def __init__(self, tags):
         self.dict_tags = OrderedDict()
         for tag in tags:
@@ -26,7 +31,10 @@ class AssociatedKeyActivityPlayer(Player):
         self.actual_tag = None
 
     def play(self, writer):
-
+        """
+        Plays activity tags.
+        @param writer: Object that write tags info.
+        """
         self.return_code = EXIT_SUCCESS_CODE
 
         pygame.init()

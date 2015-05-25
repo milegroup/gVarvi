@@ -7,11 +7,20 @@ import wx.lib.agw.ultimatelistctrl as ULC
 
 from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.VideoPresentation import VideoTag, VideoPresentation
-from view.wxUtils import InfoDialog
+from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
 
 class InsModVideoPresentation(InsModTemplate):
+    """
+    Window for insert and modify video presentation activities.
+    @param parent: An instance of InsModTemplate class, that have common methods and parameter for all windows created
+    for insert and modify activities.
+    @param main_facade: Main facade of application.
+    @param activity_id: If the frame is open to modify an activity, this parameter is the id of that activity.
+    Otherwise, this parameter gets the value of -1.
+    """
+
     def __init__(self, parent, main_facade, activity_id=-1):
         super(InsModVideoPresentation, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                       insmod_tag_window_type=InsModVideoPresentationTag,
@@ -78,6 +87,14 @@ class InsModVideoPresentation(InsModTemplate):
 
 
 class InsModVideoPresentationTag(wx.Frame):
+    """
+    Window for insert and modify video presentation tags.
+    @param parent: An instance of InsModVideoPresentation that triggered actual frame.
+    @param tag_control: Object that controls all operations in tag list (insertions, deletions and updates).
+    @param tag_id: If the frame is open to modify a tag, this parameter is the id of that tag.
+    Otherwise, this parameter gets the value of -1.
+    """
+
     def __init__(self, parent, tag_control, tag_id=-1):
         self.parent = parent
         self.tag_control = tag_control
@@ -94,7 +111,7 @@ class InsModVideoPresentationTag(wx.Frame):
 
         self.SetBackgroundColour(BACKGROUND_COLOUR)
 
-        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_ICO)
+        icon = wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)
         self.CenterOnScreen()
 

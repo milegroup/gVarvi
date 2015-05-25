@@ -29,7 +29,7 @@ class XMLMapper(object):
     def read_activities_file(self):
         """
         Parses xml activities file to get stored activities
-        :return: A list with all stored activity objects
+        @return: A list with all stored activity objects
         """
         tree = eT.ElementTree(file=self.act_file)
         root = tree.getroot()
@@ -44,9 +44,10 @@ class XMLMapper(object):
 
     def get_activity(self, activity_id):
         """
-        Gets the activity wich id is passed by parameter
-        :param activity_id: The id of the activity you want get
-        :return: The activity object :raise KeyError: If there is no activity with that id
+        Gets the activity which id is passed by parameter
+        @param activity_id: The id of the activity you want get
+        @return: The activity object
+        @raise KeyError: If there is no activity with that id
         """
         tree = eT.ElementTree(file=self.act_file)
         root = tree.getroot()

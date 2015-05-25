@@ -46,17 +46,17 @@ class TestDAO(unittest.TestCase):
     </activity>
 </activities>
 """)
-            with open("conf.xml", "wt") as f:
-                f.write("""<?xml version='1.0' encoding='UTF-8'?>
+        with open("conf.xml", "wt") as f:
+            f.write("""<?xml version='1.0' encoding='UTF-8'?>
 <config>
-    <defaultMode>Demo mode</defaultMode>
-    <bluetoothSupport>No</bluetoothSupport>
-    <antSupport>No</antSupport>
-    <scanDevicesOnStartup>Yes</scanDevicesOnStartup>
-    <remoteDebugger>No</remoteDebugger>
-    <rdIP>10.20.30.40</rdIP>
-    <rdPort>4444</rdPort>
+<defaultMode>Demo mode</defaultMode>
+<bluetoothSupport>No</bluetoothSupport>
+<antSupport>No</antSupport>
+<scanDevicesOnStartup>Yes</scanDevicesOnStartup>
+<remoteDebugger>No</remoteDebugger>
+<rdIP>10.20.30.40</rdIP>
+<rdPort>4444</rdPort>
 </config>""")
-                self.mapper = XMLMapper("activities.xml", "conf.xml")
-                self.mapper.lastId = 5
-                self.mapper.used_ids = [1, 2, 3, 4, 5]
+        self.mapper = XMLMapper("activities.xml", "conf.xml")
+        self.mapper.lastId = 5
+        self.mapper.used_ids = [1, 2, 3, 4, 5]

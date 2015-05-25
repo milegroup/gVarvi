@@ -5,6 +5,12 @@ from abc import abstractmethod, ABCMeta
 
 
 class AbstractActivity:
+    """
+    Abstract class that provides common methods and attributes
+    to every activities.
+    @param id: Unique identifier for each activity.
+    @param name: Name of the activity.
+    """
     __metaclass__ = ABCMeta
 
     def __init__(self, id, name):
@@ -13,6 +19,11 @@ class AbstractActivity:
         self.tags = None
 
     def check_before_run(self):
+        """
+        Checks if every activity tag is ok and there is no missing
+        files.
+        @return: True if everything is OK.
+        """
         tags_ok = True
         for tag in self.tags:
             if not tag.check_files():
@@ -22,4 +33,8 @@ class AbstractActivity:
 
     @abstractmethod
     def run(self, writer):
+        """
+        Plays the activity.
+        @param writer: Object that writes tag data.
+        """
         pass

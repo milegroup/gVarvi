@@ -1,21 +1,27 @@
 # coding=utf-8
 __author__ = 'nico'
 
-import os
 import time
 from random import shuffle
-import sys
 from datetime import datetime
 import pygame
 
 from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE, EXIT_FAIL_CODE
-from Utils import run_in_thread, get_sound_length
+from utils import run_in_thread, get_sound_length
 from logger import Logger
 
 
 class SoundPresentationPlayer(Player):
+    """
+    Plays a Sound presentation activity and listen for keyboard events
+    @param random: If is set to "Yes" tags will be played in a random way. It can be set to "Yes" or "No"
+    @type random: str
+    @param tags: list of SoundPresentationTag objects that contain all tag info.
+    @type tags: list
+    """
+
     def __init__(self, random, tags):
         self.logger = Logger()
 
@@ -32,6 +38,10 @@ class SoundPresentationPlayer(Player):
         self.zerotime = None
 
     def play(self, writer):
+        """
+        Plays activity tags.
+        @param writer: Object that write tags info.
+        """
 
         background = (0, 0, 0)
         pygame.init()
@@ -49,45 +59,42 @@ class SoundPresentationPlayer(Player):
         try:
             pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
         except pygame.error, exc:
-            print >> sys.stderr, "Could not initialize sound system\n %s" % exc
-            return 1
+            self.logger.exception("Could not initialize sound system\n {0}".format(exc))
+            self.return_code = EXIT_FAIL_CODE
+            return
 
         self.zerotime = datetime.now()
 
-        if self.check(self.tags):
-            for tag in self.tags:
-                self.ended_tag = False
-                self.image_player_thread = None
-                if tag.associated_image == "Yes":
-                    gap = get_sound_length(tag.path) / len(tag.images)
-                    self.image_player_thread = self.play_tag_images([img.path for img in tag.images], tag.random, gap,
-                                                                    size, screen,
-                                                                    background)
-                try:
-                    clock = pygame.time.Clock()
-                    pygame.mixer.music.load(tag.path)
-                    beg = (datetime.now() - self.zerotime).total_seconds()
-                    pygame.mixer.music.play()
-                    while pygame.mixer.music.get_busy() and not self.done:
-                        for event in pygame.event.get(pygame.KEYDOWN):
-                            if event.key == ABORT_KEY:
-                                self.done = True
-                        clock.tick(FRAMERATE)
-                    if self.done:
-                        self.return_code = EXIT_ABORT_CODE
-                except pygame.error, exc:
-                    self.logger.exception("Could not play sound file: {0}\n{1}".format(tag.path, exc))
-                    self.return_code = EXIT_FAIL_CODE
+        for tag in self.tags:
+            self.ended_tag = False
+            self.image_player_thread = None
+            if tag.associated_image == "Yes":
+                gap = get_sound_length(tag.path) / len(tag.images)
+                self.image_player_thread = self.play_tag_images([img.path for img in tag.images], tag.random, gap,
+                                                                size, screen,
+                                                                background)
+            try:
+                clock = pygame.time.Clock()
+                pygame.mixer.music.load(tag.path)
+                beg = (datetime.now() - self.zerotime).total_seconds()
+                pygame.mixer.music.play()
+                while pygame.mixer.music.get_busy() and not self.done:
+                    for event in pygame.event.get(pygame.KEYDOWN):
+                        if event.key == ABORT_KEY:
+                            self.done = True
+                    clock.tick(FRAMERATE)
+                if self.done:
+                    self.return_code = EXIT_ABORT_CODE
+            except pygame.error, exc:
+                self.logger.exception("Could not play sound file: {0}\n{1}".format(tag.path, exc))
+                self.return_code = EXIT_FAIL_CODE
 
-                self.ended_tag = True
-                if self.image_player_thread:
-                    self.image_player_thread.join()
-                end = (datetime.now() - self.zerotime).total_seconds()
-                writer.write_tag_value(tag.name, beg, end)
-            print "Tags finished"
+            self.ended_tag = True
+            if self.image_player_thread:
+                self.image_player_thread.join()
+            end = (datetime.now() - self.zerotime).total_seconds()
+            writer.write_tag_value(tag.name, beg, end)
 
-        else:
-            self.return_code = EXIT_ABORT_CODE
         self._stop()
         self.logger.info("Player return code: {0}".format(self.return_code))
         self.raise_if_needed(self.return_code)
@@ -99,15 +106,6 @@ class SoundPresentationPlayer(Player):
         pygame.mixer.stop()
         pygame.mixer.quit()
         pygame.quit()
-
-    def check(self, tags):
-        tags_ok = True
-        for tag in tags:
-            if not os.path.isfile(tag.path):
-                self.logger.exception("File not exists: {0}".format(tag.path))
-                tags_ok = False
-                break
-        return tags_ok
 
     @run_in_thread
     def play_tag_images(self, images, random, gap, size, screen, background):

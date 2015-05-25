@@ -28,7 +28,6 @@ class ResultEvent(wx.PyEvent):
     """
 
     def __init__(self, data):
-        """Init Result Event."""
         wx.PyEvent.__init__(self)
         self.SetEventType(EVT_RESULT_ID)
         self.data = data
@@ -49,13 +48,13 @@ class Singleton(type):
 class CustomConsoleHandler(logging.StreamHandler):
     """
     Handler that send log to a TextCtrl object
-    @param textctrl: The TextCtrl object
-    @type textctrl: wx.TextCtrl
+    @param text_ctrl: The TextCtrl object
+    @type text_ctrl: wx.TextCtrl
     """
 
-    def __init__(self, textctrl):
+    def __init__(self, text_ctrl):
         logging.StreamHandler.__init__(self)
-        self.textctrl = textctrl
+        self.text_ctrl = text_ctrl
         self.formatter = logging.Formatter("%(levelname)s -- %(message)s")
 
     def emit(self, record):
@@ -64,7 +63,7 @@ class CustomConsoleHandler(logging.StreamHandler):
         @param record: Unformatted message
         """
         msg = self.format(record)
-        self.textctrl.WriteText(msg + "\n")
+        self.text_ctrl.WriteText(msg + "\n")
         self.flush()
 
 
@@ -172,18 +171,29 @@ def parse_tag_file(tag_file):
         return tag_list
 
 
+def cumsum(it):
+    """
+    Cumulative sum of iterable values
+    :param it: Iterable
+    """
+    total = 0
+    for x in it:
+        total += x
+        yield total
+
+
 def paint(rr_file, tag_file):
     """
     Paint results of acquisition
     @param rr_file: Path to file that contains rr values
     @param tag_file: Path to file that contains tag values
     """
-    colors = ['orange', 'green', 'lightblue', 'grey', 'brown', 'red', 'white', 'yellow']
+    colors = ['orange', 'green', 'lightblue', 'grey', 'brown', 'red', 'yellow', 'black', 'magenta', 'purple']
     shuffle(colors)
     rr_values = parse_rr_file(rr_file)
-    hr_values = map(lambda x: 60 / (float(x) / 1000), rr_values)
+    hr_values = map(lambda rr: 60 / (float(rr) / 1000), rr_values)
     tag_values = parse_tag_file(tag_file)
-    x = [x / 1000 for x in [sum(rr_values[:i + 1]) for i in xrange(len(rr_values))]]
+    x = [x / 1000 for x in cumsum(rr_values)]
     y = hr_values
     plt.plot(x, y)
 
@@ -193,11 +203,13 @@ def paint(rr_file, tag_file):
 
     plt.ylabel('Heart rate (bpm)')
     plt.xlabel('Time (s)')
+    plt.title('Acquisition results')
     plt.ylim(ymin=min(min(y) - 10, 40), ymax=max(max(y) + 10, 150))
     plt.legend()
     plt.show()
 
-    # Custom exceptions
+
+# Custom exceptions
 # ---------------------------------
 
 

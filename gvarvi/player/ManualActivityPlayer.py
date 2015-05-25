@@ -12,6 +12,11 @@ from config import FRAMERATE
 
 
 class ManualActivityPlayer(Player):
+    """
+   Player for manual defined activities
+   @param tags: Tags of actual activity.
+   """
+
     def __init__(self, tags):
         self.tags = tags
         self.done = False
@@ -21,6 +26,10 @@ class ManualActivityPlayer(Player):
         self.zerotime = None
 
     def play(self, writer):
+        """
+        Plays activity tags.
+        @param writer: Object that write tags info.
+        """
         self.return_code = EXIT_SUCCESS_CODE
 
         pygame.init()
