@@ -10,14 +10,14 @@ from config import BACKGROUND_COLOUR, MAIN_ICON
 
 class InsModTemplate(wx.Frame):
     """
-    Window template for insert and modify activities
-    @param size: Size of the window, as a tuple (Width, Height). Must be in pixels
-    @param parent: Main frame of application
-    @param main_facade: Controller of the application
+    Window template for insert and modify activities.
+    @param size: Size of the window, as a tuple (Width, Height). Must be in pixels.
+    @param parent: Main frame of application.
+    @param main_facade: Facade of the application.
     @param insmod_tag_window_type: Subclass of wx.Frame that performs the insert of modify of a specific tag
     @param activity_id: If the frame is open to modify an activity, this parameter is the id of that activity.
     Otherwise, this parameter gets the value of -1.
-    @param title: Title of the window
+    @param title: Frame title..
     """
 
     def __init__(self, size, parent, main_facade, insmod_tag_window_type, activity_id=-1, title=None):

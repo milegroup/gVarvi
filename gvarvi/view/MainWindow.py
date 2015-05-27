@@ -28,6 +28,12 @@ from activities.ManualDefinedActivity import ManualDefinedActivity
 
 
 class MainWindow(wx.Frame):
+    """
+    Main window of gVARVI application.
+    @param title: Frame title.
+    @param facade: Main facade of application.
+    """
+
     def __init__(self, title, facade):
         self.logger = Logger()
 
@@ -1074,6 +1080,12 @@ copy of the Program in return for a fee.
 
 
 class OnFinishAcquisitionDialog(wx.Frame):
+    """
+    Window shown to the user when acquisition finishes.
+    @param parent: Main window of gVARVI.
+    @param main_facade: Main application facade.
+    """
+
     def __init__(self, parent, main_facade, *args, **kw):
         super(OnFinishAcquisitionDialog, self).__init__(parent, *args, **kw)
         self.main_facade = main_facade
@@ -1129,6 +1141,11 @@ class OnFinishAcquisitionDialog(wx.Frame):
 
 
 class TestDeviceFrame(wx.Frame):
+    """
+    Window to show real time data of acquisition device.
+    @param main_facade: Main application facade.
+    """
+
     def __init__(self, main_facade):
         DEFAULT_TITLE_FONT = wx.Font(pointSize=25, family=wx.SWISS, style=wx.NORMAL, weight=wx.LIGHT)
         NORMAL_FONT = wx.Font(pointSize=18, family=wx.SWISS, style=wx.NORMAL, weight=wx.LIGHT)
@@ -1188,6 +1205,12 @@ class TestDeviceFrame(wx.Frame):
 
 
 class RefreshDevicesThread(threading.Thread):
+    """
+    Thread for refresh nearby devices list in background.
+    @param main_window: Main window of gVARVI.
+    @param main_facade: Main application facade.
+    """
+
     def __init__(self, main_window, main_facade):
         self.logger = Logger()
 

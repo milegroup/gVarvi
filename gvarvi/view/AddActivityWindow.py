@@ -14,6 +14,13 @@ from config import BACKGROUND_COLOUR
 
 
 class AddActivityWindow(wx.Frame):
+    """
+    Window for select an activity type to insert.
+    @param parent: Reference to MainWindow object.
+    @param title: Frame title.
+    @param main_facade: Reference to main facade of gVARVI app.
+    """
+
     def __init__(self, parent, title, main_facade):
         self.parent = parent
         self.main_facade = main_facade
@@ -27,7 +34,6 @@ class AddActivityWindow(wx.Frame):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
         # ---------- Begin icon buttons sizer ----------
-
 
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
         buttons_sizer = wx.BoxSizer(wx.HORIZONTAL)
