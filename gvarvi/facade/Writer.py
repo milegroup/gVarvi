@@ -59,8 +59,8 @@ class TextWriter(IWriter):
         self.logger = Logger()
 
         self.tag_file = tag_file
-        with open(self.tag_file, "w") as f:
-            f.write("Init_time\tEvent\tDurat\n")
+        with open(self.tag_file, "wt") as f:
+            f.write("Init_time\tEvent\tDurat" + os.linesep)
         self.rr_file = rr_file
         self.rr_values = []
 
@@ -71,25 +71,24 @@ class TextWriter(IWriter):
         @param beg: Begin time in seconds.
         @param end: End time in seconds.
         """
-        with open(self.tag_file, "a") as f:
+        with open(self.tag_file, "at") as f:
             line = "%s\t%s\t%.3f" % (str(timedelta(seconds=beg)), name.replace(' ', '_'), end - beg)
-            f.write(line + "\n")
+            f.write(line + os.linesep)
 
     def write_rr_value(self, rr):
         """
-        Writes rr value to rr text file.
+        Writes rr value to list.
         @param rr: The value.
         """
         self.rr_values.append(rr)
 
     def close_writer(self):
         """
-        Finishes writing operation and closes text file.
+        Writes list values to text file and closes it.
         """
-        self.logger.debug("Writing all rr values")
-        with open(self.rr_file, "w") as f:
+        with open(self.rr_file, "wt") as f:
             for rr in self.rr_values:
-                f.write(str(rr) + "\n")
+                f.write(str(rr) + os.linesep)
 
     def abort(self):
         """
@@ -99,7 +98,3 @@ class TextWriter(IWriter):
             os.remove(self.rr_file)
         if os.path.isfile(self.tag_file):
             os.remove(self.tag_file)
-
-
-
-

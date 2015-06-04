@@ -1,4 +1,6 @@
 # coding=utf-8
+import os
+
 __author__ = 'nico'
 
 import time
@@ -59,7 +61,7 @@ class SoundPresentationPlayer(Player):
         try:
             pygame.mixer.init(FREQ, BITSIZE, CHANNELS, BUFFER)
         except pygame.error, exc:
-            self.logger.exception("Could not initialize sound system\n {0}".format(exc))
+            self.logger.exception("Could not initialize sound system{0} {1}".format(os.linesep, exc))
             self.return_code = EXIT_FAIL_CODE
             return
 
@@ -86,7 +88,7 @@ class SoundPresentationPlayer(Player):
                 if self.done:
                     self.return_code = EXIT_ABORT_CODE
             except pygame.error, exc:
-                self.logger.exception("Could not play sound file: {0}\n{1}".format(tag.path, exc))
+                self.logger.exception("Could not play sound file: {0}{1}{2}".format(tag.path, os.linesep, exc))
                 self.return_code = EXIT_FAIL_CODE
 
             self.ended_tag = True

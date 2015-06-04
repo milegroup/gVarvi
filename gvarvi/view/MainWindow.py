@@ -900,7 +900,7 @@ copy of the Program in return for a fee.
         wx.AboutBox(info)
 
     def _OnClose(self, _):
-        result = ConfirmDialog("Quitting VARVI\nAre you sure?", "Confirm exit").get_result()
+        result = ConfirmDialog("Quitting VARVI" + os.linesep + "Are you sure?", "Confirm exit").get_result()
         if result == wx.ID_YES:
             try:
                 self.Destroy()  # Close the frame.
@@ -947,7 +947,7 @@ copy of the Program in return for a fee.
         except BluetoothError as e:
             if self.test_frame:
                 self.test_frame.Destroy()
-            err_message = "Bluetooth error\nCODE: {0}".format(e.message)
+            err_message = "Bluetooth error{0}CODE: {1}".format(os.linesep, e.message)
             ErrorDialog(err_message).show()
 
     def _OnBeginAcquisition(self, _):
@@ -1015,7 +1015,7 @@ copy of the Program in return for a fee.
                     OnFinishAcquisitionDialog(self, self.main_facade).Show()
 
                 except MissingFiles:
-                    ErrorDialog("Some of activity files has been deleted\nCheck them!").show()
+                    ErrorDialog("Some of activity files has been deleted" + os.linesep + "Check them!").show()
                 except AbortedAcquisition:
                     InfoDialog("Activity aborted. Data won't be saved").show()
                 except FailedAcquisition:
@@ -1231,6 +1231,3 @@ class RefreshDevicesThread(threading.Thread):
             self.main_window.devicesGrid.DeleteAllItems()
             self.main_window.button_rescan_devices.SetLabel("Scan")
             self.main_window.Enable()
-
-
-

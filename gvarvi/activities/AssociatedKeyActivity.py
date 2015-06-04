@@ -16,7 +16,7 @@ class AssociatedKeyActivity(AbstractActivity):
         AssociatedKeyActivityPlayer(self.tags).play(writer)
 
     def __str__(self):
-        toret = "Associated key acivity:\n" \
+        toret = "Associated key activity:\n" \
                 "Id: {id}\n" \
                 "Name: {name}\n".format(id=self.id,
                                         name=self.name.encode())

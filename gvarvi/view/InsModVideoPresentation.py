@@ -83,7 +83,8 @@ class InsModVideoPresentation(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields\nAlso remember to add at least one tag").show()
+            InfoDialog("Please, don't forget to fill all fields" + os.linesep + "Also remember to add at least one " \
+                                                                                "tag").show()
 
 
 class InsModVideoPresentationTag(wx.Frame):

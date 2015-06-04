@@ -99,7 +99,7 @@ class InsModPhotoPresentation(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, fill all fields\nAlso remember to add at least one tag").show()
+            InfoDialog("Please, fill all fields" + os.linesep + "Also remember to add at least one tag").show()
 
 
 class InsModPhotoPresentationTag(wx.Frame):

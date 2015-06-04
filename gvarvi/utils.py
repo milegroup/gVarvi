@@ -1,4 +1,6 @@
 # coding=utf-8
+import os
+
 _author__ = 'nico'
 
 import threading
@@ -63,7 +65,7 @@ class CustomConsoleHandler(logging.StreamHandler):
         @param record: Unformatted message
         """
         msg = self.format(record)
-        self.text_ctrl.WriteText(msg + "\n")
+        self.text_ctrl.WriteText(msg + os.linesep)
         self.flush()
 
 
