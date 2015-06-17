@@ -263,7 +263,7 @@ class InsModPhotoPresentationTag(wx.Frame):
 
     def _OnSave(self, _):
         correct_data = True
-        name = self.name_text_ctrl.GetValue()
+        name = self.name_text_ctrl.GetValue().encode('utf-8', "ignore")
         path = self.path_text_ctrl.GetValue()
         if self.associated_sound_checkbox.IsChecked():
             associated_sound = "Yes"

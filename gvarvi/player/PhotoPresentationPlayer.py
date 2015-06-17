@@ -110,14 +110,14 @@ class PhotoPresentationPlayer(Player):
         self.done = True
         if self.sound_player_thread:
             self.sound_player_thread.join()
-        pygame.mixer.stop()
+        pygame.mixer.music.stop()
         pygame.mixer.quit()
         pygame.quit()
 
     @run_in_thread
     def play_tag_sounds(self, sounds):
         if pygame.mixer.music.get_busy():
-            pygame.mixer.stop()
+            pygame.mixer.music.stop()
 
         # If sounds playing ends
         # but tag playing goes on,
@@ -131,6 +131,7 @@ class PhotoPresentationPlayer(Player):
                     while pygame.mixer.music.get_busy() and not self.ended_tag and not self.done:
                         clock.tick(FRAMERATE)
                     if self.ended_tag or self.done:
+                        pygame.mixer.music.stop()
                         return
                 except pygame.error, exc:
                     self.logger.error("Could not play sound file: {0}".format(sound))
