@@ -174,7 +174,8 @@ class InsModAssociatedKeyTag(wx.Frame):
         screentext = self.screentext_text_ctrl.GetValue()
         key = self.key_text_ctrl.GetValue()
         tag = AssociatedKeyTag(name, screentext, key)
-        if name == "" or screentext == "" or key == "" or (key in self.used_keys and key != self.previous_key):
+        if screentext == "" or key == "" or (
+                        key in self.used_keys and key != self.previous_key):
             correct_data = False
         else:
             try:

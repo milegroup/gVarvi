@@ -85,7 +85,7 @@ class AssociatedKeyActivityPlayer(Player):
                 end = (datetime.now() - self.zerotime).total_seconds()
                 writer.write_tag_value(self.actual_tag.name, beg, end)
                 break
-        self._stop()
+        self.stop()
         self.raise_if_needed(self.return_code)
 
     def _change_tag(self, tag):
@@ -93,7 +93,7 @@ class AssociatedKeyActivityPlayer(Player):
         self.actual_tag = tag
         self.ended_tag = True
 
-    def _stop(self):
+    def stop(self):
         pygame.display.quit()
         pygame.quit()
 

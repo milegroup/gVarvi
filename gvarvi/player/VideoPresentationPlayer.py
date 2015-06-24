@@ -68,17 +68,17 @@ class VideoPresentationPlayer(Player):
                 clock.tick(FRAMERATE)
 
             if self.done:
-                self._stop()
+                self.stop()
                 self.return_code = EXIT_ABORT_CODE
                 break
 
             end = (datetime.now() - self.zerotime).total_seconds()
             writer.write_tag_value(tag.name, beg, end)
 
-        self._stop()
+        self.stop()
         self.raise_if_needed(self.return_code)
 
-    def _stop(self):
+    def stop(self):
         self.done = True
         pygame.quit()
 

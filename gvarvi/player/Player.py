@@ -14,6 +14,10 @@ class Player:
     def play(self, writer):
         pass
 
+    @abstractmethod
+    def stop(self):
+        pass
+
     @staticmethod
     def raise_if_needed(code):
         """

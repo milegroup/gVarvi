@@ -1,16 +1,18 @@
 # coding=utf-8
+import shutil
+
 __author__ = 'nico'
 
 import os
 
 from dao.XMLMapper import XMLMapper
-from utils import Singleton
+from utils import Singleton, unpack_tar_file_and_remove
 from facade.AcquisitionFacade import AcquisitionFacade
 from devices.PolariWL import PolariWL
 from devices.DemoBand import DemoBand
 from devices.ANTDevice import ANTDevice
 from facade.Writer import TextWriter
-from config import DEVICE_CONNECTED_MODE, DEMO_MODE
+from config import DEVICE_CONNECTED_MODE, DEMO_MODE, CONF_DIR
 from utils import run_in_thread, paint
 from logger import Logger
 from devices.BTDevice import BTDevice
@@ -78,6 +80,29 @@ class MainFacade:
     def remove_activity(self, activity_id):
         self.xml_mapper.remove_activity(activity_id)
         self.refresh_activities()
+
+    def import_activity_from_file(self, activity_file):
+        from activities.PhotoPresentation import PhotoPresentation
+        from activities.SoundPresentation import SoundPresentation
+        from activities.VideoPresentation import VideoPresentation
+        from activities.AssociatedKeyActivity import AssociatedKeyActivity
+        from activities.ManualDefinedActivity import ManualDefinedActivity
+
+        activity_folder = CONF_DIR
+        unpack_tar_file_and_remove(activity_file, activity_folder)
+        files = os.listdir(os.path.join(activity_folder, "activity_auxiliary_folder"))
+        class_dict = {"photo.xml": PhotoPresentation,
+                      "sound.xml": SoundPresentation,
+                      "video.xml": VideoPresentation,
+                      "key.xml": AssociatedKeyActivity,
+                      "manual.xml": ManualDefinedActivity}
+        for file_name in class_dict.keys():
+            if file_name in files:
+                shutil.rmtree(os.path.join(activity_folder, "activity_auxiliary_folder"))
+                activity = class_dict[file_name].import_from_file(activity_file)
+                self.xml_mapper.save_activity(activity)
+                self.refresh_activities()
+                break
 
     def get_nearby_devices(self):
         devices = []
@@ -149,8 +174,3 @@ class MainFacade:
         rr_file = str(self.acquisition_path) + ".rr.txt"
         tag_file = str(self.acquisition_path) + ".tag.txt"
         paint(rr_file, tag_file)
-
-
-
-
-

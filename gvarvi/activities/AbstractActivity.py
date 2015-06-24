@@ -38,3 +38,19 @@ class AbstractActivity:
         @param writer: Object that writes tag data.
         """
         pass
+
+    @abstractmethod
+    def stop(self):
+        """
+        Stops the activity
+        """
+        pass
+
+    @classmethod
+    @abstractmethod
+    def import_from_file(cls, file_path):
+        pass
+
+    @abstractmethod
+    def export_to_file(self, file_path):
+        pass

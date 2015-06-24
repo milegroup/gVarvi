@@ -95,10 +95,9 @@ class XMLMapper(object):
                     tags = []
                     for tagelement in element.findall("tag"):
                         images = []
-                        if tagelement.attrib["associatedImage"] == "Yes":
-                            for image_element in tagelement.findall("image"):
-                                image = Image(image_element.attrib["path"])
-                                images.append(image)
+                        for image_element in tagelement.findall("image"):
+                            image = Image(image_element.attrib["path"])
+                            images.append(image)
                         tag = SoundPresentationTag(
                             tagelement.attrib["name"],
                             tagelement.attrib["path"],
@@ -274,7 +273,7 @@ class XMLMapper(object):
     def save_config(self, attr_dict):
         """
         Saves the actual configuration to xml config file
-        @param attr_dict: A dictonary with param configurations and their values
+        @param attr_dict: A dictionary with param configurations and their values
         """
         tree = eT.parse(self.conf_file)
         doc = tree.getroot()

@@ -1,12 +1,16 @@
 # coding=utf-8
 
 from datetime import timedelta
+import unicodedata
+import sys
 
 __author__ = 'nico'
 
 from abc import ABCMeta, abstractmethod
 from logger import Logger
 import os
+import codecs
+from utils import FailedAcquisition
 
 
 class IWriter:
@@ -59,7 +63,7 @@ class TextWriter(IWriter):
         self.logger = Logger()
 
         self.tag_file = tag_file
-        with open(self.tag_file, "wt") as f:
+        with codecs.open(self.tag_file, "wt", "utf-8") as f:
             f.write("Init_time\tEvent\tDurat" + os.linesep)
         self.rr_file = rr_file
         self.rr_values = []
@@ -71,9 +75,31 @@ class TextWriter(IWriter):
         @param beg: Begin time in seconds.
         @param end: End time in seconds.
         """
-        with open(self.tag_file, "at") as f:
-            line = "%s\t%s\t%.3f" % (str(timedelta(seconds=beg)), name.replace(' ', '_'), end - beg)
-            f.write(line + os.linesep)
+
+        try:
+            reload(sys)
+            sys.setdefaultencoding("utf-8")
+
+            def normalize(input_str):
+                """
+                Removes accents of a string.
+                @param input_str: Original string.
+                @return: Same string with all accents removed.
+                """
+                input_str = input_str.lower()
+                nkfd_form = unicodedata.normalize('NFKD', unicode(input_str))
+                return u"".join([c.replace(' ', '_').encode('utf-8') for c in nkfd_form if not unicodedata.combining(
+                    c)])
+
+            with codecs.open(self.tag_file, "at", "utf-8") as f:
+                line = "{0}\t{1}\t{2:3f}".format(str(timedelta(seconds=beg)),
+                                                 normalize(name),
+                                                 end - beg)
+                f.write(line + os.linesep)
+
+        except Exception as e:
+            raise FailedAcquisition("Unable to write tag value in text file{0}Exception type: {0}".format(os.linesep,
+                                                                                                          e.__class__.__name__))
 
     def write_rr_value(self, rr):
         """
@@ -86,7 +112,7 @@ class TextWriter(IWriter):
         """
         Writes list values to text file and closes it.
         """
-        with open(self.rr_file, "wt") as f:
+        with codecs.open(self.rr_file, "wt", "utf-8") as f:
             for rr in self.rr_values:
                 f.write(str(rr) + os.linesep)
 

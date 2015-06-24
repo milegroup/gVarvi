@@ -59,6 +59,7 @@ class AcquisitionFacade(object):
             self.logger.exception("Unable to connect to device (host down)")
             raise
         except FailedAcquisition:
+            self._abort(remove_files=False)
             if self.acquisition_thread and self.acquisition_thread.is_alive():
                 self.acquisition_thread.join()
             self.logger.exception("Acquisition failed. Data will be saved anyway")
@@ -67,10 +68,15 @@ class AcquisitionFacade(object):
             self._abort()
             self.logger.info("Activity aborted. Data won't be saved")
             raise
+        except Exception as e:
+            self._abort(remove_files=False)
+            raise FailedAcquisition(e.message)
 
-    def _abort(self):
+    def _abort(self, remove_files=True):
+        self.activity.stop()
         self.device.finish_acquisition()
         if self.acquisition_thread and self.acquisition_thread.is_alive():
             self.acquisition_thread.join()
         self.device.disconnect()
-        self.writer.abort()
+        if remove_files:
+            self.writer.abort()

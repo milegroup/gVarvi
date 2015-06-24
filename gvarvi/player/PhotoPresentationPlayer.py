@@ -1,7 +1,6 @@
 # coding=utf-8
 __author__ = 'nico'
 
-import os
 import time
 from random import shuffle
 from collections import OrderedDict
@@ -11,8 +10,7 @@ import pygame
 from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
-from config import SUPPORTED_IMG_EXTENSIONS
-from utils import run_in_thread
+from utils import run_in_thread, get_folder_images
 from logger import Logger
 
 
@@ -42,8 +40,7 @@ class PhotoPresentationPlayer(Player):
         self.event_thread = None
         self.images = OrderedDict()
         for tag in self.tags:
-            images = [os.path.join(tag.path, img) for img in os.listdir(tag.path) if
-                      os.path.splitext(img)[1].upper() in SUPPORTED_IMG_EXTENSIONS]
+            images = get_folder_images(tag.path)
             shuffle(images)
             self.images[tag] = images
         self.zero_time = None
@@ -103,15 +100,13 @@ class PhotoPresentationPlayer(Player):
                 break
             end = (datetime.now() - self.zero_time).total_seconds()
             writer.write_tag_value(tag.name, beg, end)
-        self._stop()
+        self.stop()
         self.raise_if_needed(self.return_code)
 
-    def _stop(self):
+    def stop(self):
         self.done = True
         if self.sound_player_thread:
             self.sound_player_thread.join()
-        pygame.mixer.music.stop()
-        pygame.mixer.quit()
         pygame.quit()
 
     @run_in_thread

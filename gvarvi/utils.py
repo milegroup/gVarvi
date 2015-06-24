@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+import shutil
+import tarfile
 
 _author__ = 'nico'
 
@@ -14,7 +16,7 @@ from random import shuffle
 
 import mutagen.mp3
 
-from config import EVT_RESULT_ID
+from config import EVT_RESULT_ID, SUPPORTED_IMG_EXTENSIONS
 
 
 
@@ -108,6 +110,27 @@ def get_sound_length(sound_path):
             rate = f.getframerate()
             duration = frames / float(rate)
         return duration
+
+
+def get_folder_images(folder_path):
+    """
+    Return a list of paths of all supported images in a giving folder.
+    @param folder_path: Folder path.
+    @return: A list of all supported images.
+    """
+    return [os.path.join(folder_path, img) for img in os.listdir(folder_path) if os.path.splitext(img)[1].upper() in
+            SUPPORTED_IMG_EXTENSIONS]
+
+
+def pack_folder_and_remove(folder_path, dst_path):
+    with tarfile.open(dst_path, "w") as f:
+        f.add(folder_path, arcname="activity_auxiliary_folder")
+    shutil.rmtree(folder_path)
+
+
+def unpack_tar_file_and_remove(tar_path, dst_path):
+    with tarfile.open(tar_path, "r") as f:
+        f.extractall(dst_path)
 
 
 def valid_ip(address):

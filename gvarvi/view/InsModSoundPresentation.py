@@ -277,16 +277,16 @@ class InsModSoundPresentationTag(wx.Frame):
         else:
             random = "No"
         if self.associated_image_checkbox.IsChecked():
-            image_associated = "Yes"
+            associated_image = "Yes"
         else:
-            image_associated = "No"
+            associated_image = "No"
         images = [Image(image_path) for image_path in self.images_listbox.GetItems()]
-        tag = SoundPresentationTag(name, path, random, image_associated, images)
+        tag = SoundPresentationTag(name, path, random, associated_image, images)
 
         if name == "" or path == "" or not os.path.isfile(path):
             correct_data = False
 
-        if image_associated == "Yes" and len(images) == 0:
+        if associated_image == "Yes" and len(images) == 0:
             correct_data = False
 
         if correct_data:
