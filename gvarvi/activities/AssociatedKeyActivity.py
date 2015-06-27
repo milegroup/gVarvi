@@ -4,9 +4,6 @@ import shutil
 
 from config import CONF_DIR
 from utils import pack_folder_and_remove, unpack_tar_file_and_remove
-
-__author__ = 'nico'
-
 from activities.AbstractActivity import AbstractActivity
 from player.AssociatedKeyActivityPlayer import AssociatedKeyActivityPlayer
 

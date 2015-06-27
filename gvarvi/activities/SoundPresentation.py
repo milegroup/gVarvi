@@ -1,5 +1,5 @@
 # coding=utf-8
-__author__ = 'nico'
+
 import shutil
 import os
 import uuid

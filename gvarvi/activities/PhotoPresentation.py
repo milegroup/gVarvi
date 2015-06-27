@@ -1,7 +1,5 @@
 # coding=utf-8
 
-__author__ = 'nico'
-
 import uuid
 import os
 import shutil
@@ -107,14 +105,17 @@ class PhotoPresentationTag(object):
             self.sounds = sounds
 
     def check_files(self):
-        images = [os.path.join(self.path, img) for img in os.listdir(self.path) if
-                  img.endswith(SUPPORTED_IMG_EXTENSIONS)]
-        if len(images) == 0:
-            return False
-        for sound in self.sounds:
-            if not os.path.isfile(sound.path):
+        if os.path.isdir(self.path):
+            images = [os.path.join(self.path, img) for img in os.listdir(self.path) if
+                      img.endswith(SUPPORTED_IMG_EXTENSIONS)]
+            if len(images) == 0:
                 return False
-        return True
+            for sound in self.sounds:
+                if not os.path.isfile(sound.path):
+                    return False
+            return True
+        else:
+            return False
 
 
 class Sound(object):

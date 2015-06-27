@@ -1,7 +1,5 @@
 # coding=utf-8
 
-__author__ = 'nico'
-
 from TestDAO import TestDAO
 
 

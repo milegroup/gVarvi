@@ -1,13 +1,9 @@
 # coding=utf-8
 import shutil
 import uuid
-
-from utils import pack_folder_and_remove, unpack_tar_file_and_remove
-
-__author__ = 'nico'
-
 import os
 
+from utils import pack_folder_and_remove, unpack_tar_file_and_remove
 from activities.AbstractActivity import AbstractActivity
 from player.VideoPresentationPlayer import VideoPresentationPlayer
 from config import EXIT_ABORT_CODE, CONF_DIR

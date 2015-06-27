@@ -1,7 +1,9 @@
 # coding=utf-8
-__author__ = 'nico'
 import wx
 
+from utils import get_translation
+
+_ = get_translation()
 
 class InfoDialog(wx.MessageDialog):
     """
@@ -10,7 +12,7 @@ class InfoDialog(wx.MessageDialog):
     """
 
     def __init__(self, msg):
-        wx.MessageDialog.__init__(self, None, msg, "Info", wx.OK | wx.ICON_INFORMATION)
+        wx.MessageDialog.__init__(self, None, msg, _("Info"), wx.OK | wx.ICON_INFORMATION)
 
     def show(self):
         """

@@ -1,8 +1,5 @@
 # coding=utf-8
 import os
-
-__author__ = 'nico'
-
 import time
 from random import shuffle
 from datetime import datetime

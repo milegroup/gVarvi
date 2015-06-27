@@ -1,6 +1,5 @@
 # coding=utf-8
 
-__author__ = 'nico'
 import xml.etree.ElementTree as eT
 
 import activities.PhotoPresentation

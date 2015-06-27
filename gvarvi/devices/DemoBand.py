@@ -1,5 +1,4 @@
 # coding=utf-8
-__author__ = 'nico'
 
 from random import randint
 from time import sleep

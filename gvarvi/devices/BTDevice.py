@@ -11,9 +11,6 @@ from config import bt_lookup_time
 from devices.IDevice import IDevice
 
 
-__author__ = 'nico'
-
-
 class BTDevice(IDevice):
     """
     Abstract class that provides common method implementation.

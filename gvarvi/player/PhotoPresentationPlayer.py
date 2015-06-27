@@ -1,5 +1,4 @@
 # coding=utf-8
-__author__ = 'nico'
 
 import time
 from random import shuffle
@@ -10,7 +9,7 @@ import pygame
 from player.Player import Player
 from config import FREQ, BITSIZE, CHANNELS, BUFFER, FRAMERATE
 from config import ABORT_KEY, EXIT_SUCCESS_CODE, EXIT_ABORT_CODE
-from utils import run_in_thread, get_folder_images
+from utils import run_in_thread, get_folder_images, MissingFiles
 from logger import Logger
 
 
@@ -39,10 +38,6 @@ class PhotoPresentationPlayer(Player):
         self.sound_player_thread = None
         self.event_thread = None
         self.images = OrderedDict()
-        for tag in self.tags:
-            images = get_folder_images(tag.path)
-            shuffle(images)
-            self.images[tag] = images
         self.zero_time = None
 
     def play(self, writer):
@@ -52,6 +47,14 @@ class PhotoPresentationPlayer(Player):
         """
 
         self.return_code = EXIT_SUCCESS_CODE
+
+        try:
+            for tag in self.tags:
+                images = get_folder_images(tag.path)
+                shuffle(images)
+                self.images[tag] = images
+        except OSError:
+            raise MissingFiles()
 
         background = (0, 0, 0)
         pygame.init()

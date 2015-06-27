@@ -3,13 +3,11 @@
 from datetime import timedelta
 import unicodedata
 import sys
-
-__author__ = 'nico'
-
 from abc import ABCMeta, abstractmethod
-from logger import Logger
 import os
 import codecs
+
+from logger import Logger
 from utils import FailedAcquisition
 
 

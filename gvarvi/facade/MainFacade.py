@@ -1,8 +1,5 @@
 # coding=utf-8
 import shutil
-
-__author__ = 'nico'
-
 import os
 
 from dao.XMLMapper import XMLMapper

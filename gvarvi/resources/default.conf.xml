@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <config>
+    <language>en_EN</language>
     <defaultMode>Demo mode</defaultMode>
     <bluetoothSupport>Yes</bluetoothSupport>
     <antSupport>No</antSupport>

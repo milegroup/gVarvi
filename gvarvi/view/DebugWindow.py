@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-__author__ = 'nico'
 
 import wx
 
 from logger import Logger
-from utils import CustomConsoleHandler
+from utils import CustomConsoleHandler, get_translation
 
+_ = get_translation()
 
 class DebugWindow(wx.Frame):
     """
@@ -14,7 +14,7 @@ class DebugWindow(wx.Frame):
     """
 
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, title="Debug Window", size=(400, 400))
+        wx.Frame.__init__(self, parent, title=_("Debug Window"), size=(400, 400))
 
         self.logger = Logger()
 

@@ -1,5 +1,4 @@
 # coding=utf-8
-__author__ = 'nico'
 
 from utils import HostDownError, FailedAcquisition, AbortedAcquisition, MissingFiles
 from logger import Logger
@@ -67,6 +66,10 @@ class AcquisitionFacade(object):
         except AbortedAcquisition:
             self._abort()
             self.logger.info("Activity aborted. Data won't be saved")
+            raise
+        except MissingFiles:
+            self._abort()
+            self.logger.info("Some of activity files or folders has been deleted")
             raise
         except Exception as e:
             self._abort(remove_files=False)

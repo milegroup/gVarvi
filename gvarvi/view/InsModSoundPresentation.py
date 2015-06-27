@@ -1,15 +1,16 @@
 # coding=utf-8
-__author__ = 'nico'
 
 import os
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
+from utils import get_translation
 from config import MAIN_ICON, BACKGROUND_COLOUR
 from activities.SoundPresentation import SoundPresentation, SoundPresentationTag, Image
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
+_ = get_translation()
 
 class InsModSoundPresentation(InsModTemplate):
     """
@@ -25,7 +26,7 @@ class InsModSoundPresentation(InsModTemplate):
         super(InsModSoundPresentation, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                       insmod_tag_window_type=InsModSoundPresentationTag,
                                                       activity_id=activity_id,
-                                                      title="New Sound Activity")
+                                                      title=_("New Sound Activity"))
         self.Show()
 
     def refresh_tags(self):
@@ -42,10 +43,10 @@ class InsModSoundPresentation(InsModTemplate):
     def build_general_data_sizer(self):
         self.general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        self.name_label = wx.StaticText(self, label='Name')
+        self.name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
 
-        self.random_label = wx.StaticText(self, label='Random')
+        self.random_label = wx.StaticText(self, label=_('Random'))
         self.randomCheckBox = wx.CheckBox(self)
 
         if self.modifying:
@@ -66,16 +67,16 @@ class InsModSoundPresentation(InsModTemplate):
 
         self.tags_grid.SetUserLineHeight(30)
 
-        self.tags_grid.InsertColumn(0, 'Name', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(0, _('Name'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(0, 115)
-        self.tags_grid.InsertColumn(1, 'Path', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(1, _('Path'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(1, 200)
-        self.tags_grid.InsertColumn(2, 'Associated image', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(2, _('Associated image'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(2, 140)
-        self.tags_grid.InsertColumn(3, 'Images', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(3, _('Images'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(3, -3)
 
-    def OnSave(self, _):
+    def OnSave(self, _e):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         if self.randomCheckBox.IsChecked():
@@ -93,8 +94,8 @@ class InsModSoundPresentation(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields" + os.linesep + "Also remember to add at least one "
-                                                                                "tag").show()
+            InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one "
+                         "tag").format(os.linesep)).show()
 
 
 class InsModSoundPresentationTag(wx.Frame):
@@ -112,11 +113,11 @@ class InsModSoundPresentationTag(wx.Frame):
         self.modifying = tag_id != -1
         self.tag_id = tag_id
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title="New Sound Tag",
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Sound Tag"),
                               size=(600, 600))
         else:
             wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
-                              title="Modifying Sound Tag (id: {0})".format(tag_id),
+                              title=_("Modifying Sound Tag (id: {0})").format(tag_id),
                               size=(600, 600))
             tag = self.tag_control.tags[self.tag_id]
 
@@ -130,12 +131,12 @@ class InsModSoundPresentationTag(wx.Frame):
 
         general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        name_label = wx.StaticText(self, label='Name')
+        name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
         if self.modifying:
             self.name_text_ctrl.SetValue(tag.name)
 
-        path_label = wx.StaticText(self, label='Path')
+        path_label = wx.StaticText(self, label=_('Path'))
         path_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.path_text_ctrl = wx.TextCtrl(self, -1, size=(350, -1))
         if self.modifying:
@@ -147,12 +148,12 @@ class InsModSoundPresentationTag(wx.Frame):
         path_sizer.AddSpacer(20)
         path_sizer.Add(self.path_button, 0, wx.RIGHT)
 
-        associated_image_label = wx.StaticText(self, label='Associated image')
+        associated_image_label = wx.StaticText(self, label=_('Associated image'))
         self.associated_image_checkbox = wx.CheckBox(self)
         if self.modifying and tag.associated_image == "Yes":
             self.associated_image_checkbox.SetValue(True)
 
-        random_label = wx.StaticText(self, label='Randomize images')
+        random_label = wx.StaticText(self, label=_('Randomize images'))
         self.random_checkbox = wx.CheckBox(self)
         if self.modifying and tag.random == "Yes":
             self.random_checkbox.SetValue(True)
@@ -164,7 +165,7 @@ class InsModSoundPresentationTag(wx.Frame):
 
         general_data_sizer.AddGrowableCol(1, 1)
 
-        images_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label="Images"), wx.VERTICAL)
+        images_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label=_("Images")), wx.VERTICAL)
 
         self.images_listbox = wx.ListBox(self, -1)
         if self.modifying and len(tag.images) != 0:
@@ -177,39 +178,39 @@ class InsModSoundPresentationTag(wx.Frame):
 
         # Buttons for adding and removing tags
 
-        add_tag_bt = wx.Button(self, -1, label="Add")
+        add_tag_bt = wx.Button(self, -1, label=_("Add"))
         tag_buttons_sizer.Add(add_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self._OnAddImage, id=add_tag_bt.GetId())
-        add_tag_bt.SetToolTip(wx.ToolTip("Add new tag"))
+        add_tag_bt.SetToolTip(wx.ToolTip(_("Add new tag")))
 
-        remove_tag_bt = wx.Button(self, -1, label="Remove")
+        remove_tag_bt = wx.Button(self, -1, label=_("Remove"))
         tag_buttons_sizer.Add(remove_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self._OnRemoveImage, id=remove_tag_bt.GetId())
-        remove_tag_bt.SetToolTip(wx.ToolTip("Remove the selected tag"))
+        remove_tag_bt.SetToolTip(wx.ToolTip(_("Remove the selected tag")))
 
-        up_tag_bt = wx.Button(self, -1, label="Up")
+        up_tag_bt = wx.Button(self, -1, label=_("Up"))
         tag_buttons_sizer.Add(up_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self._OnImageUp, id=up_tag_bt.GetId())
-        up_tag_bt.SetToolTip(wx.ToolTip("Up selected tag in the list"))
+        up_tag_bt.SetToolTip(wx.ToolTip(_("Up selected tag in the list")))
 
-        down_tag_bt = wx.Button(self, -1, label="Down")
+        down_tag_bt = wx.Button(self, -1, label=_("Down"))
         tag_buttons_sizer.Add(down_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self._OnImageDown, id=down_tag_bt.GetId())
-        down_tag_bt.SetToolTip(wx.ToolTip("Down selected tag in the list"))
+        down_tag_bt.SetToolTip(wx.ToolTip(_("Down selected tag in the list")))
 
         images_sizer.Add(tag_buttons_sizer, 0, wx.ALIGN_CENTER | wx.ALL, border=10)
 
         buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
 
-        button_save = wx.Button(self, -1, label="Save")
+        button_save = wx.Button(self, -1, label=_("Save"))
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
-        button_save.SetToolTip(wx.ToolTip("Save the activity"))
+        button_save.SetToolTip(wx.ToolTip(_("Save the activity")))
 
-        button_cancel = wx.Button(self, -1, label="Cancel")
+        button_cancel = wx.Button(self, -1, label=_("Cancel"))
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=button_cancel.GetId())
-        button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
+        button_cancel.SetToolTip(wx.ToolTip(_("Return to the main window")))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
         sizer.Add(images_sizer, 1, wx.EXPAND | wx.ALL, border=20)
@@ -218,12 +219,12 @@ class InsModSoundPresentationTag(wx.Frame):
 
         self.Show()
 
-    def _OnChangePath(self, _):
+    def _OnChangePath(self, _e):
 
         wildcard = "Audio source (*.mp3; *wav)|*.mp3;*.wav"
 
         dlg = wx.FileDialog(
-            self, message="Choose a file",
+            self, message=_("Choose a file"),
             defaultFile="",
             wildcard=wildcard,
             style=wx.OPEN | wx.CHANGE_DIR
@@ -233,12 +234,12 @@ class InsModSoundPresentationTag(wx.Frame):
             self.path_text_ctrl.SetValue(path)
         dlg.Destroy()
 
-    def _OnAddImage(self, _):
+    def _OnAddImage(self, _e):
         wildcard = "Image source (*.jpg; *.jpeg; *.png; *.bmp; *.tif; *.xpm; " \
                    "*.pcx)|*.jpg;*.JPG;*.jpeg;*.JPEG;*.png;*.PNG;*.bmp;*.BMP;*.tif;*.TIF;*.xmp;*.XPM;*.pcx;*.PCX"
 
         dlg = wx.FileDialog(
-            self, message="Choose a file",
+            self, message=_("Choose a file"),
             defaultFile="",
             wildcard=wildcard,
             style=wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR
@@ -268,7 +269,7 @@ class InsModSoundPresentationTag(wx.Frame):
             self.images_listbox.Delete(sel_pos)
             self.images_listbox.Insert(sel_path, sel_pos + 1)
 
-    def _OnSave(self, _):
+    def _OnSave(self, _e):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
@@ -297,7 +298,7 @@ class InsModSoundPresentationTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields with valid data").show()
+            InfoDialog(_("Please, don't forget to fill all fields with valid data")).show()
 
     def OnCancel(self, _):
         self.Destroy()

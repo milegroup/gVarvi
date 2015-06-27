@@ -1,12 +1,12 @@
 # coding=utf-8
-__author__ = 'nico'
-
 from abc import abstractmethod
 import wx
 
+from utils import get_translation
 from view.wxutils import ConfirmDialog, InfoDialog
 from config import BACKGROUND_COLOUR, MAIN_ICON
 
+_ = get_translation()
 
 class InsModTemplate(wx.Frame):
     """
@@ -32,7 +32,7 @@ class InsModTemplate(wx.Frame):
             self.tag_ctrl = TagControl()
         else:
             wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
-                              title="Modifying Activity (id: {0})".format(activity_id),
+                              title=_("Modifying Activity (id: {0})").format(activity_id),
                               size=size)
             self.activity = self.main_facade.get_activity(activity_id)
             self.tag_ctrl = TagControl(self.activity.tags)
@@ -47,7 +47,7 @@ class InsModTemplate(wx.Frame):
         self.general_data_sizer = None
         self.build_general_data_sizer()
 
-        self.tags_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label="Tags"), wx.VERTICAL)
+        self.tags_sizer = wx.StaticBoxSizer(wx.StaticBox(self, label=_("Tags")), wx.VERTICAL)
         self.tags_grid = None
         self.build_tags_grid()
         if self.modifying:
@@ -58,30 +58,30 @@ class InsModTemplate(wx.Frame):
 
         self.tag_buttons_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.add_tag_bt = wx.Button(self, -1, label="Add")
+        self.add_tag_bt = wx.Button(self, -1, label=_("Add"))
         self.tag_buttons_sizer.Add(self.add_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.OnAddTag, id=self.add_tag_bt.GetId())
         self.add_tag_bt.SetToolTip(wx.ToolTip("Add new tag"))
 
-        self.remove_tag_bt = wx.Button(self, -1, label="Remove")
+        self.remove_tag_bt = wx.Button(self, -1, label=_("Remove"))
         self.tag_buttons_sizer.Add(self.remove_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.OnRemoveTag, id=self.remove_tag_bt.GetId())
-        self.remove_tag_bt.SetToolTip(wx.ToolTip("Remove the selected tag"))
+        self.remove_tag_bt.SetToolTip(wx.ToolTip(_("Remove the selected tag")))
 
-        self.edit_tag_bt = wx.Button(self, -1, label="Edit")
+        self.edit_tag_bt = wx.Button(self, -1, label=_("Edit"))
         self.tag_buttons_sizer.Add(self.edit_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.OnEditTag, id=self.edit_tag_bt.GetId())
-        self.edit_tag_bt.SetToolTip(wx.ToolTip("Rename the selected tag"))
+        self.edit_tag_bt.SetToolTip(wx.ToolTip(_("Rename the selected tag")))
 
-        self.up_tag_bt = wx.Button(self, -1, label="Up")
+        self.up_tag_bt = wx.Button(self, -1, label=_("Up"))
         self.tag_buttons_sizer.Add(self.up_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.OnTagUp, id=self.up_tag_bt.GetId())
         self.up_tag_bt.SetToolTip(wx.ToolTip("Up selected tag in the list"))
 
-        self.down_tag_bt = wx.Button(self, -1, label="Down")
+        self.down_tag_bt = wx.Button(self, -1, label=_("Down"))
         self.tag_buttons_sizer.Add(self.down_tag_bt, flag=wx.ALL, border=0)
         self.Bind(wx.EVT_BUTTON, self.OnTagDown, id=self.down_tag_bt.GetId())
-        self.down_tag_bt.SetToolTip(wx.ToolTip("Down selected tag in the list"))
+        self.down_tag_bt.SetToolTip(wx.ToolTip(_("Down selected tag in the list")))
 
         self.tags_sizer.Add(self.tag_buttons_sizer, 0, wx.ALIGN_CENTER | wx.ALL, border=10)
 
@@ -89,15 +89,15 @@ class InsModTemplate(wx.Frame):
 
         self.buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
 
-        self.button_save = wx.Button(self, -1, label="Save")
+        self.button_save = wx.Button(self, -1, label=_("Save"))
         self.buttons_sizer.Add(self.button_save, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self.OnSave, id=self.button_save.GetId())
-        self.button_save.SetToolTip(wx.ToolTip("Save the activity"))
+        self.button_save.SetToolTip(wx.ToolTip(_("Save the activity")))
 
-        self.button_cancel = wx.Button(self, -1, label="Cancel")
+        self.button_cancel = wx.Button(self, -1, label=_("Cancel"))
         self.buttons_sizer.Add(self.button_cancel, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, id=self.button_cancel.GetId())
-        self.button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
+        self.button_cancel.SetToolTip(wx.ToolTip(_("Return to the main window")))
 
         self.sizer.Add(self.general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
         self.sizer.Add(self.tags_sizer, 1, wx.EXPAND | wx.ALL, border=20)
@@ -130,13 +130,13 @@ class InsModTemplate(wx.Frame):
     def OnRemoveTag(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
-            result = ConfirmDialog("Are you sure to delete that tag?", "Confirm delete operation").get_result()
+            result = ConfirmDialog(_("Are you sure to delete that tag?"), _("Confirm delete operation")).get_result()
             if result == wx.ID_YES:
                 self.tag_ctrl.remove_tag(selected_row)
                 self.refresh_tags()
 
         else:
-            InfoDialog("You must select a tag").show()
+            InfoDialog(_("You must select a tag")).show()
 
     def OnTagUp(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
@@ -144,7 +144,7 @@ class InsModTemplate(wx.Frame):
             self.tag_ctrl.up_tag(selected_row)
             self.refresh_tags()
         else:
-            InfoDialog("You must select a tag").show()
+            InfoDialog(_("You must select a tag")).show()
 
     def OnTagDown(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
@@ -152,14 +152,14 @@ class InsModTemplate(wx.Frame):
             self.tag_ctrl.down_tag(selected_row)
             self.refresh_tags()
         else:
-            InfoDialog("You must select a tag").show()
+            InfoDialog(_("You must select a tag")).show()
 
     def OnEditTag(self, _):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.insmod_tag_window_class(self, self.tag_ctrl, selected_row)
         else:
-            InfoDialog("You must select a tag").show()
+            InfoDialog(_("You must select a tag")).show()
 
     @abstractmethod
     def OnSave(self, _):

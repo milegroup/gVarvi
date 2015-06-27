@@ -1,8 +1,9 @@
 # coding=utf-8
-__author__ = 'nico'
 
 from shutil import copyfile
 import xml.etree.ElementTree as eT
+
+from xml.dom import minidom
 
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
 from activities.VideoPresentation import VideoPresentation, VideoTag
@@ -223,7 +224,9 @@ class XMLMapper(object):
                 act_element.append(tag_element)
 
         root.append(act_element)
-        eT.ElementTree(root).write(self.act_file, encoding="UTF-8")
+        pretty_xml_string = self._prettify(root)
+        with open(self.act_file, "wt") as f:
+            f.write(pretty_xml_string)
 
     def remove_activity(self, activity_id):
         """
@@ -237,7 +240,9 @@ class XMLMapper(object):
             if act_element.attrib["id"] == str(activity_id):
                 root.remove(act_element)
                 break
-        eT.ElementTree(root).write(self.act_file, encoding="UTF-8")
+        pretty_xml_string = self._prettify(root)
+        with open(self.act_file, "wt") as f:
+            f.write(pretty_xml_string)
 
     def update_activity(self, activity_id, activity):
         """
@@ -255,6 +260,9 @@ class XMLMapper(object):
         Parses the xml config file and return the configuration
         @return: A Config object with the configuration data
         """
+
+        self._add_missing_conf_fields()
+
         tree = eT.ElementTree(file=self.conf_file)
         root = tree.getroot()
         conf_dict = {}
@@ -262,6 +270,26 @@ class XMLMapper(object):
             conf_dict[element.tag] = element.text
         conf = UserConfig(conf_dict)
         return conf
+
+    def _add_missing_conf_fields(self):
+        # Get default conf parameters
+        default_conf_tree = eT.ElementTree(file=DEFAULT_CONF_FILE)
+        default_conf_root = default_conf_tree.getroot()
+        default_conf_dict = {elem.tag: elem.text for elem in default_conf_root}
+
+        # Get actual configuration
+        tree = eT.ElementTree(file=self.conf_file)
+        root = tree.getroot()
+        conf_dict = {}
+        for element in root:
+            conf_dict[element.tag] = element.text
+
+        # Add default value in missing fields
+        for key, default_value in default_conf_dict.items():
+            if key not in conf_dict:
+                conf_dict[key] = default_value
+
+        self.save_config(conf_dict)
 
     def reset_config(self):
         """
@@ -275,12 +303,16 @@ class XMLMapper(object):
         Saves the actual configuration to xml config file
         @param attr_dict: A dictionary with param configurations and their values
         """
-        tree = eT.parse(self.conf_file)
-        doc = tree.getroot()
-        for key in attr_dict.keys():
-            elem = doc.find(key)
-            elem.text = str(attr_dict[key])
-        eT.ElementTree(doc).write(self.conf_file, encoding="UTF-8")
+        tree = eT.ElementTree(file=self.conf_file)
+        root = tree.getroot()
+        root.clear()
+        for key, value in attr_dict.items():
+            element = eT.Element(key)
+            element.text = str(value)
+            root.append(element)
+        pretty_xml_string = self._prettify(root)
+        with open(self.conf_file, "wt") as f:
+            f.write(pretty_xml_string)
 
     def _get_next_id(self):
         if len(self.used_ids) > 0:
@@ -289,3 +321,12 @@ class XMLMapper(object):
                     return i
         else:
             return 1
+
+    @staticmethod
+    def _prettify(elem):
+        """Return a pretty-printed XML string for the Element.
+        """
+        rough_string = eT.tostring(elem, 'utf-8')
+        reparsed = minidom.parseString(rough_string)
+        pretty = reparsed.toprettyxml(indent="\t")
+        return pretty

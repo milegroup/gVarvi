@@ -1,5 +1,4 @@
 # coding=utf-8
-__author__ = 'nico'
 
 from collections import OrderedDict
 from datetime import datetime

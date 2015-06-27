@@ -1,7 +1,5 @@
 # coding=utf-8
 
-__author__ = 'nico'
-
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
 from activities.VideoPresentation import VideoPresentation, VideoTag
 from activities.SoundPresentation import SoundPresentation, SoundPresentationTag, Image

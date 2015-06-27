@@ -1,16 +1,15 @@
 # coding=utf-8
 import os
-
-__author__ = 'nico'
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
+from utils import get_translation
 from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.ManualDefinedActivity import ManualDefinedTag, ManualDefinedActivity
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
+_ = get_translation()
 
 class InsModManualDefined(InsModTemplate):
     """
@@ -25,7 +24,7 @@ class InsModManualDefined(InsModTemplate):
     def __init__(self, parent, main_facade, activity_id=-1):
         super(InsModManualDefined, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                   insmod_tag_window_type=InsModManualTag, activity_id=activity_id,
-                                                  title="New Manual Activity")
+                                                  title=_("New Manual Activity"))
         self.Show()
 
     def refresh_tags(self):
@@ -33,15 +32,15 @@ class InsModManualDefined(InsModTemplate):
         for tag in self.tag_ctrl.tags:
             if tag.finish_type == "Timed":
                 self.tags_grid.Append(
-                    [tag.name, tag.screentext, tag.finish_type, tag.time])
-            else:
+                    [tag.name, tag.screentext, _("Timed"), tag.time])
+            elif tag.finish_type == "Key (SPACE BAR)":
                 self.tags_grid.Append(
-                    [tag.name, tag.screentext, tag.finish_type, "-"])
+                    [tag.name, tag.screentext, _("Key (SPACE BAR)"), "-"])
 
     def build_general_data_sizer(self):
         self.general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        self.name_label = wx.StaticText(self, label='Name')
+        self.name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
 
         if self.modifying:
@@ -56,13 +55,13 @@ class InsModManualDefined(InsModTemplate):
 
         self.tags_grid.SetUserLineHeight(30)
 
-        self.tags_grid.InsertColumn(0, 'Name', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(0, _('Name'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(0, 115)
-        self.tags_grid.InsertColumn(1, 'Text', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(1, _('Text'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(1, -3)
-        self.tags_grid.InsertColumn(2, 'Finish type', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(2, _('Finish type'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(2, 130)
-        self.tags_grid.InsertColumn(3, 'Time', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(3, _('Time'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(3, 70)
 
     def OnSave(self, e):
@@ -79,8 +78,8 @@ class InsModManualDefined(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields" + os.linesep + "Also remember to add at least one " \
-                                                                                "tag").show()
+            InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one "
+                         "tag").format(os.linesep)).show()
 
 
 class InsModManualTag(wx.Frame):
@@ -98,11 +97,11 @@ class InsModManualTag(wx.Frame):
         self.modifying = tag_id != -1
         self.tag_id = tag_id
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title="New Manual Tag",
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Manual Tag"),
                               size=(600, 280))
         else:
             wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
-                              title="Modifying Manual Tag (id: {0})".format(tag_id),
+                              title=_("Modifying Manual Tag (id: {0})").format(tag_id),
                               size=(600, 280))
             tag = self.tag_control.tags[self.tag_id]
 
@@ -116,23 +115,26 @@ class InsModManualTag(wx.Frame):
 
         general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        name_label = wx.StaticText(self, label='Name')
+        name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
-        screentext_label = wx.StaticText(self, label='Screen Text')
+        screentext_label = wx.StaticText(self, label=_('Screen Text'))
         self.screentext_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
-        finish_type_label = wx.StaticText(self, label='Finish type')
-        finish_types = ["Key (SPACE BAR)", "Timed"]
+        finish_type_label = wx.StaticText(self, label=_('Finish type'))
+        finish_types = [_("Key (SPACE BAR)"), _("Timed")]
         self.finish_type_ctrl = wx.ComboBox(self, pos=(50, 30), choices=finish_types,
                                             style=wx.CB_READONLY)
         if not self.modifying:
-            self.finish_type_ctrl.SetValue("Timed")
+            self.finish_type_ctrl.SetValue(_("Timed"))
         self.finish_type_ctrl.Bind(wx.EVT_COMBOBOX, self._OnSelectFinishType)
-        time_label = wx.StaticText(self, label='Time')
+        time_label = wx.StaticText(self, label=_('Time'))
         self.time_ctrl = wx.SpinCtrl(self, value='120', min=5, max=1200)
         if self.modifying:
             self.name_text_ctrl.SetValue(tag.name)
             self.screentext_text_ctrl.SetValue(tag.screentext)
-            self.finish_type_ctrl.SetValue(tag.finish_type)
+            if tag.finish_type == "Timed":
+                self.finish_type_ctrl.SetValue(_("Timed"))
+            elif tag.finish_type == "Key (SPACE BAR)":
+                self.finish_type_ctrl.SetValue(_("Key (SPACE BAR)"))
             if tag.finish_type == "Timed":
                 self.time_ctrl.SetValue(int(tag.time))
             else:
@@ -148,15 +150,15 @@ class InsModManualTag(wx.Frame):
 
         buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
 
-        button_save = wx.Button(self, -1, label="Save")
+        button_save = wx.Button(self, -1, label=_("Save"))
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
-        button_save.SetToolTip(wx.ToolTip("Save the tag"))
+        button_save.SetToolTip(wx.ToolTip(_("Save the tag")))
 
-        button_cancel = wx.Button(self, -1, label="Cancel")
+        button_cancel = wx.Button(self, -1, label=_("Cancel"))
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
-        button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
+        button_cancel.SetToolTip(wx.ToolTip(_("Return to the main window")))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
         sizer.Add(buttons_sizer, 0, wx.ALIGN_BOTTOM | wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=10)
@@ -166,17 +168,20 @@ class InsModManualTag(wx.Frame):
 
     def _OnSelectFinishType(self, e):
         selected_string = e.GetString()
-        if selected_string == "Key (SPACE BAR)":
+        if selected_string == _("Key (SPACE BAR)"):
             self.time_ctrl.Disable()
             self.time_ctrl.SetValue(0)
         else:
             self.time_ctrl.Enable()
 
-    def _OnSave(self, _):
+    def _OnSave(self, _e):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         screentext = self.screentext_text_ctrl.GetValue()
-        finish_type = self.finish_type_ctrl.GetValue()
+        if self.finish_type_ctrl.GetValue() == _("Timed"):
+            finish_type = "Timed"
+        elif self.finish_type_ctrl.GetValue() == (_("Key (SPACE BAR)")):
+            finish_type = "Key (SPACE BAR)"
         time = self.time_ctrl.GetValue()
         tag = ManualDefinedTag(name, screentext, finish_type, time)
 
@@ -191,7 +196,7 @@ class InsModManualTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields with valid data").show()
+            InfoDialog(_("Please, don't forget to fill all fields with valid data")).show()
 
     def _OnCancel(self, _):
         self.Destroy()

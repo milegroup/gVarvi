@@ -1,16 +1,15 @@
 # coding=utf-8
 import os
-
-__author__ = 'nico'
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
+from utils import get_translation
 from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.AssociatedKeyActivity import AssociatedKeyTag, AssociatedKeyActivity
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
+_ = get_translation()
 
 class InsModAssociatedKey(InsModTemplate):
     """
@@ -26,13 +25,13 @@ class InsModAssociatedKey(InsModTemplate):
         super(InsModAssociatedKey, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                   insmod_tag_window_type=InsModAssociatedKeyTag,
                                                   activity_id=activity_id,
-                                                  title="New Associated-Key Activity")
+                                                  title=_("New Associated-Key Activity"))
         self.Show()
 
     def build_general_data_sizer(self):
         self.general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        self.name_label = wx.StaticText(self, label='Name')
+        self.name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
 
         if self.modifying:
@@ -47,11 +46,11 @@ class InsModAssociatedKey(InsModTemplate):
 
         self.tags_grid.SetUserLineHeight(30)
 
-        self.tags_grid.InsertColumn(0, 'Name', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(0, _('Name'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(0, 115)
-        self.tags_grid.InsertColumn(1, 'Text', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(1, _('Text'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(1, -3)
-        self.tags_grid.InsertColumn(2, 'Key code', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(2, _('Key code'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(2, 100)
 
     def refresh_tags(self):
@@ -74,8 +73,8 @@ class InsModAssociatedKey(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields" + os.linesep + "Also remember to add at least one "
-                                                                                "tag").show()
+            InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one tag").format(
+                os.linesep)).show()
 
     def used_keys(self):
         return [t.key for t in self.tag_ctrl.tags]
@@ -98,11 +97,11 @@ class InsModAssociatedKeyTag(wx.Frame):
         self.used_keys = self.parent.used_keys()
         self.previous_key = None
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title="New Associated Key Tag",
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Associated Key Tag"),
                               size=(600, 245))
         else:
             wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
-                              title="Modifying Associated Key Tag (id: {0})".format(tag_id),
+                              title=_("Modifying Associated Key Tag (id: {0})").format(tag_id),
                               size=(600, 245))
             tag = self.tag_control.tags[self.tag_id]
 
@@ -116,14 +115,14 @@ class InsModAssociatedKeyTag(wx.Frame):
 
         general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        name_label = wx.StaticText(self, label='Name')
+        name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
-        screentext_label = wx.StaticText(self, label='Screen Text')
+        screentext_label = wx.StaticText(self, label=_('Screen Text'))
         self.screentext_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
-        key_associated_label = wx.StaticText(self, label='Key')
+        key_associated_label = wx.StaticText(self, label=_('Key'))
         key_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.key_text_ctrl = wx.TextCtrl(self, -1, size=(350, -1), style=wx.TE_READONLY)
-        self.change_key_button = wx.Button(self, -1, label="Change")
+        self.change_key_button = wx.Button(self, -1, label=_("Change"))
         self.Bind(wx.EVT_BUTTON, self._OnChangeKey, id=self.change_key_button.GetId())
         key_sizer.Add(self.key_text_ctrl, 1, wx.EXPAND)
         key_sizer.AddSpacer(20)
@@ -142,15 +141,15 @@ class InsModAssociatedKeyTag(wx.Frame):
 
         buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
 
-        button_save = wx.Button(self, -1, label="Save")
+        button_save = wx.Button(self, -1, label=_("Save"))
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
-        button_save.SetToolTip(wx.ToolTip("Save the tag"))
+        button_save.SetToolTip(wx.ToolTip(_("Save the tag")))
 
-        button_cancel = wx.Button(self, -1, label="Cancel")
+        button_cancel = wx.Button(self, -1, label=_("Cancel"))
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
-        button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
+        button_cancel.SetToolTip(wx.ToolTip(_("Return to the main window")))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
         sizer.Add(buttons_sizer, 0, wx.ALIGN_BOTTOM | wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=10)
@@ -158,17 +157,17 @@ class InsModAssociatedKeyTag(wx.Frame):
 
         self.Show()
 
-    def _OnChangeKey(self, _):
+    def _OnChangeKey(self, _e):
         self.change_key_button.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown)
-        self.change_key_button.SetLabel("Listening...")
+        self.change_key_button.SetLabel(_("Listening..."))
 
     def _OnKeyDown(self, e):
         key = e.GetUniChar()
         self.key_text_ctrl.SetValue(unichr(key))
-        self.change_key_button.SetLabel("Change")
+        self.change_key_button.SetLabel(_("Change"))
         self.change_key_button.Unbind(wx.EVT_KEY_DOWN)
 
-    def _OnSave(self, _):
+    def _OnSave(self, _e):
         correct_data = True
         name = self.name_text_ctrl.GetValue()
         screentext = self.screentext_text_ctrl.GetValue()
@@ -194,11 +193,11 @@ class InsModAssociatedKeyTag(wx.Frame):
                 self.Destroy()
         else:
             InfoDialog(
-                """Please, don't forget to fill all fields with valid data
+                _("""Please, don't forget to fill all fields with valid data
 - Every fields are mandatory
 - The key must be alphanumeric
 - Make you sure that you aren't using this key in
-other tag""").show()
+other tag""")).show()
 
     def _OnCancel(self, _):
         self.Destroy()

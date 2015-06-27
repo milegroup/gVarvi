@@ -2,9 +2,6 @@
 from abc import ABCMeta, abstractmethod
 
 
-__author__ = 'nico'
-
-
 class IDevice:
     """
     Interface that provides common methods for all devices.
