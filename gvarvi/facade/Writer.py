@@ -96,8 +96,8 @@ class TextWriter(IWriter):
                 f.write(line + os.linesep)
 
         except Exception as e:
-            raise FailedAcquisition("Unable to write tag value in text file{0}Exception type: {0}".format(os.linesep,
-                                                                                                          e.__class__.__name__))
+            raise FailedAcquisition("Unable to write tag value in text file{0}Exception type: {1}{0}Exception "
+                                    "message: {2}".format(os.linesep, type(e), e.message))
 
     def write_rr_value(self, rr):
         """

@@ -5,6 +5,8 @@ import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 from pygame.locals import *
 
+VERSION = 0.2
+
 # Paths
 PROJECT_PATH = os.path.dirname(__file__)
 RESOURCES_FOLDER = os.path.join(PROJECT_PATH, "resources")

@@ -1,0 +1,358 @@
+# English messages of gVARVI app.
+# Copyright (C) 2015 Mile group
+# Nicolás Vila <nvblanco@esei.uvigo.es>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2015-06-24 16:35+CEST\n"
+"PO-Revision-Date: 2015-06-24 16:36+0100\n"
+"Last-Translator: Nicolás Vila\n"
+"Language-Team: \n"
+"Language: en_150\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: view/MainWindow.py:83
+msgid "Activities"
+msgstr ""
+
+#: view/MainWindow.py:94 view/MainWindow.py:166
+msgid "Name"
+msgstr ""
+
+#: view/MainWindow.py:96 view/MainWindow.py:170
+msgid "Type"
+msgstr ""
+
+#: view/MainWindow.py:105
+msgid "Add"
+msgstr ""
+
+#: view/MainWindow.py:108
+msgid "Add new activity"
+msgstr ""
+
+#: view/MainWindow.py:110
+msgid "Edit"
+msgstr ""
+
+#: view/MainWindow.py:113
+msgid "Edit the selected activity"
+msgstr ""
+
+#: view/MainWindow.py:115
+msgid "Remove"
+msgstr ""
+
+#: view/MainWindow.py:118
+msgid "Remove the selected activity"
+msgstr ""
+
+#: view/MainWindow.py:120
+msgid "Export"
+msgstr ""
+
+#: view/MainWindow.py:124
+msgid "Export the selected activity"
+msgstr ""
+
+#: view/MainWindow.py:134
+msgid "Global options"
+msgstr ""
+
+#: view/MainWindow.py:136
+msgid "Quit"
+msgstr ""
+
+#: view/MainWindow.py:139
+msgid "Click to quit using VARVI"
+msgstr ""
+
+#: view/MainWindow.py:141 view/MainWindow.py:262
+msgid "About"
+msgstr ""
+
+#: view/MainWindow.py:144
+msgid "Click to see information about VARVI"
+msgstr ""
+
+#: view/MainWindow.py:146 view/MainWindow.py:259
+msgid "Preferences"
+msgstr ""
+
+#: view/MainWindow.py:149
+msgid "Click to open configuration window"
+msgstr ""
+
+#: view/MainWindow.py:158
+msgid "Connected Devices"
+msgstr ""
+
+#: view/MainWindow.py:168
+msgid "MAC"
+msgstr ""
+
+#: view/MainWindow.py:177 view/MainWindow.py:529 view/MainWindow.py:707
+msgid "Scan"
+msgstr ""
+
+#: view/MainWindow.py:180
+msgid "Replay the device search"
+msgstr ""
+
+#: view/MainWindow.py:182
+msgid "Test"
+msgstr ""
+
+#: view/MainWindow.py:185
+msgid "Run a test for the selected device"
+msgstr ""
+
+#: view/MainWindow.py:193
+msgid "Acquisition Info"
+msgstr ""
+
+#: view/MainWindow.py:198
+msgid "Selected activity:"
+msgstr ""
+
+#: view/MainWindow.py:201
+msgid "Selected device:"
+msgstr ""
+
+#: view/MainWindow.py:209
+msgid "Begin acquisition"
+msgstr ""
+
+#: view/MainWindow.py:212
+msgid "Run selected activity and begin acquisition"
+msgstr ""
+
+#: view/MainWindow.py:254
+msgid "Import activity"
+msgstr ""
+
+#: view/MainWindow.py:254
+msgid "Import an activity from an external file"
+msgstr ""
+
+#: view/MainWindow.py:257
+msgid "Export selected activity"
+msgstr ""
+
+#: view/MainWindow.py:257
+msgid "Export selected activity to file"
+msgstr ""
+
+#: view/MainWindow.py:259
+msgid "Configuration window"
+msgstr ""
+
+#: view/MainWindow.py:260
+msgid "Exit"
+msgstr ""
+
+#: view/MainWindow.py:260
+msgid "Terminate the program"
+msgstr ""
+
+#: view/MainWindow.py:262
+msgid "Information about this program"
+msgstr ""
+
+#: view/MainWindow.py:264
+msgid "Show or hide a debug window"
+msgstr ""
+
+#: view/MainWindow.py:264
+msgid "Toggle debug window"
+msgstr ""
+
+#: view/MainWindow.py:266
+msgid "File"
+msgstr ""
+
+#: view/MainWindow.py:267
+msgid "Help"
+msgstr ""
+
+#: view/MainWindow.py:268
+msgid "Advanced"
+msgstr ""
+
+#: view/MainWindow.py:296
+msgid "Insert activity"
+msgstr ""
+
+#: view/MainWindow.py:307 view/MainWindow.py:380 view/MainWindow.py:456
+msgid "You must select an activity"
+msgstr ""
+
+#: view/MainWindow.py:312
+msgid "Are you sure to delete that activity?"
+msgstr ""
+
+#: view/MainWindow.py:312
+msgid "Confirm delete operation"
+msgstr ""
+
+#: view/MainWindow.py:323
+msgid ""
+"gVARVI is a free software tool developed to perform heart\n"
+"rate variability (HRV) analysis in response to different visual stimuli.\n"
+"The tool was developed after realizing that\n"
+"this type of studies are becoming popular in fields such as\n"
+"psychiatry, psychology and marketing, and taking into account\n"
+"the lack of specific tools for this purpose."
+msgstr ""
+
+#: view/MainWindow.py:353
+msgid "Are you sure?"
+msgstr ""
+
+#: view/MainWindow.py:353
+msgid "Confirm exit"
+msgstr ""
+
+#: view/MainWindow.py:353
+msgid "Quitting VARVI"
+msgstr ""
+
+#: view/MainWindow.py:368
+msgid "Select path and name for the activity file"
+msgstr ""
+
+#: view/MainWindow.py:378
+msgid "Activity \"{0}\" exported successfully"
+msgstr ""
+
+#: view/MainWindow.py:384
+msgid "Choose a file"
+msgstr ""
+
+#: view/MainWindow.py:417 view/MainWindow.py:445
+msgid "Device not supported"
+msgstr ""
+
+#: view/MainWindow.py:420
+msgid "Please select a device"
+msgstr ""
+
+#: view/MainWindow.py:425
+msgid "Bluetooth error{0}CODE: {1}"
+msgstr ""
+
+#: view/MainWindow.py:452 view/MainWindow.py:460
+msgid "You must select an activity and a device"
+msgstr ""
+
+#: view/MainWindow.py:463
+msgid "Select path and name for this acquisition"
+msgstr ""
+
+#: view/MainWindow.py:475
+msgid "File already exists. Do you want to overwrite it?"
+msgstr ""
+
+#: view/MainWindow.py:476
+msgid "Confirm"
+msgstr ""
+
+#: view/MainWindow.py:493
+msgid "Check them!"
+msgstr ""
+
+#: view/MainWindow.py:493
+msgid "Some of activity files has been deleted"
+msgstr ""
+
+#: view/MainWindow.py:495
+msgid "Activity aborted. Data won't be saved"
+msgstr ""
+
+#: view/MainWindow.py:497
+msgid ""
+"Acquisition failed. Data will be saved anyway\n"
+"{0}"
+msgstr ""
+
+#: view/MainWindow.py:502
+msgid "Searching..."
+msgstr ""
+
+#: view/MainWindow.py:504
+msgid "Looking for devices..."
+msgstr ""
+
+#: view/MainWindow.py:517
+msgid "Name: {0}\tMAC: {1}"
+msgstr ""
+
+#: view/MainWindow.py:524
+msgid "Search finished"
+msgstr ""
+
+#: view/MainWindow.py:540
+msgid "No device found"
+msgstr ""
+
+#: view/MainWindow.py:543
+msgid "{0} device(s) found"
+msgstr ""
+
+#: view/MainWindow.py:554
+msgid "Activities list updated"
+msgstr ""
+
+#: view/MainWindow.py:574
+msgid "Do nothing"
+msgstr ""
+
+#: view/MainWindow.py:579
+msgid "Open in gHRV"
+msgstr ""
+
+#: view/MainWindow.py:584
+msgid "Plot results"
+msgstr ""
+
+#: view/MainWindow.py:595
+msgid "Acquisition finished"
+msgstr ""
+
+#: view/MainWindow.py:609
+msgid "gHRV must be installed in the system"
+msgstr ""
+
+#: view/MainWindow.py:611
+msgid "This feature is only available for Linux platforms"
+msgstr ""
+
+#: view/MainWindow.py:630
+msgid "Running test"
+msgstr ""
+
+#: view/MainWindow.py:636
+msgid "Connecting..."
+msgstr ""
+
+#: view/MainWindow.py:642
+msgid "RR Value"
+msgstr ""
+
+#: view/MainWindow.py:646
+msgid "HR Value"
+msgstr ""
+
+#: view/MainWindow.py:657
+msgid "OK"
+msgstr ""
+
+#: view/MainWindow.py:676
+msgid "Connected"
+msgstr ""

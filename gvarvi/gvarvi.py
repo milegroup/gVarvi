@@ -10,6 +10,10 @@ from config import CONF_DIR, DEFAULT_CONF_FILE, DEFAULT_ACTIV_FILE, CONF_FILE, A
 from utils import set_language
 
 
+
+
+
+
 # Creating necessary files and dirs if not exist
 if not os.path.isdir(CONF_DIR):
     os.mkdir(CONF_DIR)
@@ -52,10 +56,53 @@ class GVarviApp(wx.App):
             else:
                 sys.stderr.write(ftrace)
 
+        self.check_for_update()
         logger.debug("Starting app")
         sys.excepthook = exception_hook
 
         return True
+
+    def check_for_update(self):
+        from config import VERSION
+
+        import urllib2
+        import subprocess
+
+        try:
+            data = urllib2.urlopen("https://github.com/milegroup/gVarvi/raw"
+                                   "/develop/dist/lastversion.txt")
+            last_version = eval(data.read())
+            if last_version > VERSION:
+                from view.wxutils import ConfirmDialog
+                message = "New version of gVARVI is available for download\n"
+                if sys.platform == 'linux2':
+                    message += "Do you want to download it?"
+                elif sys.platform == "win32":
+                    message += "Do you want to open gVARVI repositories webpage?"
+
+                result = ConfirmDialog(message, "New version available").get_result()
+                if result == wx.ID_YES:
+                    if sys.platform == 'linux2':
+                        deb_url = "https://github.com/milegroup/gVarvi/blob" \
+                                  "/develop/dist/gvarvi-{0}.deb?raw=true".format(
+                            last_version)
+                        deb_data = urllib2.urlopen(deb_url)
+                        from tempfile import gettempdir
+                        with open(os.path.join(gettempdir(), "gvarvi_last.deb"), "wb") as f:
+                            f.write(deb_data.read())
+                            subprocess.call(["xdg-open", f.name])
+                        sys.exit(0)
+                    elif sys.platform == "win32":
+                        import webbrowser
+                        webbrowser.open('https://github.com/milegroup/gVarvi')
+
+            elif last_version == VERSION:
+                logger.debug("Last version of gVARVI ({}) is already installed".format(VERSION))
+        except urllib2.HTTPError as e:
+            logger.info(e.message)
+        except urllib2.URLError as e:
+            logger.info(e.message)
+
 
 # Application initialization
 from view.MainWindow import MainWindow

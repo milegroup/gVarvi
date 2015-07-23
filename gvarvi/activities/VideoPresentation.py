@@ -6,6 +6,11 @@ import os
 from utils import pack_folder_and_remove, unpack_tar_file_and_remove
 from activities.AbstractActivity import AbstractActivity
 from player.VideoPresentationPlayer import VideoPresentationPlayer
+
+
+
+
+# from player.VideoPresentationPlayerVLC import VideoPresentationPlayer
 from config import EXIT_ABORT_CODE, CONF_DIR
 
 
@@ -16,9 +21,10 @@ class VideoPresentation(AbstractActivity):
         AbstractActivity.__init__(self, id, name)
         self.random = random
         self.tags = tags
-        self.player = VideoPresentationPlayer(self.random, self.tags)
+        self.player = None
 
     def run(self, writer):
+        self.player = VideoPresentationPlayer(self.random, self.tags)
         exit_code = self.player.play(writer)
         if exit_code == EXIT_ABORT_CODE:
             raise KeyboardInterrupt()

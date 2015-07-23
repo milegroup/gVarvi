@@ -309,6 +309,7 @@ class MainWindow(wx.Frame):
             InfoDialog(_("You must select an activity")).show()
 
     def _OnAbout(self, _e):
+        from config import VERSION
         description = _("""gVARVI is a free software tool developed to perform heart
 rate variability (HRV) analysis in response to different visual stimuli.
 The tool was developed after realizing that
@@ -323,7 +324,7 @@ the lack of specific tools for this purpose.""")
 
         info.SetIcon(wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG))
         info.SetName('gVarvi')
-        info.SetVersion('0.1')
+        info.SetVersion(str(VERSION))
         info.SetDescription(description)
         info.SetCopyright('(C) 2015-2016 MileGroup')
         info.SetWebSite('http://milegroup.net/')
@@ -541,6 +542,7 @@ the lack of specific tools for this purpose.""")
             self.activities_grid.SetStringItem(i, 2, self.main_facade.activities[i].__class__.name)
             i += 1
         self.logger.debug("Activities list updated")
+
 
 class OnFinishAcquisitionDialog(wx.Frame):
     """
