@@ -1,6 +1,8 @@
 # coding=utf-8
 
 import os
+import re
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -66,13 +68,15 @@ class InsModVideoPresentation(InsModTemplate):
 
     def OnSave(self, e):
         correct_data = True
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
         name = self.name_text_ctrl.GetValue()
         if self.randomCheckBox.IsChecked():
             random = "Yes"
         else:
             random = "No"
         tags = self.tag_ctrl.tags
-        if name == "" or len(tags) == 0:
+        if not regex.match(name) or len(tags) == 0:
             correct_data = False
         if correct_data:
             if self.modifying:
@@ -82,8 +86,8 @@ class InsModVideoPresentation(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields" + os.linesep + "Also remember to add at least one " \
-                                                                                "tag").show()
+            InfoDialog("Please, don't forget to fill all fields.{0}Also remember to add at least one "
+                       "tag{0}Name only allows alphanumeric symbols, underscore and space".format(os.linesep)).show()
 
 
 class InsModVideoPresentationTag(wx.Frame):

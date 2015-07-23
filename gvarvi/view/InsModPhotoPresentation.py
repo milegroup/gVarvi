@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+import re
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -8,6 +10,7 @@ from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
+
 
 _ = get_translation()
 
@@ -83,6 +86,8 @@ class InsModPhotoPresentation(InsModTemplate):
 
     def OnSave(self, e):
         correct_data = True
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
         name = self.name_text_ctrl.GetValue()
         gap = str(self.gap_control.GetValue())
         if self.randomCheckBox.IsChecked():
@@ -90,7 +95,7 @@ class InsModPhotoPresentation(InsModTemplate):
         else:
             random = "No"
         tags = self.tag_ctrl.tags
-        if name == "" or len(tags) == 0:
+        if not regex.match(name) or len(tags) == 0:
             correct_data = False
         if correct_data:
             if self.modifying:
@@ -100,7 +105,10 @@ class InsModPhotoPresentation(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog(_("Please, fill all fields.{0}Also remember to add at least one tag").format(os.linesep)).show()
+            InfoDialog(_(
+                "Please, don't forget to fill all fields.{0}Also remember to add at least one "
+                "tag{0}Name only allows alphanumeric symbols, underscore and space").format(
+                os.linesep)).show()
 
 
 class InsModPhotoPresentationTag(wx.Frame):
@@ -250,21 +258,33 @@ class InsModPhotoPresentationTag(wx.Frame):
 
     def _OnSoundUp(self, _):
         sel_pos = self.sounds_listbox.GetSelection()
-        if sel_pos > 0:
-            sel_path = self.sounds_listbox.GetStringSelection()
-            self.sounds_listbox.Delete(sel_pos)
-            self.sounds_listbox.Insert(sel_path, sel_pos - 1)
+        if sel_pos != -1:
+            if sel_pos > 0:
+                sel_path = self.sounds_listbox.GetStringSelection()
+                self.sounds_listbox.Delete(sel_pos)
+                self.sounds_listbox.Insert(sel_path, sel_pos - 1)
+                self.sounds_listbox.Select(sel_pos - 1)
+            else:
+                self.sounds_listbox.Select(0)
 
     def _OnSoundDown(self, _):
         sel_pos = self.sounds_listbox.GetSelection()
-        if sel_pos < self.sounds_listbox.GetCount() - 1 and sel_pos != -1:
-            sel_path = self.sounds_listbox.GetStringSelection()
-            self.sounds_listbox.Delete(sel_pos)
-            self.sounds_listbox.Insert(sel_path, sel_pos + 1)
+        if sel_pos != -1:
+            if sel_pos < self.sounds_listbox.GetCount() - 1:
+                sel_path = self.sounds_listbox.GetStringSelection()
+                self.sounds_listbox.Delete(sel_pos)
+                self.sounds_listbox.Insert(sel_path, sel_pos + 1)
+                self.sounds_listbox.Select(sel_pos + 1)
+            else:
+                self.sounds_listbox.Select(self.sounds_listbox.GetCount() - 1)
 
     def _OnSave(self, _e):
         correct_data = True
-        name = self.name_text_ctrl.GetValue().encode('utf-8', "ignore")
+
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
+
+        name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
         if self.associated_sound_checkbox.IsChecked():
             associated_sound = "Yes"
@@ -273,7 +293,7 @@ class InsModPhotoPresentationTag(wx.Frame):
         sounds = [Sound(sound_path) for sound_path in self.sounds_listbox.GetItems()]
         tag = PhotoPresentationTag(name, path, associated_sound, sounds)
 
-        if name == "" or path == "" or not os.path.isdir(path):
+        if not regex.match(name) or path == "" or not os.path.isdir(path):
             correct_data = False
 
         if associated_sound == "Yes" and len(sounds) == 0:
@@ -287,7 +307,8 @@ class InsModPhotoPresentationTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog(_("Please, fill all fields with valid data")).show()
+            InfoDialog(_("Please, fill all fields with valid data{0}"
+                         "Name only allows alphanumeric symbols, underscore and space".format(os.linesep))).show()
 
     def _OnCancel(self, _):
         self.Destroy()

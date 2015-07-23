@@ -1,10 +1,12 @@
 # coding=utf-8
 from abc import abstractmethod
+
 import wx
 
 from utils import get_translation
 from view.wxutils import ConfirmDialog, InfoDialog
 from config import BACKGROUND_COLOUR, MAIN_ICON
+
 
 _ = get_translation()
 
@@ -127,7 +129,7 @@ class InsModTemplate(wx.Frame):
         self.tag_ctrl.modify_tag(pos, tag)
         self.refresh_tags()
 
-    def OnRemoveTag(self, _):
+    def OnRemoveTag(self, _e):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             result = ConfirmDialog(_("Are you sure to delete that tag?"), _("Confirm delete operation")).get_result()
@@ -138,23 +140,31 @@ class InsModTemplate(wx.Frame):
         else:
             InfoDialog(_("You must select a tag")).show()
 
-    def OnTagUp(self, _):
+    def OnTagUp(self, _e):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.tag_ctrl.up_tag(selected_row)
             self.refresh_tags()
+            if selected_row > 0:
+                self.tags_grid.Select(selected_row - 1)
+            else:
+                self.tags_grid.Select(0)
         else:
             InfoDialog(_("You must select a tag")).show()
 
-    def OnTagDown(self, _):
+    def OnTagDown(self, _e):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.tag_ctrl.down_tag(selected_row)
             self.refresh_tags()
+            if selected_row < self.tags_grid.GetItemCount() - 1:
+                self.tags_grid.Select(selected_row + 1)
+            else:
+                self.tags_grid.Select(self.tags_grid.GetItemCount() - 1)
         else:
             InfoDialog(_("You must select a tag")).show()
 
-    def OnEditTag(self, _):
+    def OnEditTag(self, _e):
         selected_row = self.tags_grid.GetFirstSelected()
         if selected_row != -1:
             self.insmod_tag_window_class(self, self.tag_ctrl, selected_row)

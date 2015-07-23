@@ -2,7 +2,6 @@
 
 from shutil import copyfile
 import xml.etree.ElementTree as eT
-
 from xml.dom import minidom
 
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
@@ -59,10 +58,9 @@ class XMLMapper(object):
                     tags = []
                     for tagelement in element.findall("tag"):
                         sounds = []
-                        if tagelement.attrib["associatedSound"] == "Yes":
-                            for soundElement in tagelement.findall("sound"):
-                                sound = Sound(soundElement.attrib["path"])
-                                sounds.append(sound)
+                        for soundElement in tagelement.findall("sound"):
+                            sound = Sound(soundElement.attrib["path"])
+                            sounds.append(sound)
                         tag = PhotoPresentationTag(
                             tagelement.attrib["name"],
                             tagelement.attrib["path"],

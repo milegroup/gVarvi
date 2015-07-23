@@ -236,17 +236,20 @@ def paint(rr_file, tag_file):
 
 def set_language(language):
     import gettext
-    import locale
     from config import PROJECT_PATH
 
     DIR = os.path.join(PROJECT_PATH, "locale")
     APP = "gvarvi"
     gettext.textdomain(APP)
     gettext.bindtextdomain(APP, DIR)
-    locale.setlocale(locale.LC_ALL, "")
+
+    def get_text(original):
+        translated = gettext.translation(APP, DIR, languages=[language], fallback=False).gettext(original)
+        properly_encoded = translated.decode('utf-8')
+        return properly_encoded
 
     global _
-    _ = gettext.translation(APP, DIR, languages=[language], fallback=False).gettext
+    _ = get_text
 
 
 def get_translation():
