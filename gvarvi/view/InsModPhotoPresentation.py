@@ -1,7 +1,6 @@
 # coding=utf-8
 import os
 import re
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -10,7 +9,6 @@ from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
-
 
 _ = get_translation()
 
@@ -281,7 +279,7 @@ class InsModPhotoPresentationTag(wx.Frame):
     def _OnSave(self, _e):
         correct_data = True
 
-        correct_pattern = "^[0-9a-zA-Z _]+$"
+        correct_pattern = r"^[0-9a-zA-Z _]+$"
         regex = re.compile(correct_pattern)
 
         name = self.name_text_ctrl.GetValue()
@@ -308,7 +306,7 @@ class InsModPhotoPresentationTag(wx.Frame):
                 self.Destroy()
         else:
             InfoDialog(_("Please, fill all fields with valid data{0}"
-                         "Name only allows alphanumeric symbols, underscore and space".format(os.linesep))).show()
+                         "Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
     def _OnCancel(self, _):
         self.Destroy()

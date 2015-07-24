@@ -5,7 +5,7 @@ import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 from pygame.locals import *
 
-VERSION = 0.2
+VERSION = 0.3
 
 # Paths
 PROJECT_PATH = os.path.dirname(__file__)

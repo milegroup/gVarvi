@@ -14,6 +14,7 @@ from utils import set_language
 
 
 
+
 # Creating necessary files and dirs if not exist
 if not os.path.isdir(CONF_DIR):
     os.mkdir(CONF_DIR)
@@ -56,7 +57,8 @@ class GVarviApp(wx.App):
             else:
                 sys.stderr.write(ftrace)
 
-        self.check_for_update()
+        if conf.checkForUpdatesOnStart == "Yes":
+            self.check_for_update()
         logger.debug("Starting app")
         sys.excepthook = exception_hook
 

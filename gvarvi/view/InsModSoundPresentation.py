@@ -2,7 +2,6 @@
 
 import os
 import re
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -11,7 +10,6 @@ from config import MAIN_ICON, BACKGROUND_COLOUR
 from activities.SoundPresentation import SoundPresentation, SoundPresentationTag, Image
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
-
 
 _ = get_translation()
 
@@ -309,7 +307,7 @@ class InsModSoundPresentationTag(wx.Frame):
                 self.Destroy()
         else:
             InfoDialog(_("Please, don't forget to fill all fields with valid data{0]"
-                         "Name only allows alphanumeric symbols, underscore and space".format(os.linesep))).show()
+                         "Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
     def OnCancel(self, _):
         self.Destroy()

@@ -1,5 +1,5 @@
 # coding=utf-8
-
+import os
 import wx
 
 from view.wxutils import ConfirmDialog, ErrorDialog, InfoDialog
@@ -47,6 +47,14 @@ class ConfWindow(wx.Frame):
                                               style=wx.CB_READONLY)
 
         self.language_combo_box.SetValue(languages[language_codes.index(self.conf.language)])
+
+        check_for_updates_label = wx.StaticText(self.main_panel, label=_('Check for updates on{0}start').format(
+            os.linesep))
+        self.check_for_updates_check_box = wx.CheckBox(self.main_panel)
+        if self.conf.checkForUpdatesOnStart == "Yes":
+            self.check_for_updates_check_box.SetValue(state=True)
+        else:
+            self.check_for_updates_check_box.SetValue(state=False)
 
         default_mode_label = wx.StaticText(self.main_panel, label=_("Default mode"))
         self.default_mode_list_box = wx.ListBox(self.main_panel,
@@ -100,6 +108,7 @@ class ConfWindow(wx.Frame):
 
         general_data_sizer.AddMany(
             [language_label, self.language_combo_box,
+             check_for_updates_label, self.check_for_updates_check_box,
              default_mode_label, self.default_mode_list_box,
              bluetooth_support_label, self.bluetooth_support_check_box,
              ant_support_label, self.ant_support_check_box,
@@ -146,6 +155,7 @@ class ConfWindow(wx.Frame):
         new_config = self.main_facade.conf
         previous_language = new_config.language
         new_config.language = language_codes[languages.index(self.language_combo_box.GetValue())]
+        new_config.checkForUpdatesOnStart = "Yes" if self.check_for_updates_check_box.IsChecked() else "No"
         new_config.defaultMode = self.default_mode_list_box.GetStringSelection()
         new_config.bluetoothSupport = "Yes" if self.bluetooth_support_check_box.IsChecked() else "No"
         new_config.antSupport = "Yes" if self.ant_support_check_box.IsChecked() else "No"
