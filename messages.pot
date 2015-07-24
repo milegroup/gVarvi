@@ -1,0 +1,728 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-07-24 11:06+CEST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: gvarvi/view/AddActivityWindow.py:41
+msgid ""
+"Picture presentation activity:\n"
+"        This activity plays some groups of pictures. Also\n"
+"        allows to associate sounds to each picture group."
+msgstr ""
+
+#: gvarvi/view/AddActivityWindow.py:50
+msgid ""
+"Video presentation activity:\n"
+"        This activity plays some individual videos"
+msgstr ""
+
+#: gvarvi/view/AddActivityWindow.py:58
+msgid ""
+"Sound presentation activity:\n"
+"        This activity plays some individual sounds. Also\n"
+"        allows to associate some images to each sound."
+msgstr ""
+
+#: gvarvi/view/AddActivityWindow.py:67
+msgid ""
+"Manual activity:\n"
+"        This activity plays some tags and shows\n"
+"        on screen a custom text for each tag. The\n"
+"        user can choose if the tag ends with key\n"
+"        pressing or with a timeout."
+msgstr ""
+
+#: gvarvi/view/AddActivityWindow.py:78
+msgid ""
+"Associated key activity:\n"
+"        This activity plays some tags and shows on\n"
+"        screen a custom text for each tag. Tags have\n"
+"        an associated key, so changing tags is as\n"
+"        simple as press the associated key of next tag."
+msgstr ""
+
+#: gvarvi/view/AddActivityWindow.py:112 gvarvi/view/ConfWindow.py:121
+#: gvarvi/view/InsModAssociatedKey.py:157
+#: gvarvi/view/InsModManualDefined.py:163
+#: gvarvi/view/InsModPhotoPresentation.py:217
+#: gvarvi/view/InsModSoundPresentation.py:216 gvarvi/view/InsModTemplate.py:99
+msgid "Cancel"
+msgstr ""
+
+#: gvarvi/view/AddActivityWindow.py:115 gvarvi/view/ConfWindow.py:124
+#: gvarvi/view/InsModAssociatedKey.py:160
+#: gvarvi/view/InsModManualDefined.py:166
+#: gvarvi/view/InsModPhotoPresentation.py:220
+#: gvarvi/view/InsModSoundPresentation.py:219
+#: gvarvi/view/InsModTemplate.py:102
+msgid "Return to the main window"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:27 gvarvi/view/MainWindow.py:135
+#: gvarvi/view/MainWindow.py:248
+msgid "Preferences"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:43
+msgid "Language"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:51
+msgid "Default mode"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:54
+msgid "Demo mode"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:54
+msgid "Device connected mode"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:61
+msgid "Bluetooth support"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:68
+msgid "ANT+ support"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:75
+msgid "Scan devices on startup"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:82
+msgid "Remote debugger"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:91
+msgid "Remote debugger IP"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:96
+msgid "Remote debugger port"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:116 gvarvi/view/InsModAssociatedKey.py:152
+#: gvarvi/view/InsModManualDefined.py:158
+#: gvarvi/view/InsModPhotoPresentation.py:212
+#: gvarvi/view/InsModSoundPresentation.py:211 gvarvi/view/InsModTemplate.py:94
+msgid "Save"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:119
+msgid "Save preferences"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:126
+msgid "Reset"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:129
+msgid "Back to the default configuration"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:165
+msgid "Changing the language requires rebooting application"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:168
+msgid "Remote debugger IP field must be a valid ip, although it had not been activated."
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:174
+msgid "Are you sure to reset preferences?"
+msgstr ""
+
+#: gvarvi/view/ConfWindow.py:174 gvarvi/view/MainWindow.py:466
+msgid "Confirm"
+msgstr ""
+
+#: gvarvi/view/DebugWindow.py:17
+msgid "Debug Window"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:32
+msgid "New Associated-Key Activity"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:38 gvarvi/view/InsModAssociatedKey.py:53
+#: gvarvi/view/InsModAssociatedKey.py:126
+#: gvarvi/view/InsModManualDefined.py:46 gvarvi/view/InsModManualDefined.py:61
+#: gvarvi/view/InsModManualDefined.py:123
+#: gvarvi/view/InsModPhotoPresentation.py:49
+#: gvarvi/view/InsModPhotoPresentation.py:78
+#: gvarvi/view/InsModPhotoPresentation.py:147
+#: gvarvi/view/InsModSoundPresentation.py:50
+#: gvarvi/view/InsModSoundPresentation.py:74
+#: gvarvi/view/InsModSoundPresentation.py:140 gvarvi/view/MainWindow.py:83
+#: gvarvi/view/MainWindow.py:155
+msgid "Name"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:55 gvarvi/view/InsModManualDefined.py:63
+msgid "Text"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:57
+msgid "Key code"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:82 gvarvi/view/InsModManualDefined.py:86
+#: gvarvi/view/InsModPhotoPresentation.py:108
+#: gvarvi/view/InsModSoundPresentation.py:103
+msgid "Please, don't forget to fill all fields.{0}Also remember to add at least one tag{0}Name only allows alphanumeric symbols, underscore and space"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:108
+msgid "New Associated Key Tag"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:112
+msgid "Modifying Associated Key Tag (id: {0})"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:128
+#: gvarvi/view/InsModManualDefined.py:125
+msgid "Screen Text"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:130
+msgid "Key"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:133
+#: gvarvi/view/InsModAssociatedKey.py:175
+msgid "Change"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:155
+#: gvarvi/view/InsModManualDefined.py:161
+msgid "Save the tag"
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:170
+msgid "Listening..."
+msgstr ""
+
+#: gvarvi/view/InsModAssociatedKey.py:208
+msgid ""
+"Please, don't forget to fill all fields with valid data\n"
+"- Every fields are mandatory\n"
+"- The key must be alphanumeric\n"
+"- Make you sure that you aren't using this key in\n"
+"other tag\n"
+"- Allowed symbols for tag name and screen text:\n"
+"    alphanumeric, space and underscore"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:30
+msgid "New Manual Activity"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:38
+#: gvarvi/view/InsModManualDefined.py:128
+#: gvarvi/view/InsModManualDefined.py:132
+#: gvarvi/view/InsModManualDefined.py:140
+#: gvarvi/view/InsModManualDefined.py:190
+msgid "Timed"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:41
+#: gvarvi/view/InsModManualDefined.py:128
+#: gvarvi/view/InsModManualDefined.py:142
+#: gvarvi/view/InsModManualDefined.py:176
+#: gvarvi/view/InsModManualDefined.py:192
+msgid "Key (SPACE BAR)"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:65
+#: gvarvi/view/InsModManualDefined.py:127
+msgid "Finish type"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:67
+#: gvarvi/view/InsModManualDefined.py:134
+msgid "Time"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:105
+msgid "New Manual Tag"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:109
+msgid "Modifying Manual Tag (id: {0})"
+msgstr ""
+
+#: gvarvi/view/InsModManualDefined.py:208
+msgid ""
+"Please, don't forget to fill all fields with valid data\n"
+"- Every fields are mandatory\n"
+"- Allowed symbols for tag name and screen text:\n"
+"    alphanumeric, space and underscore"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:32
+msgid "New Image Activity"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:52
+msgid "Gap (seconds)"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:55
+#: gvarvi/view/InsModSoundPresentation.py:53
+msgid "Random"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:80
+#: gvarvi/view/InsModPhotoPresentation.py:152
+#: gvarvi/view/InsModSoundPresentation.py:76
+#: gvarvi/view/InsModSoundPresentation.py:145
+msgid "Path"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:82
+#: gvarvi/view/InsModPhotoPresentation.py:164
+msgid "Associated sound"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:84
+#: gvarvi/view/InsModPhotoPresentation.py:175
+msgid "Sounds"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:129
+msgid "New Image Tag"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:133
+msgid "Modifying Image Tag (id: {0})"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:188
+#: gvarvi/view/InsModSoundPresentation.py:187 gvarvi/view/InsModTemplate.py:63
+#: gvarvi/view/MainWindow.py:94
+msgid "Add"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:191
+#: gvarvi/view/InsModSoundPresentation.py:190
+msgid "Add new tag"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:193
+#: gvarvi/view/InsModSoundPresentation.py:192 gvarvi/view/InsModTemplate.py:68
+#: gvarvi/view/MainWindow.py:104
+msgid "Remove"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:196
+#: gvarvi/view/InsModSoundPresentation.py:195 gvarvi/view/InsModTemplate.py:71
+msgid "Remove the selected tag"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:198
+#: gvarvi/view/InsModSoundPresentation.py:197 gvarvi/view/InsModTemplate.py:78
+msgid "Up"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:201
+#: gvarvi/view/InsModSoundPresentation.py:200
+msgid "Up selected tag in the list"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:203
+#: gvarvi/view/InsModSoundPresentation.py:202 gvarvi/view/InsModTemplate.py:83
+msgid "Down"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:206
+#: gvarvi/view/InsModSoundPresentation.py:205 gvarvi/view/InsModTemplate.py:86
+msgid "Down selected tag in the list"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:215
+#: gvarvi/view/InsModSoundPresentation.py:214 gvarvi/view/InsModTemplate.py:97
+msgid "Save the activity"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:231
+msgid "Choose a directory:"
+msgstr ""
+
+#: gvarvi/view/InsModPhotoPresentation.py:243
+#: gvarvi/view/InsModSoundPresentation.py:233
+#: gvarvi/view/InsModSoundPresentation.py:248 gvarvi/view/MainWindow.py:374
+msgid "Choose a file"
+msgstr ""
+
+#: gvarvi/view/InsModSoundPresentation.py:33
+msgid "New Sound Activity"
+msgstr ""
+
+#: gvarvi/view/InsModSoundPresentation.py:78
+#: gvarvi/view/InsModSoundPresentation.py:157
+msgid "Associated image"
+msgstr ""
+
+#: gvarvi/view/InsModSoundPresentation.py:80
+#: gvarvi/view/InsModSoundPresentation.py:174
+msgid "Images"
+msgstr ""
+
+#: gvarvi/view/InsModSoundPresentation.py:122
+msgid "New Sound Tag"
+msgstr ""
+
+#: gvarvi/view/InsModSoundPresentation.py:126
+msgid "Modifying Sound Tag (id: {0})"
+msgstr ""
+
+#: gvarvi/view/InsModSoundPresentation.py:162
+msgid "Randomize images"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:37
+msgid "Modifying Activity (id: {0})"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:52
+msgid "Tags"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:73 gvarvi/view/MainWindow.py:99
+msgid "Edit"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:76
+msgid "Rename the selected tag"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:135
+msgid "Are you sure to delete that tag?"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:135 gvarvi/view/MainWindow.py:301
+msgid "Confirm delete operation"
+msgstr ""
+
+#: gvarvi/view/InsModTemplate.py:141 gvarvi/view/InsModTemplate.py:153
+#: gvarvi/view/InsModTemplate.py:165 gvarvi/view/InsModTemplate.py:172
+msgid "You must select a tag"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:72
+msgid "Activities"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:85 gvarvi/view/MainWindow.py:159
+msgid "Type"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:97
+msgid "Add new activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:102
+msgid "Edit the selected activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:107
+msgid "Remove the selected activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:109
+msgid "Export"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:113
+msgid "Export the selected activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:123
+msgid "Global options"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:125
+msgid "Quit"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:128
+msgid "Click to quit using VARVI"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:130 gvarvi/view/MainWindow.py:251
+msgid "About"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:133
+msgid "Click to see information about VARVI"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:138
+msgid "Click to open configuration window"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:147
+msgid "Connected Devices"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:157
+msgid "MAC"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:166 gvarvi/view/MainWindow.py:519
+#: gvarvi/view/MainWindow.py:697
+msgid "Scan"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:169
+msgid "Replay the device search"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:171
+msgid "Test"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:174
+msgid "Run a test for the selected device"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:182
+msgid "Acquisition Info"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:187
+msgid "Selected activity:"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:190
+msgid "Selected device:"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:198
+msgid "Begin acquisition"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:201
+msgid "Run selected activity and begin acquisition"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:243
+msgid "Import activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:243
+msgid "Import an activity from an external file"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:246
+msgid "Export selected activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:246
+msgid "Export selected activity to file"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:248
+msgid "Configuration window"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:249
+msgid "Exit"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:249
+msgid "Terminate the program"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:251
+msgid "Information about this program"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:253
+msgid "Show or hide a debug window"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:253
+msgid "Toggle debug window"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:255
+msgid "File"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:256
+msgid "Help"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:257
+msgid "Advanced"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:285
+msgid "Insert activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:296 gvarvi/view/MainWindow.py:309
+#: gvarvi/view/MainWindow.py:370 gvarvi/view/MainWindow.py:446
+msgid "You must select an activity"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:301
+msgid "Are you sure to delete that activity?"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:313
+msgid ""
+"gVARVI is a free software tool developed to perform heart\n"
+"rate variability (HRV) analysis in response to different visual stimuli.\n"
+"The tool was developed after realizing that\n"
+"this type of studies are becoming popular in fields such as\n"
+"psychiatry, psychology and marketing, and taking into account\n"
+"the lack of specific tools for this purpose."
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:343
+msgid "Are you sure?"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:343
+msgid "Confirm exit"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:343
+msgid "Quitting VARVI"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:358
+msgid "Select path and name for the activity file"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:368
+msgid "Activity \"{0}\" exported successfully"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:407 gvarvi/view/MainWindow.py:435
+msgid "Device not supported"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:410
+msgid "Please select a device"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:415
+msgid "Bluetooth error{0}CODE: {1}"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:442 gvarvi/view/MainWindow.py:450
+msgid "You must select an activity and a device"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:453
+msgid "Select path and name for this acquisition"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:465
+msgid "File already exists. Do you want to overwrite it?"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:483
+msgid "Check them!"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:483
+msgid "Some of activity files has been deleted"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:485
+msgid "Activity aborted. Data won't be saved"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:487
+msgid ""
+"Acquisition failed. Data will be saved anyway\n"
+"{0}"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:492
+msgid "Searching..."
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:494
+msgid "Looking for devices..."
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:530
+msgid "No device found"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:533
+msgid "{0} device(s) found"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:564
+msgid "Do nothing"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:569
+msgid "Open in gHRV"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:574
+msgid "Plot results"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:585
+msgid "Acquisition finished"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:599
+msgid "gHRV must be installed in the system"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:601
+msgid "This feature is only available for Linux platforms"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:620
+msgid "Running test"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:626
+msgid "Connecting..."
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:632
+msgid "RR Value"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:636
+msgid "HR Value"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:647
+msgid "OK"
+msgstr ""
+
+#: gvarvi/view/MainWindow.py:666
+msgid "Connected"
+msgstr ""
+
+#: gvarvi/view/wxutils.py:15
+msgid "Info"
+msgstr ""
+
