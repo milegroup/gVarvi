@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 import sys
 import threading
+
 from wx import PostEvent
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -24,6 +24,7 @@ from activities.SoundPresentation import SoundPresentation
 from activities.VideoPresentation import VideoPresentation
 from activities.AssociatedKeyActivity import AssociatedKeyActivity
 from activities.ManualDefinedActivity import ManualDefinedActivity
+
 
 _ = get_translation()
 
@@ -329,13 +330,13 @@ the lack of specific tools for this purpose.""")
         info.SetCopyright('(C) 2015-2016 MileGroup')
         info.SetWebSite('http://milegroup.net/')
         info.SetLicence(licence)
-        info.SetDevelopers(['Leandro Rodríguez-Liñares',
-                            'Arturo Méndez',
-                            'María José Lado',
-                            'Xosé Antón Vila',
-                            'Pedro Cuesta Morales',
-                            'Nicolás Vila'])
-        info.AddDocWriter('Nicolás Vila')
+        info.SetDevelopers(['Leandro Rodríguez-Liñares'.decode('utf-8'),
+                            'Arturo Méndez'.decode('utf-8'),
+                            'María José Lado'.decode('utf-8'),
+                            'Xosé Antón Vila'.decode('utf-8'),
+                            'Pedro Cuesta Morales'.decode('utf-8'),
+                            'Nicolás Vila'.decode('utf-8')])
+        info.AddDocWriter('Nicolás Vila'.decode('utf-8'))
 
         wx.AboutBox(info)
 
