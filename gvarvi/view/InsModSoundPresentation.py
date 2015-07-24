@@ -1,6 +1,8 @@
 # coding=utf-8
 
 import os
+import re
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -10,7 +12,9 @@ from activities.SoundPresentation import SoundPresentation, SoundPresentationTag
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
+
 _ = get_translation()
+
 
 class InsModSoundPresentation(InsModTemplate):
     """
@@ -78,13 +82,15 @@ class InsModSoundPresentation(InsModTemplate):
 
     def OnSave(self, _e):
         correct_data = True
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
         name = self.name_text_ctrl.GetValue()
         if self.randomCheckBox.IsChecked():
             random = "Yes"
         else:
             random = "No"
         tags = self.tag_ctrl.tags
-        if name == "" or len(tags) == 0:
+        if not regex.match(name) or len(tags) == 0:
             correct_data = False
         if correct_data:
             if self.modifying:
@@ -95,7 +101,7 @@ class InsModSoundPresentation(InsModTemplate):
             self.Destroy()
         else:
             InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one "
-                         "tag").format(os.linesep)).show()
+                         "tag{0}Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
 
 class InsModSoundPresentationTag(wx.Frame):
@@ -271,6 +277,10 @@ class InsModSoundPresentationTag(wx.Frame):
 
     def _OnSave(self, _e):
         correct_data = True
+
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
+
         name = self.name_text_ctrl.GetValue()
         path = self.path_text_ctrl.GetValue()
         if self.random_checkbox.IsChecked():
@@ -284,7 +294,7 @@ class InsModSoundPresentationTag(wx.Frame):
         images = [Image(image_path) for image_path in self.images_listbox.GetItems()]
         tag = SoundPresentationTag(name, path, random, associated_image, images)
 
-        if name == "" or path == "" or not os.path.isfile(path):
+        if not regex.match(name) or path == "" or not os.path.isfile(path):
             correct_data = False
 
         if associated_image == "Yes" and len(images) == 0:
@@ -298,7 +308,8 @@ class InsModSoundPresentationTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog(_("Please, don't forget to fill all fields with valid data")).show()
+            InfoDialog(_("Please, don't forget to fill all fields with valid data{0]"
+                         "Name only allows alphanumeric symbols, underscore and space".format(os.linesep))).show()
 
     def OnCancel(self, _):
         self.Destroy()

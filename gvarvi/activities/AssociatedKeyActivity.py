@@ -26,13 +26,13 @@ class AssociatedKeyActivity(AbstractActivity):
         toret = "Associated key activity:\n" \
                 "Id: {id}\n" \
                 "Name: {name}\n".format(id=self.id,
-                                        name=self.name.encode('utf-8'))
+                                        name=self.name)
         for tag in self.tags:
             toret += "Photo presentation tag:\n" \
                      "\tName: {name}\n" \
                      "\tScreen text: {screentext}\n" \
-                     "\tAssociated key: {key}\n".format(name=tag.name.encode('utf-8'),
-                                                        screentext=tag.screentext.encode('utf-8'),
+                     "\tAssociated key: {key}\n".format(name=tag.name,
+                                                        screentext=tag.screentext,
                                                         key=tag.key)
         return toret
 

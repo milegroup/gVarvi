@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+import re
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -8,6 +10,7 @@ from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.ManualDefinedActivity import ManualDefinedTag, ManualDefinedActivity
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
+
 
 _ = get_translation()
 
@@ -66,9 +69,11 @@ class InsModManualDefined(InsModTemplate):
 
     def OnSave(self, e):
         correct_data = True
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
         name = self.name_text_ctrl.GetValue()
         tags = self.tag_ctrl.tags
-        if name == "" or len(tags) == 0:
+        if not regex.match(name) or len(tags) == 0:
             correct_data = False
         if correct_data:
             if self.modifying:
@@ -79,7 +84,7 @@ class InsModManualDefined(InsModTemplate):
             self.Destroy()
         else:
             InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one "
-                         "tag").format(os.linesep)).show()
+                         "tag{0}Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
 
 class InsModManualTag(wx.Frame):
@@ -176,6 +181,10 @@ class InsModManualTag(wx.Frame):
 
     def _OnSave(self, _e):
         correct_data = True
+
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
+
         name = self.name_text_ctrl.GetValue()
         screentext = self.screentext_text_ctrl.GetValue()
         if self.finish_type_ctrl.GetValue() == _("Timed"):
@@ -185,7 +194,7 @@ class InsModManualTag(wx.Frame):
         time = self.time_ctrl.GetValue()
         tag = ManualDefinedTag(name, screentext, finish_type, time)
 
-        if name == "" or screentext == "" or finish_type == "":
+        if not regex.match(name) or not regex.match(screentext) or finish_type == "":
             correct_data = False
 
         if correct_data:
@@ -196,7 +205,10 @@ class InsModManualTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog(_("Please, don't forget to fill all fields with valid data")).show()
+            InfoDialog(_("""Please, don't forget to fill all fields with valid data
+- Every fields are mandatory
+- Allowed symbols for tag name and screen text:
+    alphanumeric, space and underscore""")).show()
 
     def _OnCancel(self, _):
         self.Destroy()

@@ -26,14 +26,14 @@ class ManualDefinedActivity(AbstractActivity):
         toret = "Manual defined acivity:\n" \
                 "Id: {id}\n" \
                 "Name: {name}\n".format(id=self.id,
-                                        name=self.name.encode('utf-8'))
+                                        name=self.name)
         for tag in self.tags:
             toret += "Manual defined tag:\n" \
                      "\tName: {name}\n" \
                      "\tScreen text: {screentext}\n" \
                      "\tFinish type: {finishtype}\n" \
-                     "\tTime: {time}\n".format(name=tag.name.encode('utf-8'),
-                                               screentext=tag.screentext.encode('utf-8'),
+                     "\tTime: {time}\n".format(name=tag.name,
+                                               screentext=tag.screentext,
                                                finishtype=tag.finish_type,
                                                time=tag.time)
         return toret

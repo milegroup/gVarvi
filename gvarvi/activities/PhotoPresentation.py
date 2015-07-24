@@ -32,19 +32,19 @@ class PhotoPresentation(AbstractActivity):
                 "Name: {name}\n" \
                 "Random: {random}\n" \
                 "Gap: {gap}\n".format(id=self.id,
-                                      name=self.name.encode('utf-8'),
+                                      name=self.name,
                                       random=self.random,
                                       gap=self.gap)
         for tag in self.tags:
             toret += "Photo presentation tag:\n" \
                      "\tName: {name}\n" \
                      "\tPath: {path}\n" \
-                     "\tAssociated sound: {associated_sound}\n".format(name=tag.name.encode('utf-8'),
-                                                                       path=tag.path.encode('utf-8'),
+                     "\tAssociated sound: {associated_sound}\n".format(name=tag.name,
+                                                                       path=tag.path,
                                                                        associated_sound=tag.associated_sound)
             for sound in tag.sounds:
                 toret += "\tSound:\n" \
-                         "\t\tPath: {path}\n".format(path=sound.path.encode('utf-8'))
+                         "\t\tPath: {path}\n".format(path=sound.path)
         return toret
 
     def export_to_file(self, file_path):

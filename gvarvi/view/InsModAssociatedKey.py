@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+import re
+
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -9,7 +11,9 @@ from activities.AssociatedKeyActivity import AssociatedKeyTag, AssociatedKeyActi
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
+
 _ = get_translation()
+
 
 class InsModAssociatedKey(InsModTemplate):
     """
@@ -61,9 +65,11 @@ class InsModAssociatedKey(InsModTemplate):
 
     def OnSave(self, e):
         correct_data = True
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
         name = self.name_text_ctrl.GetValue()
         tags = self.tag_ctrl.tags
-        if name == "" or len(tags) == 0:
+        if not regex.match(name) or len(tags) == 0:
             correct_data = False
         if correct_data:
             if self.modifying:
@@ -73,7 +79,9 @@ class InsModAssociatedKey(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one tag").format(
+            InfoDialog(_(
+                "Please, don't forget to fill all fields.{0}Also remember to add at least one "
+                "tag{0}Name only allows alphanumeric symbols, underscore and space").format(
                 os.linesep)).show()
 
     def used_keys(self):
@@ -169,11 +177,15 @@ class InsModAssociatedKeyTag(wx.Frame):
 
     def _OnSave(self, _e):
         correct_data = True
+
+        correct_pattern = "^[0-9a-zA-Z _]+$"
+        regex = re.compile(correct_pattern)
+
         name = self.name_text_ctrl.GetValue()
         screentext = self.screentext_text_ctrl.GetValue()
         key = self.key_text_ctrl.GetValue()
         tag = AssociatedKeyTag(name, screentext, key)
-        if screentext == "" or key == "" or (
+        if not regex.match(screentext) or not regex.match(name) or key == "" or (
                         key in self.used_keys and key != self.previous_key):
             correct_data = False
         else:
@@ -197,7 +209,9 @@ class InsModAssociatedKeyTag(wx.Frame):
 - Every fields are mandatory
 - The key must be alphanumeric
 - Make you sure that you aren't using this key in
-other tag""")).show()
+other tag
+- Allowed symbols for tag name and screen text:
+    alphanumeric, space and underscore""")).show()
 
     def _OnCancel(self, _):
         self.Destroy()

@@ -30,20 +30,20 @@ class SoundPresentation(AbstractActivity):
                 "Id: {id}\n" \
                 "Name: {name}\n" \
                 "Random: {random}\n".format(id=self.id,
-                                            name=self.name.encode('utf-8'),
+                                            name=self.name,
                                             random=self.random)
         for tag in self.tags:
             toret += "Sound presentation tag:\n" \
                      "\tName: {name}\n" \
                      "\tPath: {path}\n" \
                      "\tRandomized images: {random}\n" \
-                     "\tAssociated images: {associated_image}\n".format(name=tag.name.encode('utf-8'),
-                                                                        path=tag.path.encode('utf-8'),
+                     "\tAssociated images: {associated_image}\n".format(name=tag.name,
+                                                                        path=tag.path,
                                                                         random=tag.random,
                                                                         associated_image=tag.associated_image)
             for image in tag.images:
                 toret += "\tImage:\n" \
-                         "\t\tPath: {path}\n".format(path=image.path.encode('utf-8'))
+                         "\t\tPath: {path}\n".format(path=image.path)
         return toret
 
     def export_to_file(self, file_path):

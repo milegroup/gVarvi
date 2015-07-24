@@ -10,6 +10,7 @@ from player.VideoPresentationPlayer import VideoPresentationPlayer
 
 
 
+
 # from player.VideoPresentationPlayerVLC import VideoPresentationPlayer
 from config import EXIT_ABORT_CODE, CONF_DIR
 
@@ -33,17 +34,17 @@ class VideoPresentation(AbstractActivity):
         self.player.stop()
 
     def __str__(self):
-        toret = "Video presentation acivity:\n" \
+        toret = "Video presentation activity:\n" \
                 "Id: {id}\n" \
                 "Name: {name}\n" \
                 "Random: {random}\n".format(id=self.id,
-                                            name=self.name.encode('utf-8'),
+                                            name=self.name,
                                             random=self.random)
         for tag in self.tags:
             toret += "Video presentation tag:\n" \
                      "\tName: {name}\n" \
-                     "\tPath: {path}\n".format(name=tag.name.encode('utf-8'),
-                                               path=tag.path.encode('utf-8'))
+                     "\tPath: {path}\n".format(name=tag.name,
+                                               path=tag.path)
         return toret
 
     def export_to_file(self, file_path):
