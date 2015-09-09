@@ -424,6 +424,8 @@ the lack of specific tools for this purpose.""")
         activity_id = None
         mode = None
         if self._is_activity_selected():
+            print(self.main_facade.is_demo_mode())
+            print(self._is_device_selected())
             activity_id = self.activities_grid.GetItem(self.activities_grid.GetFirstSelected()).GetText()
             if not self.main_facade.is_demo_mode() and self._is_device_selected():
                 mode = DEVICE_CONNECTED_MODE

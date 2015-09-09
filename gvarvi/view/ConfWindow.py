@@ -156,7 +156,8 @@ class ConfWindow(wx.Frame):
         previous_language = new_config.language
         new_config.language = language_codes[languages.index(self.language_combo_box.GetValue())]
         new_config.checkForUpdatesOnStart = "Yes" if self.check_for_updates_check_box.IsChecked() else "No"
-        new_config.defaultMode = self.default_mode_list_box.GetStringSelection()
+        new_config.defaultMode = "Demo mode" if self.default_mode_list_box.GetStringSelection() == _("Demo mode") \
+            else "Device connected mode"
         new_config.bluetoothSupport = "Yes" if self.bluetooth_support_check_box.IsChecked() else "No"
         new_config.antSupport = "Yes" if self.ant_support_check_box.IsChecked() else "No"
 
