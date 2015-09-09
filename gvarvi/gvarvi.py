@@ -73,7 +73,7 @@ class GVarviApp(wx.App):
         try:
             data = urllib2.urlopen("https://github.com/milegroup/gVarvi/raw"
                                    "/develop/dist/lastversion.txt")
-            last_version = eval(data.read())
+            last_version = data.read()
             if last_version > VERSION:
                 from view.wxutils import ConfirmDialog
                 message = "New version of gVARVI is available for download\n"
