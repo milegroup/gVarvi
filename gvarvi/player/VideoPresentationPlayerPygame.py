@@ -1,5 +1,8 @@
 # coding=utf-8
 
+# This module is obsolete and kept only for historical interest. gVARVI now uses VideoPresentationPlayerVLC.py module
+# for video playback.
+
 from random import shuffle
 from datetime import datetime
 import pygame

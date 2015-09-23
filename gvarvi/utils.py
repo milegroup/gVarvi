@@ -3,7 +3,7 @@ import os
 import shutil
 import tarfile
 
-_author__ = 'nico'
+__author__ = 'nico'
 
 import threading
 import contextlib
@@ -11,14 +11,11 @@ import itertools
 import wave
 import logging
 import wx
-import matplotlib.pyplot as plt
 from random import shuffle
 
 import mutagen.mp3
 
 from config import EVT_RESULT_ID, SUPPORTED_IMG_EXTENSIONS
-
-
 
 
 # Custom classes
@@ -207,12 +204,19 @@ def cumsum(it):
         yield total
 
 
+@run_in_thread
 def paint(rr_file, tag_file):
     """
     Paint results of acquisition
     @param rr_file: Path to file that contains rr values
     @param tag_file: Path to file that contains tag values
     """
+    import matplotlib
+    matplotlib.use("Agg")
+
+    import matplotlib.pyplot as plt
+    plt.switch_backend("WXAgg")
+
     colors = ['orange', 'green', 'lightblue', 'grey', 'brown', 'red', 'yellow', 'black', 'magenta', 'purple']
     shuffle(colors)
     rr_values = parse_rr_file(rr_file)

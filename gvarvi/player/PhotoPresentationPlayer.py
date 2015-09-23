@@ -28,9 +28,8 @@ class PhotoPresentationPlayer(Player):
         self.logger = Logger()
 
         self.gap = gap
-        self.random = random
         self.tags = tags
-        if self.random == "Yes":
+        if random == "Yes":
             shuffle(self.tags)
         self.ended_tag = False
         self.done = False

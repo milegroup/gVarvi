@@ -72,6 +72,7 @@ class AcquisitionFacade(object):
             self.logger.info("Some of activity files or folders has been deleted")
             raise
         except Exception as e:
+            self.logger.exception("{}: {}".format(e.__class__, e.message))
             self._abort(remove_files=False)
             raise FailedAcquisition(e.message)
 

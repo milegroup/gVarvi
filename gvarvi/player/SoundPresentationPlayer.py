@@ -24,9 +24,8 @@ class SoundPresentationPlayer(Player):
     def __init__(self, random, tags):
         self.logger = Logger()
 
-        self.random = random
         self.tags = tags
-        if self.random == "Yes":
+        if random == "Yes":
             shuffle(self.tags)
         self.ended_tag = False
         self.done = False
@@ -102,8 +101,6 @@ class SoundPresentationPlayer(Player):
         self.done = True
         if self.image_player_thread:
             self.image_player_thread.join()
-        pygame.mixer.stop()
-        pygame.mixer.quit()
         pygame.quit()
 
     @run_in_thread

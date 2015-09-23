@@ -2,7 +2,6 @@
 
 import os
 import re
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -165,7 +164,11 @@ class InsModVideoPresentationTag(wx.Frame):
 
     def _OnChangePath(self, _):
 
-        wildcard = "Video source (*.mpg)|*.mpg"
+        wildcard = "Video source (*.mpg; *.MPG; *.mp4; *.MP4; *.mov; *.mkv; *.MKV; " \
+                   "*.3gp; *.3GP; *.m4v; *.M4V; *.m2v; *.M2V; *.ogv; *.OGV; *.webm; *.WEBM; *.flv; *.FLV; *.avi; " \
+                   "*.AVI)" \
+                   "|*.mpg;*.MPG;*.mp4;*.MP4;*.mov;*.MOV;*.mkv;*.MKV;*.3gp;*.3GP;*.m4v;*.M4V;*.m2v;*.M2V;*.ogv;*.OGV" \
+                   ";*.webm;*.WEBM;*.flv;*.FLV;*.avi;*.AVI"
 
         dlg = wx.FileDialog(
             self, message="Choose a file",

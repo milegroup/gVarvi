@@ -10,7 +10,6 @@ from devices.DemoBand import DemoBand
 from devices.ANTDevice import ANTDevice
 from facade.Writer import TextWriter
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE, CONF_DIR
-from utils import run_in_thread, paint
 from logger import Logger
 from devices.BTDevice import BTDevice
 
@@ -154,7 +153,7 @@ class MainFacade:
                 ad = AcquisitionFacade(activity, device, writer)
                 ad.start()
 
-    @run_in_thread
+    # @run_in_thread
     def open_ghrv(self):
         """
         Show result data in gHRV application
@@ -163,11 +162,12 @@ class MainFacade:
         tag_file = str(self.acquisition_path) + ".tag.txt"
         os.system("/usr/bin/gHRV -loadBeatTXT {0} -loadEpTXT {1}".format(rr_file, tag_file))
 
-    @run_in_thread
     def plot_results(self):
         """
         Plots acquisition results in a new window
         """
+        from utils import paint
+
         rr_file = str(self.acquisition_path) + ".rr.txt"
         tag_file = str(self.acquisition_path) + ".tag.txt"
         paint(rr_file, tag_file)

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import threading
-
 from wx import PostEvent
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -24,7 +23,6 @@ from activities.SoundPresentation import SoundPresentation
 from activities.VideoPresentation import VideoPresentation
 from activities.AssociatedKeyActivity import AssociatedKeyActivity
 from activities.ManualDefinedActivity import ManualDefinedActivity
-
 
 _ = get_translation()
 
@@ -424,8 +422,6 @@ the lack of specific tools for this purpose.""")
         activity_id = None
         mode = None
         if self._is_activity_selected():
-            print(self.main_facade.is_demo_mode())
-            print(self._is_device_selected())
             activity_id = self.activities_grid.GetItem(self.activities_grid.GetFirstSelected()).GetText()
             if not self.main_facade.is_demo_mode() and self._is_device_selected():
                 mode = DEVICE_CONNECTED_MODE
@@ -600,7 +596,7 @@ class OnFinishAcquisitionDialog(wx.Frame):
                 self.Destroy()
             else:
                 ErrorDialog(_("gHRV must be installed in the system")).show()
-        if sysplat == "win32":
+        if sysplat == "win32" or sysplat == "darwin":
             ErrorDialog(_("This feature is only available for Linux platforms")).show()
 
     def _OnPlotResults(self, _):
