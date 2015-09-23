@@ -204,7 +204,6 @@ def cumsum(it):
         yield total
 
 
-@run_in_thread
 def paint(rr_file, tag_file):
     """
     Paint results of acquisition
