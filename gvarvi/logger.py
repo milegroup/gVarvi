@@ -18,12 +18,12 @@ class Logger(logging.Logger):
 
         # Formatters
         self.to_file_formatter = logging.Formatter(
-            "%(levelname)s %(asctime)s Func: %(funcName)s Line:%(lineno)d -- %(message)s")
+            "%(levelname)s %(asctime)s - %(filename)s at line %(lineno)d -- %(message)s")
         self.to_console_formatter = logging.Formatter("%(levelname)s -- %(message)s")
         self.to_datagram_formatter = logging.Formatter("%(message)s")
 
         # Handlers
-        self.file_handler = logging.FileHandler(filename=LOG_FILE)
+        self.file_handler = logging.handlers.RotatingFileHandler(filename=LOG_FILE, maxBytes=100000, backupCount=2)
         self.file_handler.setFormatter(self.to_file_formatter)
         self.file_handler.setLevel(logging.DEBUG)
         self.console_handler = logging.StreamHandler()

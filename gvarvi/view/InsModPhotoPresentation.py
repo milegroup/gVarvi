@@ -124,10 +124,10 @@ class InsModPhotoPresentationTag(wx.Frame):
         self.modifying = tag_id != -1
         self.tag_id = tag_id
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Image Tag"),
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, title=_("New Image Tag"),
                               size=(600, 600))
         else:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
                               title=_("Modifying Image Tag (id: {0})").format(tag_id),
                               size=(600, 600))
             tag = self.tag_control.tags[self.tag_id]
@@ -226,7 +226,7 @@ class InsModPhotoPresentationTag(wx.Frame):
 
     def _OnChangePath(self, _e):
 
-        dlg = wx.DirDialog(self, _("Choose a directory:"),
+        dlg = wx.DirDialog(self, _("Choose a directory"),
                            style=wx.DD_DEFAULT_STYLE
                                  | wx.DD_DIR_MUST_EXIST)
 
@@ -235,7 +235,7 @@ class InsModPhotoPresentationTag(wx.Frame):
         dlg.Destroy()
 
     def _OnAddSound(self, _e):
-        wildcard = "Audio source (*.mp3; *wav)|*.mp3;*.wav"
+        wildcard = _("Audio source") + " (*.mp3; *wav)|*.mp3;*.wav"
 
         dlg = wx.FileDialog(
             self, message=_("Choose a file"),

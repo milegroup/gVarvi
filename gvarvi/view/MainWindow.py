@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import sys
 import threading
-from wx import PostEvent
+import wx
+import os
 import wx.lib.agw.ultimatelistctrl as ULC
 
 from logger import Logger
-from ConfWindow import *
 from wxutils import InfoDialog, ErrorDialog, ConfirmDialog
 from config import ACTIVITIES_LIST_ID, DEVICES_LIST_ID, GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE
@@ -25,6 +24,7 @@ from activities.AssociatedKeyActivity import AssociatedKeyActivity
 from activities.ManualDefinedActivity import ManualDefinedActivity
 
 _ = get_translation()
+
 
 class MainWindow(wx.Frame):
     """
@@ -143,7 +143,7 @@ class MainWindow(wx.Frame):
         # ----- Begin of Connected Devices List -----
 
         self.devicesSizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.VERTICAL)
-        connected_devices_title = wx.StaticText(self, 0, _("Connected Devices"))
+        connected_devices_title = wx.StaticText(self, 0, _("Devices"))
         connected_devices_title.SetFont(DEFAULT_TITLE_FONT)
         self.devicesSizer.Add(connected_devices_title, flag=wx.ALIGN_CENTER)
         self.devicesGrid = ULC.UltimateListCtrl(self, id=DEVICES_LIST_ID, agwStyle=GRID_STYLE)
@@ -238,20 +238,39 @@ class MainWindow(wx.Frame):
                                 ManualDefinedActivity: InsModManualDefined}
 
     def _build_menu(self):
-        menu_file = wx.Menu()
-        menu_import_activity = menu_file.Append(wx.NewId(), _("Import activity"), _("Import an activity from an "
-                                                                                    "external "
-                                                                                    "file"))
-        menu_export_selected_activity = menu_file.Append(wx.NewId(), _("Export selected activity"), _("Export selected "
-                                                                                                      "activity to file"))
-        menu_preferences = menu_file.Append(wx.ID_ANY, _("Preferences"), _("Configuration window"))
-        menu_exit = menu_file.Append(wx.ID_ANY, _("Exit"), _("Terminate the program"))
+        from functools import partial
+
+        # ---- Open recent acquisitions
+        self.menu_open_acquisition = wx.Menu()
+        if len(self.main_facade.recent_acquisitions) == 0:
+            component = self.menu_open_acquisition.Append(wx.NewId(), _("No recent acquisitions"))
+            component.Enable(False)
+        else:
+            rec_acqu_menu_components = list()
+            for acq in self.main_facade.recent_acquisitions:
+                acq = acq.split("\n")[0]
+                component = self.menu_open_acquisition.Append(wx.NewId(), acq)
+                rec_acqu_menu_components.append(component)
+                self.Bind(wx.EVT_MENU, partial(self._OnOpenRecentAcquisition, acq), component)
+        # ----------------
+
+        self.menu_file = wx.Menu()
+        self.menu_file.AppendMenu(wx.ID_ANY, _('Open recent acquisition'), self.menu_open_acquisition)
+        menu_import_activity = self.menu_file.Append(wx.NewId(), _("Import activity"), _("Import an activity from an "
+                                                                                         "external "
+                                                                                         "file"))
+        menu_export_selected_activity = self.menu_file.Append(wx.NewId(), _("Export selected activity"),
+                                                              _("Export selected "
+                                                                "activity to file"))
+        self.menu_file.AppendSeparator()
+        menu_preferences = self.menu_file.Append(wx.ID_ANY, _("Preferences"), _("Configuration window"))
+        menu_exit = self.menu_file.Append(wx.ID_ANY, _("Exit"), _("Terminate the program"))
         menu_help = wx.Menu()
         menu_about = menu_help.Append(wx.ID_ANY, _("About"), _("Information about this program"))
         menu_advanced = wx.Menu()
         menu_toggle_debug = menu_advanced.Append(-1, _("Toggle debug window"), _("Show or hide a debug window"))
         menu_bar = wx.MenuBar()
-        menu_bar.Append(menu_file, _("File"))
+        menu_bar.Append(self.menu_file, _("File"))
         menu_bar.Append(menu_help, _("Help"))
         menu_bar.Append(menu_advanced, _("Advanced"))
         self.SetMenuBar(menu_bar)
@@ -264,6 +283,10 @@ class MainWindow(wx.Frame):
 
         accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord('D'), menu_toggle_debug.GetId())])
         self.SetAcceleratorTable(accel_tbl)
+
+    def refresh_recent_acquisitions_menu(self):
+
+        self.menu_file.UpdateUI()
 
     def _OnSelectActivity(self, _e):
         name_col = 1
@@ -347,6 +370,7 @@ the lack of specific tools for this purpose.""")
                 pass
 
     def _OnPreferences(self, _):
+        from ConfWindow import ConfWindow
         conf_window = ConfWindow(self, main_facade=self.main_facade)
         conf_window.Show()
 
@@ -369,11 +393,19 @@ the lack of specific tools for this purpose.""")
             InfoDialog(_("You must select an activity")).show()
 
     def _OnImportActivity(self, _e):
-        wildcard = "Tar file (*.tar)|*.tar"
+        wildcard = _("Tar file") + " (*.tar)|*.tar"
         dialog = wx.FileDialog(None, _("Choose a file"), os.path.expanduser('~'), "", wildcard, wx.OPEN)
         if dialog.ShowModal() == wx.ID_OK:
             self.main_facade.import_activity_from_file(dialog.GetPath())
             self.refresh_activities()
+
+    def _OnOpenRecentAcquisition(self, acq_path, _e):
+        from EndedAcquisitionDialog import EndedAcquisitionDialog
+        self.main_facade.acquisition_path = acq_path
+        if self.main_facade.check_acquisition_result_files_exists():
+            EndedAcquisitionDialog(self, self.main_facade, title=acq_path).Show()
+        else:
+            ErrorDialog(_("Result files of acquisition not found")).show()
 
     def _OnToggleDebug(self, _e):
         if self.debug_window.IsShown():
@@ -415,6 +447,8 @@ the lack of specific tools for this purpose.""")
             ErrorDialog(err_message).show()
 
     def _OnBeginAcquisition(self, _e):
+        from EndedAcquisitionDialog import EndedAcquisitionDialog
+
         correct_data = True
         dev_name = None
         dev_dir = None
@@ -476,7 +510,8 @@ the lack of specific tools for this purpose.""")
                 try:
                     self.main_facade.begin_acquisition(path, activity_id, mode, dev_name, dev_type,
                                                        dev_dir)
-                    OnFinishAcquisitionDialog(self, self.main_facade).Show()
+                    self._build_menu()
+                    EndedAcquisitionDialog(self, self.main_facade, title=_('Acquisition finished')).Show()
 
                 except MissingFiles:
                     ErrorDialog(_("Some of activity files has been deleted") + os.linesep + _("Check them!")).show()
@@ -541,67 +576,6 @@ the lack of specific tools for this purpose.""")
             self.activities_grid.SetStringItem(i, 2, self.main_facade.activities[i].__class__.name)
             i += 1
         self.logger.debug("Activities list updated")
-
-
-class OnFinishAcquisitionDialog(wx.Frame):
-    """
-    Window shown to the user when acquisition finishes.
-    @param parent: Main window of gVARVI.
-    @param main_facade: Main application facade.
-    """
-
-    def __init__(self, parent, main_facade, *args, **kw):
-        super(OnFinishAcquisitionDialog, self).__init__(parent, *args, **kw)
-        self.main_facade = main_facade
-        pnl = wx.Panel(self)
-
-        main_sizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        internal_sizer = wx.BoxSizer(wx.VERTICAL)
-        internal_sizer.AddSpacer(20)
-
-        ok_btn = wx.Button(pnl, label=_('Do nothing'))
-        ok_btn.Bind(wx.EVT_BUTTON, self._OnOK)
-        internal_sizer.Add(ok_btn, 1, wx.EXPAND)
-
-        internal_sizer.AddSpacer(10)
-        ghrv_btn = wx.Button(pnl, label=_('Open in gHRV'))
-        ghrv_btn.Bind(wx.EVT_BUTTON, self._OnGHRV)
-        internal_sizer.Add(ghrv_btn, 1, wx.EXPAND)
-
-        internal_sizer.AddSpacer(10)
-        plot_btn = wx.Button(pnl, label=_('Plot results'))
-        plot_btn.Bind(wx.EVT_BUTTON, self._OnPlotResults)
-        internal_sizer.Add(plot_btn, 1, wx.EXPAND)
-        internal_sizer.AddSpacer(20)
-
-        main_sizer.AddSpacer(20)
-        main_sizer.Add(internal_sizer, 1, wx.EXPAND)
-        main_sizer.AddSpacer(20)
-
-        pnl.SetSizer(main_sizer)
-        self.SetSize((300, 200))
-        self.SetTitle(_('Acquisition finished'))
-        self.Centre()
-
-    def _OnOK(self, _):
-        self.Destroy()
-
-    def _OnGHRV(self, _e):
-        sysplat = sys.platform
-        if sysplat == "linux2":
-            sysexec_ghrv = "/usr/bin/gHRV"
-            if os.path.isfile(sysexec_ghrv):
-                self.main_facade.open_ghrv()
-                self.Destroy()
-            else:
-                ErrorDialog(_("gHRV must be installed in the system")).show()
-        if sysplat == "win32" or sysplat == "darwin":
-            ErrorDialog(_("This feature is only available for Linux platforms")).show()
-
-    def _OnPlotResults(self, _):
-        self.main_facade.plot_results()
-        self.Destroy()
 
 
 class TestDeviceFrame(wx.Frame):
@@ -686,11 +660,11 @@ class RefreshDevicesThread(threading.Thread):
     def run(self):
         try:
             devices = self.main_facade.get_nearby_devices()
-            PostEvent(self.main_window, ResultEvent(devices))
+            wx.PostEvent(self.main_window, ResultEvent(devices))
         except HostDownError as e:
             err_message = e.message
             self.logger.error("{0}".format(err_message))
-            PostEvent(self.main_window, ResultEvent(e))
+            wx.PostEvent(self.main_window, ResultEvent(e))
         finally:
             self.main_window.devicesGrid.DeleteAllItems()
             self.main_window.button_rescan_devices.SetLabel(_("Scan"))

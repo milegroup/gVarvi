@@ -17,6 +17,9 @@ CONF_DIR = os.path.expanduser('~') + os.sep + ".gvarvi"
 LOG_FILE = os.path.join(CONF_DIR, "gVarvi.log")
 CONF_FILE = os.path.join(CONF_DIR, "conf.xml")
 ACTIV_FILE = os.path.join(CONF_DIR, "activ.xml")
+RECENT_ACQUISITIONS_FILE = os.path.join(CONF_DIR, "recent.txt")
+
+RECENT_ACQUISITIONS_COUNT = 8
 
 # Icons
 MAIN_ICON = os.path.join(RESOURCES_FOLDER, "heart.png")

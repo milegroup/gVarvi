@@ -2,6 +2,7 @@
 import os
 import shutil
 import tarfile
+import sys
 
 __author__ = 'nico'
 
@@ -253,6 +254,19 @@ def set_language(language):
 
     global _
     _ = get_text
+
+
+@run_in_thread
+def open_file(file_path):
+    """
+    Open a giving file with default application
+    @param file_path: Absolute path to the file
+    """
+    sysplat = sys.platform
+    default_command = {"linux2": "xdg-open",
+                       "win32": "start",
+                       "darwin": "open"}
+    os.system("{0} {1}".format(default_command[sysplat], file_path))
 
 
 def get_translation():

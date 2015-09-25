@@ -6,12 +6,11 @@ import wx
 import sys
 import traceback
 
-from config import CONF_DIR, DEFAULT_CONF_FILE, DEFAULT_ACTIV_FILE, CONF_FILE, ACTIV_FILE, LOG_FILE
+from config import CONF_DIR, DEFAULT_CONF_FILE, DEFAULT_ACTIV_FILE, CONF_FILE, ACTIV_FILE, LOG_FILE, \
+    RECENT_ACQUISITIONS_FILE
 from utils import set_language
-
-
-
-
+from facade.MainFacade import MainFacade
+from logger import Logger
 
 
 
@@ -24,9 +23,9 @@ if not os.path.isfile(ACTIV_FILE):
     copyfile(DEFAULT_ACTIV_FILE, ACTIV_FILE)
 if not os.path.isfile(LOG_FILE):
     open(LOG_FILE, 'a').close()
+if not os.path.isfile(RECENT_ACQUISITIONS_FILE):
+    open(RECENT_ACQUISITIONS_FILE, 'a').close()
 
-from facade.MainFacade import MainFacade
-from logger import Logger
 
 # Application logger initialization
 logger = Logger()
@@ -36,6 +35,7 @@ if conf.remoteDebugger == "Yes":
     logger.activate_datagram_logging(conf.rdIP, int(conf.rdPort))
 
 set_language(conf.language)
+
 
 class GVarviApp(wx.App):
     def OnInit(self):
@@ -64,11 +64,17 @@ class GVarviApp(wx.App):
 
         return True
 
-    def check_for_update(self):
+    @staticmethod
+    def check_for_update():
+        """
+        Check if there is a new version of gVARVI available at GitHub repositories
+        """
         from config import VERSION
 
         import urllib2
         import subprocess
+
+        sys_plat = sys.platform
 
         try:
             data = urllib2.urlopen("https://github.com/milegroup/gVarvi/raw"
@@ -76,15 +82,15 @@ class GVarviApp(wx.App):
             last_version = data.read()
             if last_version > VERSION:
                 from view.wxutils import ConfirmDialog
-                message = "New version of gVARVI is available for download\n"
-                if sys.platform == 'linux2':
+                message = "New version of gVARVI ({}) is available for download\n".format(last_version)
+                if sys_plat == 'linux2':
                     message += "Do you want to download it?"
-                elif sys.platform == "win32":
+                elif sys_plat == "win32" or sys_plat == "darwin":
                     message += "Do you want to open gVARVI repositories webpage?"
 
                 result = ConfirmDialog(message, "New version available").get_result()
                 if result == wx.ID_YES:
-                    if sys.platform == 'linux2':
+                    if sys_plat == 'linux2':
                         deb_url = "https://github.com/milegroup/gVarvi/blob" \
                                   "/develop/dist/gvarvi-{0}.deb?raw=true".format(
                             last_version)
@@ -94,7 +100,7 @@ class GVarviApp(wx.App):
                             f.write(deb_data.read())
                             subprocess.call(["xdg-open", f.name])
                         sys.exit(0)
-                    elif sys.platform == "win32":
+                    elif sys_plat == "win32" or sys_plat == "darwin":
                         import webbrowser
                         webbrowser.open('https://github.com/milegroup/gVarvi')
 
@@ -108,7 +114,6 @@ class GVarviApp(wx.App):
 
 # Application initialization
 from view.MainWindow import MainWindow
-
 app = GVarviApp()
 frame = MainWindow("gVARVI", main_facade)
 frame.Show()

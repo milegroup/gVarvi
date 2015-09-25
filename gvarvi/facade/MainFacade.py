@@ -3,15 +3,16 @@ import shutil
 import os
 
 from dao.XMLMapper import XMLMapper
-from utils import Singleton, unpack_tar_file_and_remove
+from utils import Singleton, unpack_tar_file_and_remove, open_file
 from facade.AcquisitionFacade import AcquisitionFacade
 from devices.PolariWL import PolariWL
 from devices.DemoBand import DemoBand
 from devices.ANTDevice import ANTDevice
 from facade.Writer import TextWriter
-from config import DEVICE_CONNECTED_MODE, DEMO_MODE, CONF_DIR
+from config import DEVICE_CONNECTED_MODE, DEMO_MODE, CONF_DIR, RECENT_ACQUISITIONS_FILE
 from logger import Logger
 from devices.BTDevice import BTDevice
+from utils import run_in_thread
 
 
 class MainFacade:
@@ -30,6 +31,7 @@ class MainFacade:
         self.conf_file_path = conf_file
         self.xml_mapper = XMLMapper(self.act_file_path, self.conf_file_path)
         self.activities = self.parse_activities_file()
+        self.recent_acquisitions = self.get_recent_acquisitions()
         self.valid_devices = ["Polar iWL", "ANT+ HR Band"]
         self.conf = None
         self.test_thread = None
@@ -45,6 +47,16 @@ class MainFacade:
         self.activities = self.xml_mapper.read_activities_file()
         map(self.logger.debug, self.activities)
         return self.activities
+
+    def check_acquisition_result_files_exists(self):
+        if os.path.isfile(self.acquisition_path + ".tag.txt") and os.path.isfile(self.acquisition_path + ".rr.txt"):
+            return True
+        else:
+            return False
+
+    def get_recent_acquisitions(self):
+        with open(RECENT_ACQUISITIONS_FILE) as f:
+            return [line for line in f.read().split(os.linesep) if line != ""]
 
     def refresh_activities(self):
         self.activities = self.parse_activities_file()
@@ -134,6 +146,7 @@ class MainFacade:
         return self.conf.defaultMode == "Demo mode"
 
     def begin_acquisition(self, file_path, activity_id, mode, dev_name, dev_type, dev_dir=None):
+        from config import RECENT_ACQUISITIONS_COUNT
         self.acquisition_path = file_path
         writer = TextWriter(file_path + ".tag.txt", file_path + ".rr.txt")
         if mode == DEMO_MODE:
@@ -152,8 +165,15 @@ class MainFacade:
                 activity = self.xml_mapper.get_activity(activity_id)
                 ad = AcquisitionFacade(activity, device, writer)
                 ad.start()
+        # Save recent acquisition
+        while len(self.recent_acquisitions) >= RECENT_ACQUISITIONS_COUNT:
+            del self.recent_acquisitions[-1]
+        self.recent_acquisitions.insert(0, self.acquisition_path)
+        # Save recent acquisitions to file
+        with open(RECENT_ACQUISITIONS_FILE, "w") as f:
+            f.write("{}".format(os.linesep).join(self.recent_acquisitions))
 
-    # @run_in_thread
+    @run_in_thread
     def open_ghrv(self):
         """
         Show result data in gHRV application
@@ -171,3 +191,11 @@ class MainFacade:
         rr_file = str(self.acquisition_path) + ".rr.txt"
         tag_file = str(self.acquisition_path) + ".tag.txt"
         paint(rr_file, tag_file)
+
+    def open_rr_file(self):
+        rr_file = str(self.acquisition_path) + ".rr.txt"
+        open_file(rr_file)
+
+    def open_tag_file(self):
+        tag_file = str(self.acquisition_path) + ".tag.txt"
+        open_file(tag_file)

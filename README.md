@@ -14,5 +14,6 @@
  * [PyUSB] (http://sourceforge.net/projects/pyusb/) (1.0.0a2 or later)
  * [Pyserial] (https://pypi.python.org/pypi/pyserial)
  * [msgpack-python] (https://pypi.python.org/pypi/msgpack-python/)
+ * [VLC] (http://www.videolan.org/vlc/)
  
  Binaries for debian based distributions are available [here] (https://github.com/milegroup/gVarvi/tree/master/dist)
