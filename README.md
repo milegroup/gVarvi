@@ -17,13 +17,13 @@
  * [VLC] (http://www.videolan.org/vlc/)
  
  If you want to use Pygame instead of VLC for video playback you need to change this line
- 
+```python
      from player.VideoPresentationPlayerVLC import VideoPresentationPlayer
-   
+```
  by this one
- 
+```python
      from player.VideoPresentationPlayerPygame import VideoPresentationPlayer
-   
+````
  at [VideoPresentation] (gvarvi/activities/VideoPresentation.py) module. Notice that Pygame only supports MPG video 
  format (more info [here] (http://www.pygame.org/docs/ref/movie.html))
  
