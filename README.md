@@ -4,6 +4,8 @@
  [Polar Wearlink®+](http://www.polar.com/en/products/accessories/Polar_WearLink_transmitter_with_Bluetooth) over 
  Bluetooth. gVARVI is fully functional on Linux Systems. Windows support is experimental.
  
+### Dependencies
+
  To work propertly, gVarvi needs some external software:
  
  * [Python] (https://www.python.org/downloads/) (version 2)
@@ -16,15 +18,19 @@
  * [msgpack-python] (https://pypi.python.org/pypi/msgpack-python/)
  * [VLC] (http://www.videolan.org/vlc/)
  
- If you want to use Pygame instead of VLC for video playback you need to change this line
+### How to change playback backend
+
+If you want to use Pygame instead of VLC for video playback you need to change this line
 ```python
      from player.VideoPresentationPlayerVLC import VideoPresentationPlayer
 ```
- by this one
+by this one
 ```python
      from player.VideoPresentationPlayerPygame import VideoPresentationPlayer
 ````
  at [VideoPresentation] (gvarvi/activities/VideoPresentation.py) module. Notice that Pygame only supports MPG video 
  format (more info [here] (http://www.pygame.org/docs/ref/movie.html))
  
+ 
+### Binaries available
  Binaries for debian based distributions are available [here] (https://github.com/milegroup/gVarvi/tree/master/dist)
