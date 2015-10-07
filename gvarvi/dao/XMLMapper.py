@@ -170,7 +170,7 @@ class XMLMapper(object):
             for tag in activity.tags:
                 tag_element = eT.Element("tag")
                 tag_element.attrib["name"] = tag.name
-                tag_element.attrib["path"] = tag.path
+                tag_element.attrib["path"] = tag.path('utf-8')
                 tag_element.attrib["associatedSound"] = tag.associated_sound
                 for sound in tag.sounds:
                     sound_element = eT.Element("sound")
@@ -184,7 +184,7 @@ class XMLMapper(object):
             for tag in activity.tags:
                 tag_element = eT.Element("tag")
                 tag_element.attrib["name"] = tag.name
-                tag_element.attrib["path"] = tag.path
+                tag_element.attrib["path"] = tag.path.encode('utf-8')
                 tag_element.attrib["random"] = tag.random
                 tag_element.attrib["associatedImage"] = tag.associated_image
                 for image in tag.images:
@@ -322,7 +322,8 @@ class XMLMapper(object):
 
     @staticmethod
     def _prettify(elem):
-        """Return a pretty-printed XML string for the Element.
+        """
+        Return a pretty-printed XML string for the Element.
         """
         rough_string = eT.tostring(elem, 'utf-8')
         reparsed = minidom.parseString(rough_string)

@@ -14,5 +14,17 @@
  * [PyUSB] (http://sourceforge.net/projects/pyusb/) (1.0.0a2 or later)
  * [Pyserial] (https://pypi.python.org/pypi/pyserial)
  * [msgpack-python] (https://pypi.python.org/pypi/msgpack-python/)
+ * [VLC] (http://www.videolan.org/vlc/)
+ 
+ If you want to use Pygame instead of VLC for video playback you need to change this line
+ 
+     from player.VideoPresentationPlayerVLC import VideoPresentationPlayer
+   
+ by this one
+ 
+     from player.VideoPresentationPlayerPygame import VideoPresentationPlayer
+   
+ at [VideoPresentation] (gvarvi/activities/VideoPresentation.py) module. Notice that Pygame only supports MPG video 
+ format (more info [here] (http://www.pygame.org/docs/ref/movie.html))
  
  Binaries for debian based distributions are available [here] (https://github.com/milegroup/gVarvi/tree/master/dist)

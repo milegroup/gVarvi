@@ -90,6 +90,8 @@ class SoundPresentationPlayer(Player):
             self.ended_tag = True
             if self.image_player_thread:
                 self.image_player_thread.join()
+            if self.done:
+                break
             end = (datetime.now() - self.zerotime).total_seconds()
             writer.write_tag_value(tag.name, beg, end)
 

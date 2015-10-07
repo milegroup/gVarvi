@@ -39,6 +39,9 @@ class DemoBand(IDevice):
     def finish_test(self):
         pass
 
+    def stabilize(self):
+        pass
+
     # --------------------------------------------------------
 
     @run_in_thread

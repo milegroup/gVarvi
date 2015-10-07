@@ -5,6 +5,7 @@ from utils import get_translation
 
 _ = get_translation()
 
+
 class InfoDialog(wx.MessageDialog):
     """
     Dialog that shows an info message

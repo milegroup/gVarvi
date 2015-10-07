@@ -9,6 +9,9 @@ from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.VideoPresentation import VideoTag, VideoPresentation
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
+from utils import get_translation
+
+_ = get_translation()
 
 
 class InsModVideoPresentation(InsModTemplate):
@@ -25,7 +28,7 @@ class InsModVideoPresentation(InsModTemplate):
         super(InsModVideoPresentation, self).__init__(size=(800, 600), parent=parent, main_facade=main_facade,
                                                       insmod_tag_window_type=InsModVideoPresentationTag,
                                                       activity_id=activity_id,
-                                                      title="New Video Activity")
+                                                      title=_("New Video Activity"))
         self.Show()
 
     def refresh_tags(self):
@@ -37,10 +40,10 @@ class InsModVideoPresentation(InsModTemplate):
     def build_general_data_sizer(self):
         self.general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        self.name_label = wx.StaticText(self, label='Name')
+        self.name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
 
-        self.random_label = wx.StaticText(self, label='Random')
+        self.random_label = wx.StaticText(self, label=_('Random'))
         self.randomCheckBox = wx.CheckBox(self)
 
         if self.modifying:
@@ -60,9 +63,9 @@ class InsModVideoPresentation(InsModTemplate):
 
         self.tags_grid.SetUserLineHeight(30)
 
-        self.tags_grid.InsertColumn(0, 'Name', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(0, _('Name'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(0, 115)
-        self.tags_grid.InsertColumn(1, 'Path', ULC.ULC_FORMAT_CENTER)
+        self.tags_grid.InsertColumn(1, _('Path'), ULC.ULC_FORMAT_CENTER)
         self.tags_grid.SetColumnWidth(1, -3)
 
     def OnSave(self, e):
@@ -85,8 +88,8 @@ class InsModVideoPresentation(InsModTemplate):
             self.main_window.refresh_activities()
             self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields.{0}Also remember to add at least one "
-                       "tag{0}Name only allows alphanumeric symbols, underscore and space".format(os.linesep)).show()
+            InfoDialog(_("Please, don't forget to fill all fields.{0}Also remember to add at least one "
+                         "tag{0}Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
 
 class InsModVideoPresentationTag(wx.Frame):
@@ -104,12 +107,12 @@ class InsModVideoPresentationTag(wx.Frame):
         self.modifying = tag_id != -1
         self.tag_id = tag_id
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title="New Video Tag",
-                              size=(600, 250))
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, title=_("New Video Tag"),
+                              size=(600, 220))
         else:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
-                              title="Modifying Video Tag (id: {0})".format(tag_id),
-                              size=(600, 250))
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
+                              title=_("Modifying Video Tag (id: {0})").format(tag_id),
+                              size=(600, 220))
             tag = self.tag_control.tags[self.tag_id]
 
         self.SetBackgroundColour(BACKGROUND_COLOUR)
@@ -122,12 +125,12 @@ class InsModVideoPresentationTag(wx.Frame):
 
         general_data_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
 
-        name_label = wx.StaticText(self, label='Name')
+        name_label = wx.StaticText(self, label=_('Name'))
         self.name_text_ctrl = wx.TextCtrl(self, -1, size=(400, -1))
         if self.modifying:
             self.name_text_ctrl.SetValue(tag.name)
 
-        path_label = wx.StaticText(self, label='Path')
+        path_label = wx.StaticText(self, label=_('Path'))
         path_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.path_text_ctrl = wx.TextCtrl(self, -1, size=(350, -1))
         if self.modifying:
@@ -146,15 +149,15 @@ class InsModVideoPresentationTag(wx.Frame):
 
         buttons_sizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
 
-        button_save = wx.Button(self, -1, label="Save")
+        button_save = wx.Button(self, -1, label=_("Save"))
         buttons_sizer.Add(button_save, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnSave, id=button_save.GetId())
-        button_save.SetToolTip(wx.ToolTip("Save the tag"))
+        button_save.SetToolTip(wx.ToolTip(_("Save the tag")))
 
-        button_cancel = wx.Button(self, -1, label="Cancel")
+        button_cancel = wx.Button(self, -1, label=_("Cancel"))
         buttons_sizer.Add(button_cancel, flag=wx.ALL, border=10)
         self.Bind(wx.EVT_BUTTON, self._OnCancel, id=button_cancel.GetId())
-        button_cancel.SetToolTip(wx.ToolTip("Return to the main window"))
+        button_cancel.SetToolTip(wx.ToolTip(_("Return to the main window")))
 
         sizer.Add(general_data_sizer, 0, wx.EXPAND | wx.ALL, border=20)
         sizer.Add(buttons_sizer, 0, wx.ALIGN_BOTTOM | wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, border=20)
@@ -162,16 +165,16 @@ class InsModVideoPresentationTag(wx.Frame):
 
         self.Show()
 
-    def _OnChangePath(self, _):
+    def _OnChangePath(self, _e):
 
-        wildcard = "Video source (*.mpg; *.MPG; *.mp4; *.MP4; *.mov; *.mkv; *.MKV; " \
-                   "*.3gp; *.3GP; *.m4v; *.M4V; *.m2v; *.M2V; *.ogv; *.OGV; *.webm; *.WEBM; *.flv; *.FLV; *.avi; " \
+        wildcard = _("Video source") + " (*.mpg; *.MPG; *.mp4; *.MP4; *.mov; *.mkv; *.MKV; " \
+                                       "*.3gp; *.3GP; *.m4v; *.M4V; *.m2v; *.M2V; *.ogv; *.OGV; *.webm; *.WEBM; *.flv; *.FLV; *.avi; " \
                    "*.AVI)" \
                    "|*.mpg;*.MPG;*.mp4;*.MP4;*.mov;*.MOV;*.mkv;*.MKV;*.3gp;*.3GP;*.m4v;*.M4V;*.m2v;*.M2V;*.ogv;*.OGV" \
                    ";*.webm;*.WEBM;*.flv;*.FLV;*.avi;*.AVI"
 
         dlg = wx.FileDialog(
-            self, message="Choose a file",
+            self, message=_("Choose a file"),
             defaultFile="",
             wildcard=wildcard,
             style=wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR
@@ -198,7 +201,7 @@ class InsModVideoPresentationTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog("Please, don't forget to fill all fields with valid data").show()
+            InfoDialog(_("Please, don't forget to fill all fields with valid data")).show()
 
     def _OnCancel(self, _):
         self.Destroy()

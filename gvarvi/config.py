@@ -5,7 +5,7 @@ import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 from pygame.locals import *
 
-VERSION = "0.4"
+VERSION = "0.5"
 
 # Paths
 PROJECT_PATH = os.path.dirname(__file__)
@@ -17,6 +17,9 @@ CONF_DIR = os.path.expanduser('~') + os.sep + ".gvarvi"
 LOG_FILE = os.path.join(CONF_DIR, "gVarvi.log")
 CONF_FILE = os.path.join(CONF_DIR, "conf.xml")
 ACTIV_FILE = os.path.join(CONF_DIR, "activ.xml")
+RECENT_ACQUISITIONS_FILE = os.path.join(CONF_DIR, "recent.txt")
+
+RECENT_ACQUISITIONS_COUNT = 8
 
 # Icons
 MAIN_ICON = os.path.join(RESOURCES_FOLDER, "heart.png")
@@ -55,6 +58,9 @@ SUPPORTED_IMG_EXTENSIONS = (".JPG", ".JPEG", ".PNG", ".GIF", ".BMP", ".PCX", ".X
 
 # Bluetooth Test Result Event ID
 EVT_RESULT_ID = wx.NewId()
+
+# Bluetooth acquisition step ID
+EVT_ACQUISITION_STEP_ID = wx.NewId()
 
 # GUI
 BACKGROUND_COLOUR = "#FFFFFF"

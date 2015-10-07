@@ -1,7 +1,6 @@
 # coding=utf-8
 import os
 import re
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -11,8 +10,8 @@ from activities.ManualDefinedActivity import ManualDefinedTag, ManualDefinedActi
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
 
-
 _ = get_translation()
+
 
 class InsModManualDefined(InsModTemplate):
     """
@@ -102,10 +101,10 @@ class InsModManualTag(wx.Frame):
         self.modifying = tag_id != -1
         self.tag_id = tag_id
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Manual Tag"),
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, title=_("New Manual Tag"),
                               size=(600, 280))
         else:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
                               title=_("Modifying Manual Tag (id: {0})").format(tag_id),
                               size=(600, 280))
             tag = self.tag_control.tags[self.tag_id]

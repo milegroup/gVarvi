@@ -2,6 +2,7 @@
 import os
 import shutil
 import tarfile
+import sys
 
 __author__ = 'nico'
 
@@ -204,14 +205,12 @@ def cumsum(it):
         yield total
 
 
-def paint(rr_file, tag_file):
+def plot(rr_file, tag_file):
     """
     Paint results of acquisition
     @param rr_file: Path to file that contains rr values
     @param tag_file: Path to file that contains tag values
     """
-    import matplotlib
-    matplotlib.use("Agg")
 
     import matplotlib.pyplot as plt
     plt.switch_backend("WXAgg")
@@ -253,6 +252,19 @@ def set_language(language):
 
     global _
     _ = get_text
+
+
+@run_in_thread
+def open_file(file_path):
+    """
+    Open a giving file with default application
+    @param file_path: Absolute path to the file
+    """
+    sysplat = sys.platform
+    default_command = {"linux2": "xdg-open",
+                       "win32": "start",
+                       "darwin": "open"}
+    os.system("{0} {1}".format(default_command[sysplat], file_path))
 
 
 def get_translation():
@@ -301,5 +313,12 @@ class TimedOutError(Exception):
 class NoBand(Exception):
     """
     Raised when band not found
+    """
+    pass
+
+
+class TarFileNotValid(Exception):
+    """
+    Raised on import activity operation when tar file is not valid
     """
     pass

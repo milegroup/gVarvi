@@ -1,7 +1,6 @@
 # coding=utf-8
 import os
 import re
-
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 
@@ -10,7 +9,6 @@ from config import GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from activities.AssociatedKeyActivity import AssociatedKeyTag, AssociatedKeyActivity
 from view.wxutils import InfoDialog
 from InsModTemplate import InsModTemplate
-
 
 _ = get_translation()
 
@@ -105,10 +103,11 @@ class InsModAssociatedKeyTag(wx.Frame):
         self.used_keys = self.parent.used_keys()
         self.previous_key = None
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Associated Key Tag"),
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
+                              title=_("New Associated Key Tag"),
                               size=(600, 245))
         else:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
                               title=_("Modifying Associated Key Tag (id: {0})").format(tag_id),
                               size=(600, 245))
             tag = self.tag_control.tags[self.tag_id]
@@ -130,7 +129,7 @@ class InsModAssociatedKeyTag(wx.Frame):
         key_associated_label = wx.StaticText(self, label=_('Key'))
         key_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.key_text_ctrl = wx.TextCtrl(self, -1, size=(350, -1), style=wx.TE_READONLY)
-        self.change_key_button = wx.Button(self, -1, label=_("Change"))
+        self.change_key_button = wx.Button(self, -1, size=(120, -1), label=_("Change"))
         self.Bind(wx.EVT_BUTTON, self._OnChangeKey, id=self.change_key_button.GetId())
         key_sizer.Add(self.key_text_ctrl, 1, wx.EXPAND)
         key_sizer.AddSpacer(20)

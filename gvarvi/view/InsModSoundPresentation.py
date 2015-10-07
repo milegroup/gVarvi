@@ -117,10 +117,10 @@ class InsModSoundPresentationTag(wx.Frame):
         self.modifying = tag_id != -1
         self.tag_id = tag_id
         if not self.modifying:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE, title=_("New Sound Tag"),
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, title=_("New Sound Tag"),
                               size=(600, 600))
         else:
-            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE,
+            wx.Frame.__init__(self, parent, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
                               title=_("Modifying Sound Tag (id: {0})").format(tag_id),
                               size=(600, 600))
             tag = self.tag_control.tags[self.tag_id]
@@ -225,7 +225,7 @@ class InsModSoundPresentationTag(wx.Frame):
 
     def _OnChangePath(self, _e):
 
-        wildcard = "Audio source (*.mp3; *wav)|*.mp3;*.wav"
+        wildcard = _("Audio source") + " (*.mp3; *wav)|*.mp3;*.wav"
 
         dlg = wx.FileDialog(
             self, message=_("Choose a file"),
@@ -239,8 +239,8 @@ class InsModSoundPresentationTag(wx.Frame):
         dlg.Destroy()
 
     def _OnAddImage(self, _e):
-        wildcard = "Image source (*.jpg; *.jpeg; *.png; *.bmp; *.tif; *.xpm; " \
-                   "*.pcx)|*.jpg;*.JPG;*.jpeg;*.JPEG;*.png;*.PNG;*.bmp;*.BMP;*.tif;*.TIF;*.xmp;*.XPM;*.pcx;*.PCX"
+        wildcard = _("Image source") + " (*.jpg; *.jpeg; *.png; *.bmp; *.tif; *.xpm; " \
+                                       "*.pcx)|*.jpg;*.JPG;*.jpeg;*.JPEG;*.png;*.PNG;*.bmp;*.BMP;*.tif;*.TIF;*.xmp;*.XPM;*.pcx;*.PCX"
 
         dlg = wx.FileDialog(
             self, message=_("Choose a file"),
@@ -306,7 +306,7 @@ class InsModSoundPresentationTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog(_("Please, don't forget to fill all fields with valid data{0]"
+            InfoDialog(_("Please, don't forget to fill all fields with valid data{0}"
                          "Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
     def OnCancel(self, _):

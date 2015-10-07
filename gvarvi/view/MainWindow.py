@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-import sys
 import threading
-from wx import PostEvent
+import wx
+import os
 import wx.lib.agw.ultimatelistctrl as ULC
 
 from logger import Logger
-from ConfWindow import *
 from wxutils import InfoDialog, ErrorDialog, ConfirmDialog
 from config import ACTIVITIES_LIST_ID, DEVICES_LIST_ID, GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE
-from utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError, get_translation
+from utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError, get_translation, TarFileNotValid
 from utils import ResultEvent, EVT_RESULT_ID
 from view.DebugWindow import DebugWindow
 from view.AddActivityWindow import AddActivityWindow
@@ -25,6 +24,7 @@ from activities.AssociatedKeyActivity import AssociatedKeyActivity
 from activities.ManualDefinedActivity import ManualDefinedActivity
 
 _ = get_translation()
+
 
 class MainWindow(wx.Frame):
     """
@@ -60,7 +60,7 @@ class MainWindow(wx.Frame):
         self.bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         self.status_bar = self.CreateStatusBar()
-        self.status_bar.SetStatusText("VARVI - MILE Group")
+        self.status_bar.SetStatusText("gVARVI - MILE Group")
 
         self._build_menu()
 
@@ -143,7 +143,7 @@ class MainWindow(wx.Frame):
         # ----- Begin of Connected Devices List -----
 
         self.devicesSizer = wx.StaticBoxSizer(wx.StaticBox(self), wx.VERTICAL)
-        connected_devices_title = wx.StaticText(self, 0, _("Connected Devices"))
+        connected_devices_title = wx.StaticText(self, 0, _("Devices"))
         connected_devices_title.SetFont(DEFAULT_TITLE_FONT)
         self.devicesSizer.Add(connected_devices_title, flag=wx.ALIGN_CENTER)
         self.devicesGrid = ULC.UltimateListCtrl(self, id=DEVICES_LIST_ID, agwStyle=GRID_STYLE)
@@ -238,20 +238,39 @@ class MainWindow(wx.Frame):
                                 ManualDefinedActivity: InsModManualDefined}
 
     def _build_menu(self):
-        menu_file = wx.Menu()
-        menu_import_activity = menu_file.Append(wx.NewId(), _("Import activity"), _("Import an activity from an "
-                                                                                    "external "
-                                                                                    "file"))
-        menu_export_selected_activity = menu_file.Append(wx.NewId(), _("Export selected activity"), _("Export selected "
-                                                                                                      "activity to file"))
-        menu_preferences = menu_file.Append(wx.ID_ANY, _("Preferences"), _("Configuration window"))
-        menu_exit = menu_file.Append(wx.ID_ANY, _("Exit"), _("Terminate the program"))
+        from functools import partial
+
+        # ---- Open recent acquisitions
+        self.menu_open_acquisition = wx.Menu()
+        if len(self.main_facade.recent_acquisitions) == 0:
+            component = self.menu_open_acquisition.Append(wx.NewId(), _("No recent acquisitions"))
+            component.Enable(False)
+        else:
+            rec_acqu_menu_components = list()
+            for acq in self.main_facade.recent_acquisitions:
+                acq = acq.split("\n")[0]
+                component = self.menu_open_acquisition.Append(wx.NewId(), acq)
+                rec_acqu_menu_components.append(component)
+                self.Bind(wx.EVT_MENU, partial(self._OnOpenRecentAcquisition, acq), component)
+        # ----------------
+
+        self.menu_file = wx.Menu()
+        self.menu_file.AppendMenu(wx.ID_ANY, _('Open recent acquisition'), self.menu_open_acquisition)
+        menu_import_activity = self.menu_file.Append(wx.NewId(), _("Import activity"), _("Import an activity from an "
+                                                                                         "external "
+                                                                                         "file"))
+        menu_export_selected_activity = self.menu_file.Append(wx.NewId(), _("Export selected activity"),
+                                                              _("Export selected "
+                                                                "activity to file"))
+        self.menu_file.AppendSeparator()
+        menu_preferences = self.menu_file.Append(wx.ID_ANY, _("Preferences"), _("Configuration window"))
+        menu_exit = self.menu_file.Append(wx.ID_ANY, _("Exit"), _("Terminate the program"))
         menu_help = wx.Menu()
         menu_about = menu_help.Append(wx.ID_ANY, _("About"), _("Information about this program"))
         menu_advanced = wx.Menu()
         menu_toggle_debug = menu_advanced.Append(-1, _("Toggle debug window"), _("Show or hide a debug window"))
         menu_bar = wx.MenuBar()
-        menu_bar.Append(menu_file, _("File"))
+        menu_bar.Append(self.menu_file, _("File"))
         menu_bar.Append(menu_help, _("Help"))
         menu_bar.Append(menu_advanced, _("Advanced"))
         self.SetMenuBar(menu_bar)
@@ -264,6 +283,10 @@ class MainWindow(wx.Frame):
 
         accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord('D'), menu_toggle_debug.GetId())])
         self.SetAcceleratorTable(accel_tbl)
+
+    def refresh_recent_acquisitions_menu(self):
+
+        self.menu_file.UpdateUI()
 
     def _OnSelectActivity(self, _e):
         name_col = 1
@@ -323,7 +346,7 @@ the lack of specific tools for this purpose.""")
 
         info.SetIcon(wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG))
         info.SetName('gVarvi')
-        info.SetVersion(str(VERSION))
+        info.SetVersion(VERSION)
         info.SetDescription(description)
         info.SetCopyright('(C) 2015-2016 MileGroup')
         info.SetWebSite('http://milegroup.net/')
@@ -347,6 +370,7 @@ the lack of specific tools for this purpose.""")
                 pass
 
     def _OnPreferences(self, _):
+        from ConfWindow import ConfWindow
         conf_window = ConfWindow(self, main_facade=self.main_facade)
         conf_window.Show()
 
@@ -369,11 +393,22 @@ the lack of specific tools for this purpose.""")
             InfoDialog(_("You must select an activity")).show()
 
     def _OnImportActivity(self, _e):
-        wildcard = "Tar file (*.tar)|*.tar"
+        wildcard = _("Tar file") + " (*.tar)|*.tar"
         dialog = wx.FileDialog(None, _("Choose a file"), os.path.expanduser('~'), "", wildcard, wx.OPEN)
         if dialog.ShowModal() == wx.ID_OK:
-            self.main_facade.import_activity_from_file(dialog.GetPath())
-            self.refresh_activities()
+            try:
+                self.main_facade.import_activity_from_file(dialog.GetPath())
+                self.refresh_activities()
+            except TarFileNotValid:
+                ErrorDialog(_("Activity file not valid")).show()
+
+    def _OnOpenRecentAcquisition(self, acq_path, _e):
+        from EndedAcquisitionDialog import EndedAcquisitionDialog
+        self.main_facade.acquisition_path = acq_path
+        if self.main_facade.check_acquisition_result_files_exists():
+            EndedAcquisitionDialog(self, self.main_facade, title=acq_path).Show()
+        else:
+            ErrorDialog(_("Result files of acquisition not found")).show()
 
     def _OnToggleDebug(self, _e):
         if self.debug_window.IsShown():
@@ -388,6 +423,7 @@ the lack of specific tools for this purpose.""")
 
     def _OnTestDevice(self, _e):
         from bluetooth.btcommon import BluetoothError
+        from TestDeviceFrame import TestDeviceFrame
 
         name_col = 0
         mac_col = 1
@@ -401,7 +437,7 @@ the lack of specific tools for this purpose.""")
                     mac = self.devicesGrid.GetItem(selected_row, mac_col).GetText()
                     dev_type = self.devicesGrid.GetItem(selected_row, type_col).GetText()
                     self.test_frame = TestDeviceFrame(self.main_facade)
-                    self.test_frame.run_test(name, mac, dev_type)
+                    wx.CallAfter(self.test_frame.run_test, name, mac, dev_type)
                 else:
                     ErrorDialog(_("Device not supported")).show()
 
@@ -415,6 +451,8 @@ the lack of specific tools for this purpose.""")
             ErrorDialog(err_message).show()
 
     def _OnBeginAcquisition(self, _e):
+        from EndedAcquisitionDialog import EndedAcquisitionDialog
+
         correct_data = True
         dev_name = None
         dev_dir = None
@@ -476,7 +514,8 @@ the lack of specific tools for this purpose.""")
                 try:
                     self.main_facade.begin_acquisition(path, activity_id, mode, dev_name, dev_type,
                                                        dev_dir)
-                    OnFinishAcquisitionDialog(self, self.main_facade).Show()
+                    self._build_menu()
+                    EndedAcquisitionDialog(self, self.main_facade, title=_('Acquisition finished')).Show()
 
                 except MissingFiles:
                     ErrorDialog(_("Some of activity files has been deleted") + os.linesep + _("Check them!")).show()
@@ -543,131 +582,6 @@ the lack of specific tools for this purpose.""")
         self.logger.debug("Activities list updated")
 
 
-class OnFinishAcquisitionDialog(wx.Frame):
-    """
-    Window shown to the user when acquisition finishes.
-    @param parent: Main window of gVARVI.
-    @param main_facade: Main application facade.
-    """
-
-    def __init__(self, parent, main_facade, *args, **kw):
-        super(OnFinishAcquisitionDialog, self).__init__(parent, *args, **kw)
-        self.main_facade = main_facade
-        pnl = wx.Panel(self)
-
-        main_sizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        internal_sizer = wx.BoxSizer(wx.VERTICAL)
-        internal_sizer.AddSpacer(20)
-
-        ok_btn = wx.Button(pnl, label=_('Do nothing'))
-        ok_btn.Bind(wx.EVT_BUTTON, self._OnOK)
-        internal_sizer.Add(ok_btn, 1, wx.EXPAND)
-
-        internal_sizer.AddSpacer(10)
-        ghrv_btn = wx.Button(pnl, label=_('Open in gHRV'))
-        ghrv_btn.Bind(wx.EVT_BUTTON, self._OnGHRV)
-        internal_sizer.Add(ghrv_btn, 1, wx.EXPAND)
-
-        internal_sizer.AddSpacer(10)
-        plot_btn = wx.Button(pnl, label=_('Plot results'))
-        plot_btn.Bind(wx.EVT_BUTTON, self._OnPlotResults)
-        internal_sizer.Add(plot_btn, 1, wx.EXPAND)
-        internal_sizer.AddSpacer(20)
-
-        main_sizer.AddSpacer(20)
-        main_sizer.Add(internal_sizer, 1, wx.EXPAND)
-        main_sizer.AddSpacer(20)
-
-        pnl.SetSizer(main_sizer)
-        self.SetSize((300, 200))
-        self.SetTitle(_('Acquisition finished'))
-        self.Centre()
-
-    def _OnOK(self, _):
-        self.Destroy()
-
-    def _OnGHRV(self, _e):
-        sysplat = sys.platform
-        if sysplat == "linux2":
-            sysexec_ghrv = "/usr/bin/gHRV"
-            if os.path.isfile(sysexec_ghrv):
-                self.main_facade.open_ghrv()
-                self.Destroy()
-            else:
-                ErrorDialog(_("gHRV must be installed in the system")).show()
-        if sysplat == "win32" or sysplat == "darwin":
-            ErrorDialog(_("This feature is only available for Linux platforms")).show()
-
-    def _OnPlotResults(self, _):
-        self.main_facade.plot_results()
-        self.Destroy()
-
-
-class TestDeviceFrame(wx.Frame):
-    """
-    Window to show real time data of acquisition device.
-    @param main_facade: Main application facade.
-    """
-
-    def __init__(self, main_facade):
-        DEFAULT_TITLE_FONT = wx.Font(pointSize=25, family=wx.SWISS, style=wx.NORMAL, weight=wx.LIGHT)
-        NORMAL_FONT = wx.Font(pointSize=18, family=wx.SWISS, style=wx.NORMAL, weight=wx.LIGHT)
-        self.main_facade = main_facade
-        self.device = None
-        no_close = wx.MINIMIZE_BOX | wx.SYSTEM_MENU | wx.CAPTION | wx.CLIP_CHILDREN
-        wx.Frame.__init__(self, None, title=_("Running test"), size=(400, 260), style=no_close)
-
-        self.SetBackgroundColour(BACKGROUND_COLOUR)
-
-        box = wx.BoxSizer(wx.VERTICAL)
-        box.AddSpacer(20)
-        self.status_text = wx.StaticText(self, -1, _("Connecting..."))
-        self.status_text.SetFont(DEFAULT_TITLE_FONT)
-        box.Add(self.status_text, 1, wx.ALIGN_CENTER)
-        box.AddSpacer(20)
-
-        results_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
-        rr_label = wx.StaticText(self, label=_('RR Value'))
-        rr_label.SetFont(NORMAL_FONT)
-        self.rr_text = wx.StaticText(self, label='-')
-        self.rr_text.SetFont(NORMAL_FONT)
-        hr_label = wx.StaticText(self, label=_('HR Value'))
-        hr_label.SetFont(NORMAL_FONT)
-        self.hr_text = wx.StaticText(self, label='-')
-        self.hr_text.SetFont(NORMAL_FONT)
-
-        results_sizer.AddMany([rr_label, self.rr_text,
-                               hr_label, self.hr_text])
-        box.Add(results_sizer, proportion=1, flag=wx.ALIGN_CENTER)
-
-        box.AddSpacer(20)
-
-        close_button = wx.Button(self, wx.OK, _("OK"))
-        close_button.Bind(wx.EVT_BUTTON, self.OnOk)
-        box.Add(close_button, 1, wx.ALIGN_CENTER | wx.CENTER)
-        box.AddSpacer(20)
-        self.SetSizer(box)
-        self.CenterOnScreen()
-        self.Show()
-
-    def run_test(self, name, mac, dev_type):
-        self.Connect(-1, -1, EVT_RESULT_ID, self.OnResult)
-        self.device = self.main_facade.run_test(notify_window=self, name=name, mac=mac, dev_type=dev_type)
-
-    def OnOk(self, _):
-        self.Disconnect(-1, -1, EVT_RESULT_ID, self.OnResult)
-        if self.device:
-            self.main_facade.end_device_test(self.device)
-        self.Destroy()
-
-    def OnResult(self, event):
-        self.status_text.SetLabel(_("Connected"))
-        result_dict = event.data
-        self.rr_text.SetLabel("{0}".format(result_dict['rr']))
-        self.hr_text.SetLabel("{0}".format(result_dict['hr']))
-
-
 class RefreshDevicesThread(threading.Thread):
     """
     Thread for refresh nearby devices list in background.
@@ -686,11 +600,11 @@ class RefreshDevicesThread(threading.Thread):
     def run(self):
         try:
             devices = self.main_facade.get_nearby_devices()
-            PostEvent(self.main_window, ResultEvent(devices))
+            wx.PostEvent(self.main_window, ResultEvent(devices))
         except HostDownError as e:
             err_message = e.message
             self.logger.error("{0}".format(err_message))
-            PostEvent(self.main_window, ResultEvent(e))
+            wx.PostEvent(self.main_window, ResultEvent(e))
         finally:
             self.main_window.devicesGrid.DeleteAllItems()
             self.main_window.button_rescan_devices.SetLabel(_("Scan"))

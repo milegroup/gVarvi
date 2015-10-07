@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-07-24 11:35+CEST\n"
-"PO-Revision-Date: 2015-07-24 11:38+0100\n"
+"POT-Creation-Date: 2015-09-25 18:05+CEST\n"
+"PO-Revision-Date: 2015-09-25 18:05+0100\n"
 "Last-Translator: Nicolás Vila\n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -77,83 +77,84 @@ msgstr ""
 "\tque cambiar de un episodio a otro es tan simple\n"
 "\tcomo pulsar la tecla asociada al siguiente episodio."
 
-#: view/AddActivityWindow.py:112 view/ConfWindow.py:131
-#: view/InsModAssociatedKey.py:157 view/InsModManualDefined.py:163
-#: view/InsModPhotoPresentation.py:217 view/InsModSoundPresentation.py:216
-#: view/InsModTemplate.py:99
+#: view/AddActivityWindow.py:112 view/ConfWindow.py:130
+#: view/InsModAssociatedKey.py:156 view/InsModManualDefined.py:164
+#: view/InsModPhotoPresentation.py:215 view/InsModSoundPresentation.py:214
+#: view/InsModTemplate.py:99 view/InsModVideoPresentation.py:156
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: view/AddActivityWindow.py:115 view/ConfWindow.py:134
-#: view/InsModAssociatedKey.py:160 view/InsModManualDefined.py:166
-#: view/InsModPhotoPresentation.py:220 view/InsModSoundPresentation.py:219
-#: view/InsModTemplate.py:102
+#: view/AddActivityWindow.py:115 view/ConfWindow.py:133
+#: view/InsModAssociatedKey.py:159 view/InsModManualDefined.py:167
+#: view/InsModPhotoPresentation.py:218 view/InsModSoundPresentation.py:217
+#: view/InsModTemplate.py:102 view/InsModVideoPresentation.py:159
 msgid "Return to the main window"
 msgstr "Volver a la ventana principal"
 
-#: view/ConfWindow.py:28 view/MainWindow.py:135 view/MainWindow.py:248
+#: view/ConfWindow.py:27 view/MainWindow.py:134 view/MainWindow.py:266
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: view/ConfWindow.py:44
+#: view/ConfWindow.py:43
 msgid "Language"
 msgstr "Idioma"
 
-#: view/ConfWindow.py:52
+#: view/ConfWindow.py:51
 msgid "Check for updates on{0}start"
 msgstr "Buscar actualizaciones{0}al inicio"
 
-#: view/ConfWindow.py:60
+#: view/ConfWindow.py:59
 msgid "Default mode"
 msgstr "Modo"
 
-#: view/ConfWindow.py:63
-msgid "Demo mode"
-msgstr "Modo demo"
-
-#: view/ConfWindow.py:63
+#: view/ConfWindow.py:62
 msgid "Device connected mode"
 msgstr "Conex. con dispositivo"
 
-#: view/ConfWindow.py:70
+#: view/ConfWindow.py:62 view/ConfWindow.py:159
+msgid "Demo mode"
+msgstr "Modo demo"
+
+#: view/ConfWindow.py:69
 msgid "Bluetooth support"
 msgstr "Soporte Bluetooth"
 
-#: view/ConfWindow.py:77
+#: view/ConfWindow.py:76
 msgid "ANT+ support"
 msgstr "Soporte ANT+"
 
-#: view/ConfWindow.py:84
+#: view/ConfWindow.py:83
 msgid "Scan devices on startup"
 msgstr "Escaneo al inicio"
 
-#: view/ConfWindow.py:91
+#: view/ConfWindow.py:90
 msgid "Remote debugger"
 msgstr "Depurador remoto"
 
-#: view/ConfWindow.py:100
+#: view/ConfWindow.py:99
 msgid "Remote debugger IP"
 msgstr "Dep. remoto (IP)"
 
-#: view/ConfWindow.py:105
+#: view/ConfWindow.py:104
 msgid "Remote debugger port"
 msgstr "Dep. remoto (puerto)"
 
-#: view/ConfWindow.py:126 view/InsModAssociatedKey.py:152
-#: view/InsModManualDefined.py:158 view/InsModPhotoPresentation.py:212
-#: view/InsModSoundPresentation.py:211 view/InsModTemplate.py:94
+#: view/ConfWindow.py:125 view/InsModAssociatedKey.py:151
+#: view/InsModManualDefined.py:159 view/InsModPhotoPresentation.py:210
+#: view/InsModSoundPresentation.py:209 view/InsModTemplate.py:94
+#: view/InsModVideoPresentation.py:151
 msgid "Save"
 msgstr "Guardar"
 
-#: view/ConfWindow.py:129
+#: view/ConfWindow.py:128
 msgid "Save preferences"
 msgstr "Guardar preferencias"
 
-#: view/ConfWindow.py:136
+#: view/ConfWindow.py:135
 msgid "Reset"
 msgstr "Resetear"
 
-#: view/ConfWindow.py:139
+#: view/ConfWindow.py:138
 msgid "Back to the default configuration"
 msgstr "Volver a la configuración por defecto"
 
@@ -172,7 +173,7 @@ msgstr ""
 msgid "Are you sure to reset preferences?"
 msgstr "¿Estas seguro de resetear la configuración?"
 
-#: view/ConfWindow.py:185 view/MainWindow.py:466
+#: view/ConfWindow.py:185 view/MainWindow.py:499
 msgid "Confirm"
 msgstr "Confirma"
 
@@ -180,30 +181,63 @@ msgstr "Confirma"
 msgid "Debug Window"
 msgstr "Ventana de depuración"
 
-#: view/InsModAssociatedKey.py:32
+#: view/EndedAcquisitionDialog.py:29
+msgid "Open in gHRV"
+msgstr "Abrir en gHRV"
+
+#: view/EndedAcquisitionDialog.py:31
+msgid "Plot results"
+msgstr ""
+"Representar gráficamente\n"
+"los resultados"
+
+#: view/EndedAcquisitionDialog.py:33
+msgid "Open tag file"
+msgstr "Abrir archivo de etiquetas"
+
+#: view/EndedAcquisitionDialog.py:35
+msgid "Open rr file"
+msgstr "Abrir archivo de rr"
+
+#: view/EndedAcquisitionDialog.py:46 view/MainWindow.py:620
+msgid "OK"
+msgstr "OK"
+
+#: view/EndedAcquisitionDialog.py:81
+msgid "gHRV must be installed in the system"
+msgstr "gHRV debe estar instalado en el sistema"
+
+#: view/EndedAcquisitionDialog.py:83
+msgid "This feature is only available for Linux platforms"
+msgstr "Esta funcionalidad sólo está disponible para plataformas Linux"
+
+#: view/InsModAssociatedKey.py:30
 msgid "New Associated-Key Activity"
 msgstr "Nueva actividad con teclas asociadas"
 
-#: view/InsModAssociatedKey.py:38 view/InsModAssociatedKey.py:53
-#: view/InsModAssociatedKey.py:126 view/InsModManualDefined.py:46
-#: view/InsModManualDefined.py:61 view/InsModManualDefined.py:123
-#: view/InsModPhotoPresentation.py:49 view/InsModPhotoPresentation.py:78
-#: view/InsModPhotoPresentation.py:147 view/InsModSoundPresentation.py:50
-#: view/InsModSoundPresentation.py:74 view/InsModSoundPresentation.py:140
-#: view/MainWindow.py:83 view/MainWindow.py:155
+#: view/InsModAssociatedKey.py:36 view/InsModAssociatedKey.py:51
+#: view/InsModAssociatedKey.py:125 view/InsModManualDefined.py:47
+#: view/InsModManualDefined.py:62 view/InsModManualDefined.py:124
+#: view/InsModPhotoPresentation.py:47 view/InsModPhotoPresentation.py:76
+#: view/InsModPhotoPresentation.py:145 view/InsModSoundPresentation.py:48
+#: view/InsModSoundPresentation.py:72 view/InsModSoundPresentation.py:138
+#: view/InsModVideoPresentation.py:42 view/InsModVideoPresentation.py:65
+#: view/InsModVideoPresentation.py:127 view/MainWindow.py:82
+#: view/MainWindow.py:154
 msgid "Name"
 msgstr "Nombre"
 
-#: view/InsModAssociatedKey.py:55 view/InsModManualDefined.py:63
+#: view/InsModAssociatedKey.py:53 view/InsModManualDefined.py:64
 msgid "Text"
 msgstr "Texto"
 
-#: view/InsModAssociatedKey.py:57
+#: view/InsModAssociatedKey.py:55
 msgid "Key code"
 msgstr "Tecla"
 
-#: view/InsModAssociatedKey.py:82 view/InsModManualDefined.py:86
-#: view/InsModPhotoPresentation.py:108 view/InsModSoundPresentation.py:103
+#: view/InsModAssociatedKey.py:80 view/InsModManualDefined.py:87
+#: view/InsModPhotoPresentation.py:106 view/InsModSoundPresentation.py:101
+#: view/InsModVideoPresentation.py:90
 msgid ""
 "Please, don't forget to fill all fields.{0}Also remember to add at least one "
 "tag{0}Name only allows alphanumeric symbols, underscore and space"
@@ -212,35 +246,36 @@ msgstr ""
 "añadir como mínimo una etiqueta{0}El campo \"nombre\" sólo permite "
 "caracteres alfanuméricos, guión bajo y espacio."
 
-#: view/InsModAssociatedKey.py:108
+#: view/InsModAssociatedKey.py:107
 msgid "New Associated Key Tag"
 msgstr "Nueva etiqueta con tecla asociada"
 
-#: view/InsModAssociatedKey.py:112
+#: view/InsModAssociatedKey.py:111
 msgid "Modifying Associated Key Tag (id: {0})"
 msgstr "Modificando etiqueta con tecla asociada (id: {0})"
 
-#: view/InsModAssociatedKey.py:128 view/InsModManualDefined.py:125
+#: view/InsModAssociatedKey.py:127 view/InsModManualDefined.py:126
 msgid "Screen Text"
 msgstr "Texto en pantalla"
 
-#: view/InsModAssociatedKey.py:130
+#: view/InsModAssociatedKey.py:129
 msgid "Key"
 msgstr "Tecla"
 
-#: view/InsModAssociatedKey.py:133 view/InsModAssociatedKey.py:175
+#: view/InsModAssociatedKey.py:132 view/InsModAssociatedKey.py:174
 msgid "Change"
 msgstr "Cambiar"
 
-#: view/InsModAssociatedKey.py:155 view/InsModManualDefined.py:161
+#: view/InsModAssociatedKey.py:154 view/InsModManualDefined.py:162
+#: view/InsModVideoPresentation.py:154
 msgid "Save the tag"
 msgstr "Guardar la etiqueta"
 
-#: view/InsModAssociatedKey.py:170
+#: view/InsModAssociatedKey.py:169
 msgid "Listening..."
 msgstr "Escuchando..."
 
-#: view/InsModAssociatedKey.py:208
+#: view/InsModAssociatedKey.py:207
 msgid ""
 "Please, don't forget to fill all fields with valid data\n"
 "- Every fields are mandatory\n"
@@ -261,39 +296,39 @@ msgstr ""
 "    + Guión bajo\n"
 "    + Espacio"
 
-#: view/InsModManualDefined.py:30
+#: view/InsModManualDefined.py:31
 msgid "New Manual Activity"
 msgstr "Nueva actividad de tipo manual"
 
-#: view/InsModManualDefined.py:38 view/InsModManualDefined.py:128
-#: view/InsModManualDefined.py:132 view/InsModManualDefined.py:140
-#: view/InsModManualDefined.py:190
+#: view/InsModManualDefined.py:39 view/InsModManualDefined.py:129
+#: view/InsModManualDefined.py:133 view/InsModManualDefined.py:141
+#: view/InsModManualDefined.py:191
 msgid "Timed"
 msgstr "Temporizado"
 
-#: view/InsModManualDefined.py:41 view/InsModManualDefined.py:128
-#: view/InsModManualDefined.py:142 view/InsModManualDefined.py:176
-#: view/InsModManualDefined.py:192
+#: view/InsModManualDefined.py:42 view/InsModManualDefined.py:129
+#: view/InsModManualDefined.py:143 view/InsModManualDefined.py:177
+#: view/InsModManualDefined.py:193
 msgid "Key (SPACE BAR)"
 msgstr "Por tecla (Barra espaciadora)"
 
-#: view/InsModManualDefined.py:65 view/InsModManualDefined.py:127
+#: view/InsModManualDefined.py:66 view/InsModManualDefined.py:128
 msgid "Finish type"
 msgstr "Tipo de fin"
 
-#: view/InsModManualDefined.py:67 view/InsModManualDefined.py:134
+#: view/InsModManualDefined.py:68 view/InsModManualDefined.py:135
 msgid "Time"
 msgstr "Tiempo"
 
-#: view/InsModManualDefined.py:105
+#: view/InsModManualDefined.py:106
 msgid "New Manual Tag"
 msgstr "Nueva etiqueta manual"
 
-#: view/InsModManualDefined.py:109
+#: view/InsModManualDefined.py:110
 msgid "Modifying Manual Tag (id: {0})"
 msgstr "Modificando etiqueta manual (id: {0})"
 
-#: view/InsModManualDefined.py:208
+#: view/InsModManualDefined.py:209
 msgid ""
 "Please, don't forget to fill all fields with valid data\n"
 "- Every fields are mandatory\n"
@@ -308,92 +343,99 @@ msgstr ""
 "    + Guión bajo\n"
 "    + Espacio"
 
-#: view/InsModPhotoPresentation.py:32
+#: view/InsModPhotoPresentation.py:30
 msgid "New Image Activity"
 msgstr "Nueva actividad de presentación de fotografías"
 
-#: view/InsModPhotoPresentation.py:52
+#: view/InsModPhotoPresentation.py:50
 msgid "Gap (seconds)"
 msgstr "Duración (segundos)"
 
-#: view/InsModPhotoPresentation.py:55 view/InsModSoundPresentation.py:53
+#: view/InsModPhotoPresentation.py:53 view/InsModSoundPresentation.py:51
+#: view/InsModVideoPresentation.py:45
 msgid "Random"
 msgstr "Modo aleatorio"
 
-#: view/InsModPhotoPresentation.py:80 view/InsModPhotoPresentation.py:152
-#: view/InsModSoundPresentation.py:76 view/InsModSoundPresentation.py:145
+#: view/InsModPhotoPresentation.py:78 view/InsModPhotoPresentation.py:150
+#: view/InsModSoundPresentation.py:74 view/InsModSoundPresentation.py:143
+#: view/InsModVideoPresentation.py:67 view/InsModVideoPresentation.py:132
 msgid "Path"
 msgstr "Ruta"
 
-#: view/InsModPhotoPresentation.py:82 view/InsModPhotoPresentation.py:164
+#: view/InsModPhotoPresentation.py:80 view/InsModPhotoPresentation.py:162
 msgid "Associated sound"
 msgstr "Sonido asociado"
 
-#: view/InsModPhotoPresentation.py:84 view/InsModPhotoPresentation.py:175
+#: view/InsModPhotoPresentation.py:82 view/InsModPhotoPresentation.py:173
 msgid "Sounds"
 msgstr "Sonidos"
 
-#: view/InsModPhotoPresentation.py:129
+#: view/InsModPhotoPresentation.py:127
 msgid "New Image Tag"
 msgstr "Nueva etiqueta de imágenes"
 
-#: view/InsModPhotoPresentation.py:133
+#: view/InsModPhotoPresentation.py:131
 msgid "Modifying Image Tag (id: {0})"
 msgstr "Modificando una etiqueta de imágenes (id: {0})"
 
-#: view/InsModPhotoPresentation.py:188 view/InsModSoundPresentation.py:187
-#: view/InsModTemplate.py:63 view/MainWindow.py:94
+#: view/InsModPhotoPresentation.py:186 view/InsModSoundPresentation.py:185
+#: view/InsModTemplate.py:63 view/MainWindow.py:93
 msgid "Add"
 msgstr "Añadir"
 
-#: view/InsModPhotoPresentation.py:191 view/InsModSoundPresentation.py:190
+#: view/InsModPhotoPresentation.py:189 view/InsModSoundPresentation.py:188
 msgid "Add new tag"
 msgstr "Añadir una nueva etiqueta"
 
-#: view/InsModPhotoPresentation.py:193 view/InsModSoundPresentation.py:192
-#: view/InsModTemplate.py:68 view/MainWindow.py:104
+#: view/InsModPhotoPresentation.py:191 view/InsModSoundPresentation.py:190
+#: view/InsModTemplate.py:68 view/MainWindow.py:103
 msgid "Remove"
 msgstr "Borrar"
 
-#: view/InsModPhotoPresentation.py:196 view/InsModSoundPresentation.py:195
+#: view/InsModPhotoPresentation.py:194 view/InsModSoundPresentation.py:193
 #: view/InsModTemplate.py:71
 msgid "Remove the selected tag"
 msgstr "Borrar la etiqueta seleccionada"
 
-#: view/InsModPhotoPresentation.py:198 view/InsModSoundPresentation.py:197
+#: view/InsModPhotoPresentation.py:196 view/InsModSoundPresentation.py:195
 #: view/InsModTemplate.py:78
 msgid "Up"
 msgstr "Subir"
 
-#: view/InsModPhotoPresentation.py:201 view/InsModSoundPresentation.py:200
+#: view/InsModPhotoPresentation.py:199 view/InsModSoundPresentation.py:198
 msgid "Up selected tag in the list"
 msgstr "Subir la etiqueta seleccionada en la lista"
 
-#: view/InsModPhotoPresentation.py:203 view/InsModSoundPresentation.py:202
+#: view/InsModPhotoPresentation.py:201 view/InsModSoundPresentation.py:200
 #: view/InsModTemplate.py:83
 msgid "Down"
 msgstr "Bajar"
 
-#: view/InsModPhotoPresentation.py:206 view/InsModSoundPresentation.py:205
+#: view/InsModPhotoPresentation.py:204 view/InsModSoundPresentation.py:203
 #: view/InsModTemplate.py:86
 msgid "Down selected tag in the list"
 msgstr "Bajar la etiqueta seleccionada en la lista"
 
-#: view/InsModPhotoPresentation.py:215 view/InsModSoundPresentation.py:214
+#: view/InsModPhotoPresentation.py:213 view/InsModSoundPresentation.py:212
 #: view/InsModTemplate.py:97
 msgid "Save the activity"
 msgstr "Guardar la actividad"
 
-#: view/InsModPhotoPresentation.py:231
-msgid "Choose a directory:"
-msgstr "Elige una carpeta:"
+#: view/InsModPhotoPresentation.py:229
+msgid "Choose a directory"
+msgstr "Selecciona una carpeta"
 
-#: view/InsModPhotoPresentation.py:243 view/InsModSoundPresentation.py:233
-#: view/InsModSoundPresentation.py:248 view/MainWindow.py:374
+#: view/InsModPhotoPresentation.py:238 view/InsModSoundPresentation.py:228
+msgid "Audio source"
+msgstr "Archivo de audio"
+
+#: view/InsModPhotoPresentation.py:241 view/InsModSoundPresentation.py:231
+#: view/InsModSoundPresentation.py:246 view/InsModVideoPresentation.py:176
+#: view/MainWindow.py:397
 msgid "Choose a file"
 msgstr "Selecciona un archivo"
 
-#: view/InsModPhotoPresentation.py:310
+#: view/InsModPhotoPresentation.py:308
 msgid ""
 "Please, fill all fields with valid data{0}Name only allows alphanumeric "
 "symbols, underscore and space"
@@ -401,31 +443,35 @@ msgstr ""
 "Por favor, completa todos los campos con datos válidos{0}El campo nombre "
 "permite caracteres alfanuméricos, guión bajo y espacio."
 
-#: view/InsModSoundPresentation.py:33
+#: view/InsModSoundPresentation.py:31
 msgid "New Sound Activity"
 msgstr "Nueva actividad de presentación de sonidos"
 
-#: view/InsModSoundPresentation.py:78 view/InsModSoundPresentation.py:157
+#: view/InsModSoundPresentation.py:76 view/InsModSoundPresentation.py:155
 msgid "Associated image"
 msgstr "Imagen asociada"
 
-#: view/InsModSoundPresentation.py:80 view/InsModSoundPresentation.py:174
+#: view/InsModSoundPresentation.py:78 view/InsModSoundPresentation.py:172
 msgid "Images"
 msgstr "Imágenes"
 
-#: view/InsModSoundPresentation.py:122
+#: view/InsModSoundPresentation.py:120
 msgid "New Sound Tag"
 msgstr "Nueva etiqueta de sonido"
 
-#: view/InsModSoundPresentation.py:126
+#: view/InsModSoundPresentation.py:124
 msgid "Modifying Sound Tag (id: {0})"
 msgstr "Modificando etiqueta de sonido (id: {0})"
 
-#: view/InsModSoundPresentation.py:162
+#: view/InsModSoundPresentation.py:160
 msgid "Randomize images"
 msgstr "Aleatorizar imágenes"
 
-#: view/InsModSoundPresentation.py:311
+#: view/InsModSoundPresentation.py:242
+msgid "Image source"
+msgstr "Archivo de imagen"
+
+#: view/InsModSoundPresentation.py:309
 msgid ""
 "Please, don't forget to fill all fields with valid data{0]Name only allows "
 "alphanumeric symbols, underscore and space"
@@ -441,7 +487,7 @@ msgstr "Modicando actividad (id: {0})"
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: view/InsModTemplate.py:73 view/MainWindow.py:99
+#: view/InsModTemplate.py:73 view/MainWindow.py:98
 msgid "Edit"
 msgstr "Editar"
 
@@ -453,7 +499,7 @@ msgstr "Renombrar la etiqueta seleccionada"
 msgid "Are you sure to delete that tag?"
 msgstr "¿Estás seguro de borrar esa etiqueta?"
 
-#: view/InsModTemplate.py:135 view/MainWindow.py:301
+#: view/InsModTemplate.py:135 view/MainWindow.py:323
 msgid "Confirm delete operation"
 msgstr "Confirma la operación de borrado"
 
@@ -462,168 +508,197 @@ msgstr "Confirma la operación de borrado"
 msgid "You must select a tag"
 msgstr "Debes seleccionar una etiqueta"
 
-#: view/MainWindow.py:72
+#: view/InsModVideoPresentation.py:30
+msgid "New Video Activity"
+msgstr "Nueva actividad de vídeo"
+
+#: view/InsModVideoPresentation.py:109
+msgid "New Video Tag"
+msgstr "Nueva etiqueta de vídeo"
+
+#: view/InsModVideoPresentation.py:113
+msgid "Modifying Video Tag (id: {0})"
+msgstr "Modificando etiqueta de vídeo (id: {0})"
+
+#: view/InsModVideoPresentation.py:169
+msgid "Video source"
+msgstr "Archivo de vídeo"
+
+#: view/InsModVideoPresentation.py:203
+msgid "Please, don't forget to fill all fields with valid data"
+msgstr ""
+"Por favor, no te olvides de completar todos los campos con datos válidos"
+
+#: view/MainWindow.py:71
 msgid "Activities"
 msgstr "Actividades"
 
-#: view/MainWindow.py:85 view/MainWindow.py:159
+#: view/MainWindow.py:84 view/MainWindow.py:158
 msgid "Type"
 msgstr "Tipo"
 
-#: view/MainWindow.py:97
+#: view/MainWindow.py:96
 msgid "Add new activity"
 msgstr "Añadir nueva actividad"
 
-#: view/MainWindow.py:102
+#: view/MainWindow.py:101
 msgid "Edit the selected activity"
 msgstr "Editar la actividad seleccionada"
 
-#: view/MainWindow.py:107
+#: view/MainWindow.py:106
 msgid "Remove the selected activity"
 msgstr "Borrar la actividad seleccionada"
 
-#: view/MainWindow.py:109
+#: view/MainWindow.py:108
 msgid "Export"
 msgstr "Exportar"
 
-#: view/MainWindow.py:113
+#: view/MainWindow.py:112
 msgid "Export the selected activity"
 msgstr "Exportar la actividad seleccionada a un archivo"
 
-#: view/MainWindow.py:123
+#: view/MainWindow.py:122
 msgid "Global options"
 msgstr "Opciones globales"
 
-#: view/MainWindow.py:125
+#: view/MainWindow.py:124
 msgid "Quit"
 msgstr "Salir"
 
-#: view/MainWindow.py:128
+#: view/MainWindow.py:127
 msgid "Click to quit using VARVI"
 msgstr "Selecciona esta opción para salir de la aplicación"
 
-#: view/MainWindow.py:130 view/MainWindow.py:251
+#: view/MainWindow.py:129 view/MainWindow.py:269
 msgid "About"
 msgstr "Acerca de"
 
-#: view/MainWindow.py:133
+#: view/MainWindow.py:132
 msgid "Click to see information about VARVI"
 msgstr "Selecciona esta opción para ver más información acerca de gVARVI"
 
-#: view/MainWindow.py:138
+#: view/MainWindow.py:137
 msgid "Click to open configuration window"
 msgstr "Selecciona esta opción para abrir la ventana de configuración"
 
-#: view/MainWindow.py:147
-msgid "Connected Devices"
-msgstr "Dispositivos conectados"
+#: view/MainWindow.py:146
+msgid "Devices"
+msgstr "Dispositivos"
 
-#: view/MainWindow.py:157
+#: view/MainWindow.py:156
 msgid "MAC"
 msgstr "MAC"
 
-#: view/MainWindow.py:166 view/MainWindow.py:519 view/MainWindow.py:697
+#: view/MainWindow.py:165 view/MainWindow.py:553 view/MainWindow.py:670
 msgid "Scan"
 msgstr "Escanear"
 
-#: view/MainWindow.py:169
+#: view/MainWindow.py:168
 msgid "Replay the device search"
 msgstr "Repetir la búsqueda de dispositivos"
 
-#: view/MainWindow.py:171
+#: view/MainWindow.py:170
 msgid "Test"
 msgstr "Test"
 
-#: view/MainWindow.py:174
+#: view/MainWindow.py:173
 msgid "Run a test for the selected device"
 msgstr "Ejecutar un test para el dispositivo seleccionado"
 
-#: view/MainWindow.py:182
+#: view/MainWindow.py:181
 msgid "Acquisition Info"
 msgstr "Información de la adquisición"
 
-#: view/MainWindow.py:187
+#: view/MainWindow.py:186
 msgid "Selected activity:"
 msgstr "Actividad seleccionada"
 
-#: view/MainWindow.py:190
+#: view/MainWindow.py:189
 msgid "Selected device:"
 msgstr "Dispositivo seleccionado"
 
-#: view/MainWindow.py:198
+#: view/MainWindow.py:197
 msgid "Begin acquisition"
 msgstr "Comenzar adquisición"
 
-#: view/MainWindow.py:201
+#: view/MainWindow.py:200
 msgid "Run selected activity and begin acquisition"
 msgstr "Reproduce la actividad seleccionada y comienza la adquisición"
 
-#: view/MainWindow.py:243
+#: view/MainWindow.py:246
+msgid "No recent acquisitions"
+msgstr "No hay adquisiciones recientes"
+
+#: view/MainWindow.py:258
+msgid "Open recent acquisition"
+msgstr "Abrir adquisición reciente"
+
+#: view/MainWindow.py:259
 msgid "Import activity"
 msgstr "Importar actividad"
 
-#: view/MainWindow.py:243
+#: view/MainWindow.py:259
 msgid "Import an activity from an external file"
 msgstr "Importar una actividad desde un archivo"
 
-#: view/MainWindow.py:246
+#: view/MainWindow.py:262
 msgid "Export selected activity"
 msgstr "Exportar actividad seleccionada"
 
-#: view/MainWindow.py:246
+#: view/MainWindow.py:263
 msgid "Export selected activity to file"
 msgstr "Exportar la actividad seleccionada a un archivo"
 
-#: view/MainWindow.py:248
+#: view/MainWindow.py:266
 msgid "Configuration window"
 msgstr "Ventana de configuración"
 
-#: view/MainWindow.py:249
+#: view/MainWindow.py:267
 msgid "Exit"
 msgstr "Salir"
 
-#: view/MainWindow.py:249
+#: view/MainWindow.py:267
 msgid "Terminate the program"
 msgstr "Terminar el programa"
 
-#: view/MainWindow.py:251
+#: view/MainWindow.py:269
 msgid "Information about this program"
 msgstr "Información acerca de este programa"
 
-#: view/MainWindow.py:253
+#: view/MainWindow.py:271
 msgid "Show or hide a debug window"
 msgstr "Mostrar u ocultar la ventana de depuración"
 
-#: view/MainWindow.py:253
+#: view/MainWindow.py:271
 msgid "Toggle debug window"
 msgstr "Mostrar/ocultar ventana de depuración"
 
-#: view/MainWindow.py:255
+#: view/MainWindow.py:273
 msgid "File"
 msgstr "Archivo"
 
-#: view/MainWindow.py:256
+#: view/MainWindow.py:274
 msgid "Help"
 msgstr "Ayuda"
 
-#: view/MainWindow.py:257
+#: view/MainWindow.py:275
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: view/MainWindow.py:285
+#: view/MainWindow.py:307
 msgid "Insert activity"
 msgstr "Añadir actividad"
 
-#: view/MainWindow.py:296 view/MainWindow.py:309 view/MainWindow.py:370
-#: view/MainWindow.py:446
+#: view/MainWindow.py:318 view/MainWindow.py:331 view/MainWindow.py:393
+#: view/MainWindow.py:479
 msgid "You must select an activity"
 msgstr "Debes seleccionar una actividad"
 
-#: view/MainWindow.py:301
+#: view/MainWindow.py:323
 msgid "Are you sure to delete that activity?"
 msgstr "¿Estas seguro de borrar la actividad seleccionada?"
 
-#: view/MainWindow.py:313
+#: view/MainWindow.py:335
 msgid ""
 "gVARVI is a free software tool developed to perform heart\n"
 "rate variability (HRV) analysis in response to different visual stimuli.\n"
@@ -640,63 +715,75 @@ msgstr ""
 "como la psiquiatría,psicología y marketing, y dada la falta de herramientas "
 "para este propósito."
 
-#: view/MainWindow.py:343
+#: view/MainWindow.py:365
 msgid "Are you sure?"
 msgstr "¿Estás seguro?"
 
-#: view/MainWindow.py:343
+#: view/MainWindow.py:365
 msgid "Confirm exit"
 msgstr "Confirma la salida"
 
-#: view/MainWindow.py:343
+#: view/MainWindow.py:365
 msgid "Quitting VARVI"
 msgstr "Cerrando gVARVI"
 
-#: view/MainWindow.py:358
+#: view/MainWindow.py:381
 msgid "Select path and name for the activity file"
 msgstr "Selecciona una ruta y un nombre para el archivo de actividad"
 
-#: view/MainWindow.py:368
+#: view/MainWindow.py:391
 msgid "Activity \"{0}\" exported successfully"
 msgstr "Actividad \"{0}\" exportada correctamente"
 
-#: view/MainWindow.py:407 view/MainWindow.py:435
+#: view/MainWindow.py:396
+msgid "Tar file"
+msgstr "Archivo tar"
+
+#: view/MainWindow.py:408
+msgid "Result files of acquisition not found"
+msgstr "Archivos de resultados de la adquisición no encontrados"
+
+#: view/MainWindow.py:438 view/MainWindow.py:468
 msgid "Device not supported"
 msgstr "Dispositivo no soportado"
 
-#: view/MainWindow.py:410
+#: view/MainWindow.py:441
 msgid "Please select a device"
 msgstr "Por favor, selecciona un dispositivo"
 
-#: view/MainWindow.py:415
+#: view/MainWindow.py:446
 msgid "Bluetooth error{0}CODE: {1}"
 msgstr "Error de Bluetooth{0}Código: {1}"
 
-#: view/MainWindow.py:442 view/MainWindow.py:450
+#: view/MainWindow.py:475 view/MainWindow.py:483
 msgid "You must select an activity and a device"
 msgstr "Debes seleccionar una actividad y un dispositivo"
 
-#: view/MainWindow.py:453
+#: view/MainWindow.py:486
 msgid "Select path and name for this acquisition"
 msgstr "Selecciona una ruta y un nombre para la adquisición"
 
-#: view/MainWindow.py:465
+#: view/MainWindow.py:498
 msgid "File already exists. Do you want to overwrite it?"
 msgstr "Este archivo ya existe. ¿Deseas sobreescribirlo?"
 
-#: view/MainWindow.py:483
+#: view/MainWindow.py:514
+msgid "Acquisition finished"
+msgstr "Adquisición finalizada"
+
+#: view/MainWindow.py:517
 msgid "Check them!"
 msgstr "¡Compruébalos!"
 
-#: view/MainWindow.py:483
+#: view/MainWindow.py:517
 msgid "Some of activity files has been deleted"
 msgstr "Algunos de los archivos de la actividad han sido borrados"
 
-#: view/MainWindow.py:485
+#: view/MainWindow.py:519
 msgid "Activity aborted. Data won't be saved"
 msgstr "Actividad abortada. Los datos no serán guardados"
 
-#: view/MainWindow.py:487
+#: view/MainWindow.py:521
 msgid ""
 "Acquisition failed. Data will be saved anyway\n"
 "{0}"
@@ -704,73 +791,54 @@ msgstr ""
 "Adquisición fallida. Los datos serán guardados de todas formas\n"
 "{0}"
 
-#: view/MainWindow.py:492
+#: view/MainWindow.py:526
 msgid "Searching..."
 msgstr "Buscando..."
 
-#: view/MainWindow.py:494
+#: view/MainWindow.py:528
 msgid "Looking for devices..."
 msgstr "Buscando dispositivos..."
 
-#: view/MainWindow.py:530
+#: view/MainWindow.py:564
 msgid "No device found"
 msgstr "No se han encontrado dispositivos"
 
-#: view/MainWindow.py:533
+#: view/MainWindow.py:567
 msgid "{0} device(s) found"
 msgstr "{0} dispositivo(s) encontrados"
 
-#: view/MainWindow.py:564
-msgid "Do nothing"
-msgstr "No hacer nada"
-
-#: view/MainWindow.py:569
-msgid "Open in gHRV"
-msgstr "Abrir en gHRV"
-
-#: view/MainWindow.py:574
-msgid "Plot results"
-msgstr "Representar gráficamente los resultados"
-
-#: view/MainWindow.py:585
-msgid "Acquisition finished"
-msgstr "La adquisición ha finalizado"
-
-#: view/MainWindow.py:599
-msgid "gHRV must be installed in the system"
-msgstr "gHRV debe estar instalado en el sistema"
-
-#: view/MainWindow.py:601
-msgid "This feature is only available for Linux platforms"
-msgstr "Esta funcionalidad sólo está disponible para plataformas Linux"
-
-#: view/MainWindow.py:620
+#: view/MainWindow.py:593
 msgid "Running test"
 msgstr "Ejecutando test"
 
-#: view/MainWindow.py:626
+#: view/MainWindow.py:599
 msgid "Connecting..."
 msgstr "Conectando..."
 
-#: view/MainWindow.py:632
+#: view/MainWindow.py:605
 msgid "RR Value"
 msgstr "Valor RR"
 
-#: view/MainWindow.py:636
+#: view/MainWindow.py:609
 msgid "HR Value"
 msgstr "Valor HR"
 
-#: view/MainWindow.py:647
-msgid "OK"
-msgstr "OK"
-
-#: view/MainWindow.py:666
+#: view/MainWindow.py:639
 msgid "Connected"
 msgstr "Conectado"
 
-#: view/wxutils.py:15
+#: view/wxutils.py:16
 msgid "Info"
 msgstr "Información"
+
+#~ msgid "Connected Devices"
+#~ msgstr "Dispositivos conectados"
+
+#~ msgid "Choose a directory:"
+#~ msgstr "Elige una carpeta:"
+
+#~ msgid "Do nothing"
+#~ msgstr "No hacer nada"
 
 #~ msgid "An unexpected error has ocurred: {0}"
 #~ msgstr "Un error inesperado ha ocurrido: {0}"
@@ -798,10 +866,6 @@ msgstr "Información"
 #~ "- La tecla debe ser alfanumérica\n"
 #~ "- Asegúrate de que no hayas usado la misma tecla\n"
 #~ "en otra etiqueta"
-
-#~ msgid "Please, don't forget to fill all fields with valid data"
-#~ msgstr ""
-#~ "Por favor, no te olvides de completar todos los campos con datos válidos"
 
 #~ msgid "Please, fill all fields.{0}Also remember to add at least one tag"
 #~ msgstr ""

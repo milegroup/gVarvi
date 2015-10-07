@@ -11,7 +11,7 @@ from logger import Logger
 class PolariWL(BTDevice):
     """
     A class that represents a Polar WearLink+ band.
-    @param mac: Physic address of the band.
+    @param mac: Physical address of the band.
     """
 
     def __init__(self, mac):
@@ -57,7 +57,7 @@ class PolariWL(BTDevice):
                     rr2 = int(data3[next_bit + 2:next_bit + 4], 16)
                     test_dict['rr'] = (rr1 << 8) | rr2
                     if self.end_test:
-                        return
+                        break
                     PostEvent(notify_window, ResultEvent(test_dict))
 
                     next_bit += 4
@@ -78,15 +78,38 @@ class PolariWL(BTDevice):
                 else:
                     self.logger.warning("ValueError raised at the end of the acquisition")
 
-            if self.end_test:
-                self.ended_test = True
-                break
+        self.ended_test = True
+        self.logger.warning("Ended test")
 
     def finish_test(self):
         """
         Finishes test for Polar WearLink+ device.
         """
         self.end_test = True
+
+    def stabilize(self):
+        """
+        Prevent to retrieve noisy initial data
+        """
+        minimum_value = 20
+        maximum_value = 250
+        hr = 0
+        while hr < minimum_value or hr > maximum_value:
+            try:
+                data1 = self.receive(1)
+                data2 = self.receive(1)
+                ll = int(data2, 16)
+                data3 = self.receive(ll - 2)
+
+                chk = int(data3[0:2], 16)
+                if chk + ll != 255:
+                    self.logger.error("Package not ok")
+                    continue
+
+                hr = int(data3[6:8], 16)
+
+            except ValueError:
+                continue
 
     @run_in_thread
     def begin_acquisition(self, writer):
@@ -153,7 +176,7 @@ class PolariWL(BTDevice):
                 import os.path
 
                 top = traceback.extract_stack()[-1]
-                self.logger.exception("*** Exception:", type(e).__name__, " -  Program:", os.path.basename(top[0]),
+                self.logger.exception("*** Exception:", type(e), " -  Program:", os.path.basename(top[0]),
                                       " -  Line:", str(top[1]), "***")
                 self.error = True
 
@@ -167,11 +190,3 @@ class PolariWL(BTDevice):
         Finishes acquisition for Polar WearLink+ device.
         """
         self.end_acquisition = True
-
-
-
-
-
-
-
-
