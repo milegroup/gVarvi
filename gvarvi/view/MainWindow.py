@@ -8,7 +8,7 @@ from logger import Logger
 from wxutils import InfoDialog, ErrorDialog, ConfirmDialog
 from config import ACTIVITIES_LIST_ID, DEVICES_LIST_ID, GRID_STYLE, MAIN_ICON, BACKGROUND_COLOUR
 from config import DEVICE_CONNECTED_MODE, DEMO_MODE
-from utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError, get_translation
+from utils import MissingFiles, AbortedAcquisition, FailedAcquisition, HostDownError, get_translation, TarFileNotValid
 from utils import ResultEvent, EVT_RESULT_ID
 from view.DebugWindow import DebugWindow
 from view.AddActivityWindow import AddActivityWindow
@@ -60,7 +60,7 @@ class MainWindow(wx.Frame):
         self.bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         self.status_bar = self.CreateStatusBar()
-        self.status_bar.SetStatusText("VARVI - MILE Group")
+        self.status_bar.SetStatusText("gVARVI - MILE Group")
 
         self._build_menu()
 
@@ -346,7 +346,7 @@ the lack of specific tools for this purpose.""")
 
         info.SetIcon(wx.Icon(MAIN_ICON, wx.BITMAP_TYPE_PNG))
         info.SetName('gVarvi')
-        info.SetVersion(str(VERSION))
+        info.SetVersion(VERSION)
         info.SetDescription(description)
         info.SetCopyright('(C) 2015-2016 MileGroup')
         info.SetWebSite('http://milegroup.net/')
@@ -396,8 +396,11 @@ the lack of specific tools for this purpose.""")
         wildcard = _("Tar file") + " (*.tar)|*.tar"
         dialog = wx.FileDialog(None, _("Choose a file"), os.path.expanduser('~'), "", wildcard, wx.OPEN)
         if dialog.ShowModal() == wx.ID_OK:
-            self.main_facade.import_activity_from_file(dialog.GetPath())
-            self.refresh_activities()
+            try:
+                self.main_facade.import_activity_from_file(dialog.GetPath())
+                self.refresh_activities()
+            except TarFileNotValid:
+                ErrorDialog(_("Activity file not valid")).show()
 
     def _OnOpenRecentAcquisition(self, acq_path, _e):
         from EndedAcquisitionDialog import EndedAcquisitionDialog
@@ -420,6 +423,7 @@ the lack of specific tools for this purpose.""")
 
     def _OnTestDevice(self, _e):
         from bluetooth.btcommon import BluetoothError
+        from TestDeviceFrame import TestDeviceFrame
 
         name_col = 0
         mac_col = 1
@@ -433,7 +437,7 @@ the lack of specific tools for this purpose.""")
                     mac = self.devicesGrid.GetItem(selected_row, mac_col).GetText()
                     dev_type = self.devicesGrid.GetItem(selected_row, type_col).GetText()
                     self.test_frame = TestDeviceFrame(self.main_facade)
-                    self.test_frame.run_test(name, mac, dev_type)
+                    wx.CallAfter(self.test_frame.run_test, name, mac, dev_type)
                 else:
                     ErrorDialog(_("Device not supported")).show()
 
@@ -576,70 +580,6 @@ the lack of specific tools for this purpose.""")
             self.activities_grid.SetStringItem(i, 2, self.main_facade.activities[i].__class__.name)
             i += 1
         self.logger.debug("Activities list updated")
-
-
-class TestDeviceFrame(wx.Frame):
-    """
-    Window to show real time data of acquisition device.
-    @param main_facade: Main application facade.
-    """
-
-    def __init__(self, main_facade):
-        DEFAULT_TITLE_FONT = wx.Font(pointSize=25, family=wx.SWISS, style=wx.NORMAL, weight=wx.LIGHT)
-        NORMAL_FONT = wx.Font(pointSize=18, family=wx.SWISS, style=wx.NORMAL, weight=wx.LIGHT)
-        self.main_facade = main_facade
-        self.device = None
-        no_close = wx.MINIMIZE_BOX | wx.SYSTEM_MENU | wx.CAPTION | wx.CLIP_CHILDREN
-        wx.Frame.__init__(self, None, title=_("Running test"), size=(400, 260), style=no_close)
-
-        self.SetBackgroundColour(BACKGROUND_COLOUR)
-
-        box = wx.BoxSizer(wx.VERTICAL)
-        box.AddSpacer(20)
-        self.status_text = wx.StaticText(self, -1, _("Connecting..."))
-        self.status_text.SetFont(DEFAULT_TITLE_FONT)
-        box.Add(self.status_text, 1, wx.ALIGN_CENTER)
-        box.AddSpacer(20)
-
-        results_sizer = wx.FlexGridSizer(cols=2, hgap=30, vgap=10)
-        rr_label = wx.StaticText(self, label=_('RR Value'))
-        rr_label.SetFont(NORMAL_FONT)
-        self.rr_text = wx.StaticText(self, label='-')
-        self.rr_text.SetFont(NORMAL_FONT)
-        hr_label = wx.StaticText(self, label=_('HR Value'))
-        hr_label.SetFont(NORMAL_FONT)
-        self.hr_text = wx.StaticText(self, label='-')
-        self.hr_text.SetFont(NORMAL_FONT)
-
-        results_sizer.AddMany([rr_label, self.rr_text,
-                               hr_label, self.hr_text])
-        box.Add(results_sizer, proportion=1, flag=wx.ALIGN_CENTER)
-
-        box.AddSpacer(20)
-
-        close_button = wx.Button(self, wx.OK, _("OK"))
-        close_button.Bind(wx.EVT_BUTTON, self.OnOk)
-        box.Add(close_button, 1, wx.ALIGN_CENTER | wx.CENTER)
-        box.AddSpacer(20)
-        self.SetSizer(box)
-        self.CenterOnScreen()
-        self.Show()
-
-    def run_test(self, name, mac, dev_type):
-        self.Connect(-1, -1, EVT_RESULT_ID, self.OnResult)
-        self.device = self.main_facade.run_test(notify_window=self, name=name, mac=mac, dev_type=dev_type)
-
-    def OnOk(self, _):
-        self.Disconnect(-1, -1, EVT_RESULT_ID, self.OnResult)
-        if self.device:
-            self.main_facade.end_device_test(self.device)
-        self.Destroy()
-
-    def OnResult(self, event):
-        self.status_text.SetLabel(_("Connected"))
-        result_dict = event.data
-        self.rr_text.SetLabel("{0}".format(result_dict['rr']))
-        self.hr_text.SetLabel("{0}".format(result_dict['hr']))
 
 
 class RefreshDevicesThread(threading.Thread):

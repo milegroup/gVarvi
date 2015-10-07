@@ -48,6 +48,13 @@ class IDevice:
         pass
 
     @abstractmethod
+    def stabilize(self):
+        """
+        Prevent to retrieve noisy initial data
+        """
+        pass
+
+    @abstractmethod
     def begin_acquisition(self, writer):
         """
         Starts acquisition and writes result data.

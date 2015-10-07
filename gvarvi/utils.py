@@ -205,14 +205,12 @@ def cumsum(it):
         yield total
 
 
-def paint(rr_file, tag_file):
+def plot(rr_file, tag_file):
     """
     Paint results of acquisition
     @param rr_file: Path to file that contains rr values
     @param tag_file: Path to file that contains tag values
     """
-    import matplotlib
-    matplotlib.use("Agg")
 
     import matplotlib.pyplot as plt
     plt.switch_backend("WXAgg")
@@ -315,5 +313,12 @@ class TimedOutError(Exception):
 class NoBand(Exception):
     """
     Raised when band not found
+    """
+    pass
+
+
+class TarFileNotValid(Exception):
+    """
+    Raised on import activity operation when tar file is not valid
     """
     pass

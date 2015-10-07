@@ -306,7 +306,7 @@ class InsModSoundPresentationTag(wx.Frame):
                 self.parent.add_tag(tag)
                 self.Destroy()
         else:
-            InfoDialog(_("Please, don't forget to fill all fields with valid data{0]"
+            InfoDialog(_("Please, don't forget to fill all fields with valid data{0}"
                          "Name only allows alphanumeric symbols, underscore and space").format(os.linesep)).show()
 
     def OnCancel(self, _):

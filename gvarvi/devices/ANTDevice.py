@@ -73,6 +73,12 @@ class ANTDevice(IDevice):
         self.antnode.evm.removeCallback(self.callback)
         self.antnode.evm.stop()
 
+    def stabilize(self):
+        """
+        Prevent to retrieve noisy initial data
+        """
+        pass
+
     @run_in_thread
     def begin_acquisition(self, writer):
         """

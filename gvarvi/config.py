@@ -5,7 +5,7 @@ import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 from pygame.locals import *
 
-VERSION = "0.4"
+VERSION = "0.5"
 
 # Paths
 PROJECT_PATH = os.path.dirname(__file__)
@@ -58,6 +58,9 @@ SUPPORTED_IMG_EXTENSIONS = (".JPG", ".JPEG", ".PNG", ".GIF", ".BMP", ".PCX", ".X
 
 # Bluetooth Test Result Event ID
 EVT_RESULT_ID = wx.NewId()
+
+# Bluetooth acquisition step ID
+EVT_ACQUISITION_STEP_ID = wx.NewId()
 
 # GUI
 BACKGROUND_COLOUR = "#FFFFFF"

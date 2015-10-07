@@ -36,7 +36,6 @@ import usb.core
 import usb.util
 import usb.control
 import sys
-
 from third_party.ant.core.exceptions import DriverError
 
 

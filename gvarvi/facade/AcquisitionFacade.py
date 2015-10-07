@@ -32,8 +32,9 @@ class AcquisitionFacade(object):
             if self.activity.check_before_run():
                 self.logger.info("Connecting to device")
                 self.device.connect()
+                self.logger.info("Stabilizing device data")
+                self.device.stabilize()
                 self.logger.info("Starting acquisition")
-
                 self.acquisition_thread = self.device.begin_acquisition(self.writer)
                 # Run device acquisition before activity because
                 # acquisition will be executed in a new thread so

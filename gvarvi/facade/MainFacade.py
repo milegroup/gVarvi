@@ -3,7 +3,7 @@ import shutil
 import os
 
 from dao.XMLMapper import XMLMapper
-from utils import Singleton, unpack_tar_file_and_remove, open_file
+from utils import Singleton, unpack_tar_file_and_remove, open_file, TarFileNotValid
 from facade.AcquisitionFacade import AcquisitionFacade
 from devices.PolariWL import PolariWL
 from devices.DemoBand import DemoBand
@@ -36,6 +36,7 @@ class MainFacade:
         self.conf = None
         self.test_thread = None
         self.acquisition_path = None
+        self.testing_device = None
 
     def activate_remote_debug(self, ip, port):
         self.logger.activate_datagram_logging(ip, port)
@@ -95,22 +96,24 @@ class MainFacade:
         from activities.VideoPresentation import VideoPresentation
         from activities.AssociatedKeyActivity import AssociatedKeyActivity
         from activities.ManualDefinedActivity import ManualDefinedActivity
-
-        activity_folder = CONF_DIR
-        unpack_tar_file_and_remove(activity_file, activity_folder)
-        files = os.listdir(os.path.join(activity_folder, "activity_auxiliary_folder"))
-        class_dict = {"photo.xml": PhotoPresentation,
-                      "sound.xml": SoundPresentation,
-                      "video.xml": VideoPresentation,
-                      "key.xml": AssociatedKeyActivity,
-                      "manual.xml": ManualDefinedActivity}
-        for file_name in class_dict.keys():
-            if file_name in files:
-                shutil.rmtree(os.path.join(activity_folder, "activity_auxiliary_folder"))
-                activity = class_dict[file_name].import_from_file(activity_file)
-                self.xml_mapper.save_activity(activity)
-                self.refresh_activities()
-                break
+        try:
+            activity_folder = CONF_DIR
+            unpack_tar_file_and_remove(activity_file, activity_folder)
+            files = os.listdir(os.path.join(activity_folder, "activity_auxiliary_folder"))
+            class_dict = {"photo.xml": PhotoPresentation,
+                          "sound.xml": SoundPresentation,
+                          "video.xml": VideoPresentation,
+                          "key.xml": AssociatedKeyActivity,
+                          "manual.xml": ManualDefinedActivity}
+            for file_name in class_dict.keys():
+                if file_name in files:
+                    shutil.rmtree(os.path.join(activity_folder, "activity_auxiliary_folder"))
+                    activity = class_dict[file_name].import_from_file(activity_file)
+                    self.xml_mapper.save_activity(activity)
+                    self.refresh_activities()
+                    break
+        except OSError:
+            raise TarFileNotValid()
 
     def get_nearby_devices(self):
         devices = []
@@ -123,20 +126,23 @@ class MainFacade:
         return devices
 
     def run_test(self, notify_window, name, mac, dev_type):
-        device = None
         if dev_type == "BT" and name == "Polar iWL":
             device = PolariWL(mac)
+            print "Mac: {}".format(mac)
         elif dev_type == "ANT+":
             device = ANTDevice()
         device.connect()
         self.test_thread = device.run_test(notify_window)
-        return device
+        self.testing_device = device
 
-    def end_device_test(self, device):
-        device.finish_test()
+    def end_device_test(self):
+        if self.testing_device:
+            self.testing_device.finish_test()
         if self.test_thread.is_alive():
             self.test_thread.join()
-        device.disconnect()
+        if self.testing_device:
+            self.testing_device.disconnect()
+            self.testing_device = None
 
     @staticmethod
     def get_supported_devices():
@@ -168,7 +174,7 @@ class MainFacade:
         # Save recent acquisition
         while len(self.recent_acquisitions) >= RECENT_ACQUISITIONS_COUNT:
             del self.recent_acquisitions[-1]
-        self.recent_acquisitions.insert(0, self.acquisition_path)
+        self.recent_acquisitions.insert(0, self.acquisition_path.encode('utf-8'))
         # Save recent acquisitions to file
         with open(RECENT_ACQUISITIONS_FILE, "w") as f:
             f.write("{}".format(os.linesep).join(self.recent_acquisitions))
@@ -178,24 +184,24 @@ class MainFacade:
         """
         Show result data in gHRV application
         """
-        rr_file = str(self.acquisition_path) + ".rr.txt"
-        tag_file = str(self.acquisition_path) + ".tag.txt"
+        rr_file = "{}.rr.txt".format(self.acquisition_path.encode('utf-8'))
+        tag_file = "{}.tag.txt".format(self.acquisition_path.encode('utf-8'))
         os.system("/usr/bin/gHRV -loadBeatTXT {0} -loadEpTXT {1}".format(rr_file, tag_file))
 
     def plot_results(self):
         """
         Plots acquisition results in a new window
         """
-        from utils import paint
+        from utils import plot
 
-        rr_file = str(self.acquisition_path) + ".rr.txt"
-        tag_file = str(self.acquisition_path) + ".tag.txt"
-        paint(rr_file, tag_file)
+        rr_file = "{}.rr.txt".format(self.acquisition_path.encode('utf-8'))
+        tag_file = "{}.tag.txt".format(self.acquisition_path.encode('utf-8'))
+        plot(rr_file, tag_file)
 
     def open_rr_file(self):
-        rr_file = str(self.acquisition_path) + ".rr.txt"
+        rr_file = "{}.rr.txt".format(self.acquisition_path.encode('utf-8'))
         open_file(rr_file)
 
     def open_tag_file(self):
-        tag_file = str(self.acquisition_path) + ".tag.txt"
+        tag_file = "{}.tag.txt".format(self.acquisition_path.encode('utf-8'))
         open_file(tag_file)

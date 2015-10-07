@@ -8,9 +8,9 @@ import traceback
 
 from config import CONF_DIR, DEFAULT_CONF_FILE, DEFAULT_ACTIV_FILE, CONF_FILE, ACTIV_FILE, LOG_FILE, \
     RECENT_ACQUISITIONS_FILE
-from utils import set_language
-from facade.MainFacade import MainFacade
 from logger import Logger
+
+
 
 
 
@@ -26,7 +26,7 @@ if not os.path.isfile(LOG_FILE):
 if not os.path.isfile(RECENT_ACQUISITIONS_FILE):
     open(RECENT_ACQUISITIONS_FILE, 'a').close()
 
-
+from facade.MainFacade import MainFacade
 # Application logger initialization
 logger = Logger()
 main_facade = MainFacade(ACTIV_FILE, CONF_FILE)
@@ -34,6 +34,7 @@ conf = main_facade.parse_config_file()
 if conf.remoteDebugger == "Yes":
     logger.activate_datagram_logging(conf.rdIP, int(conf.rdPort))
 
+from utils import set_language
 set_language(conf.language)
 
 
