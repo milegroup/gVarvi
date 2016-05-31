@@ -1,14 +1,14 @@
 # coding=utf-8
 
-from shutil import copyfile
 import xml.etree.ElementTree as eT
+from shutil import copyfile
 from xml.dom import minidom
 
-from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
-from activities.VideoPresentation import VideoPresentation, VideoTag
-from activities.SoundPresentation import SoundPresentation, SoundPresentationTag, Image
-from activities.ManualDefinedActivity import ManualDefinedActivity, ManualDefinedTag
 from activities.AssociatedKeyActivity import AssociatedKeyActivity, AssociatedKeyTag
+from activities.ManualDefinedActivity import ManualDefinedActivity, ManualDefinedTag
+from activities.PhotoPresentation import PhotoPresentation, PhotoPresentationTag, Sound
+from activities.SoundPresentation import SoundPresentation, SoundPresentationTag, Image
+from activities.VideoPresentation import VideoPresentation, VideoTag
 from config import DEFAULT_CONF_FILE, UserConfig
 
 
@@ -170,7 +170,7 @@ class XMLMapper(object):
             for tag in activity.tags:
                 tag_element = eT.Element("tag")
                 tag_element.attrib["name"] = tag.name
-                tag_element.attrib["path"] = tag.path('utf-8')
+                tag_element.attrib["path"] = tag.path.encode('utf-8')
                 tag_element.attrib["associatedSound"] = tag.associated_sound
                 for sound in tag.sounds:
                     sound_element = eT.Element("sound")
