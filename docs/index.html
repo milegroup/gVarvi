@@ -1,1 +1,349 @@
-Hi
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en"> <!--<![endif]-->
+<head>
+    <title>gVARVI</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body data-spy="scroll">
+
+<!---//Facebook button code-->
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<!-- ******HEADER****** -->
+<header id="header" class="header">
+    <div class="container">
+        <h1 class="logo pull-left">
+            <a class="scrollto" href="#promo">
+                <span class="logo-title">gVARVI</span>
+            </a>
+        </h1><!--//logo-->
+        <nav id="main-nav" class="main-nav navbar-right" role="navigation">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--//nav-toggle-->
+            </div>
+            <!--//navbar-header-->
+            <div class="navbar-collapse collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active nav-item sr-only"><a class="scrollto" href="#promo">Home</a></li>
+                    <li class="nav-item"><a class="scrollto" href="#about">About</a></li>
+                    <li class="nav-item"><a class="scrollto" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="scrollto" href="#docs">Docs</a></li>
+                    <li class="nav-item"><a class="scrollto" href="#packages">Packages</a></li>
+                    <li class="nav-item"><a class="scrollto" href="#license">License</a></li>
+                </ul>
+                <!--//nav-->
+            </div>
+            <!--//navabr-collapse-->
+        </nav>
+        <!--//main-nav-->
+    </div>
+</header>
+<!--//header-->
+
+<!-- ******PROMO****** -->
+<section id="promo" class="promo section offset-header">
+    <div class="container text-center">
+        <h2 class="title">g<span class="highlight">VARVI</span></h2>
+
+        <p class="intro">A graphic utility for heart rate Variability Acquisition in Response to Visual stImuli</p>
+        <ul class="meta list-inline">
+            <li><a href="https://github.com/milegroup/gVarvi" target="_blank">View on GitHub</a></li>
+            <li>Developed by: Milegroup</li>
+        </ul>
+        <!--//meta-->
+    </div>
+    <!--//container-->
+
+</section>
+<!--//promo-->
+
+<!-- ******ABOUT****** -->
+<section id="about" class="about section">
+    <div class="container">
+        <h2 class="title text-center">What is gVARVI?</h2>
+
+        <p class="intro text-center">gVARVI is an utility to retrieve heart rate data from heart rate sensors while some
+            audiovisual stimuli is being played.
+            Specifically gVARVI retrieves RR-data (time gap between two consecutive heart beats).
+            It is simple an intuitive, with a clean graphic interface.</p>
+
+        <div class="row">
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="icon-holder">
+                    <i class="glyphicon glyphicon-transfer"></i>
+                </div>
+                <div class="content">
+                    <h3 class="sub-title">Multi protocol</h3>
+
+                    <p>gVARVI supports Polar iWL® and all ANT+ heart rate sensors (it was tested with Garmin Soft Strap
+                        Premium Heart Rate Monitor) and allows to user to automatically search available sensors.</p>
+                </div>
+                <!--//content-->
+            </div>
+            <!--//item-->
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="icon-holder">
+                    <i class="glyphicon glyphicon-tasks"></i>
+                </div>
+                <div class="content">
+                    <h3 class="sub-title">"Activities"</h3>
+
+                    <p>You don't have to configure acquisition every time. You can manage your acquisition
+                        configurations (we call them "activities") and store them for future acquisitions.</p>
+                </div>
+                <!--//content-->
+            </div>
+            <!--//item-->
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="icon-holder">
+                    <i class="fa fa-smile-o"></i>
+                </div>
+                <div class="content">
+                    <h3 class="sub-title">Extremely simple</h3>
+
+                    <p>With a clean user interface that avoids any distraction. With multi language support (English and
+                        Spanish). No option is hidden behind complex menus. All of them are shown on the main
+                        window.</p>
+                </div>
+                <!--//content-->
+            </div>
+            <!--//item-->
+            <div class="clearfix visible-md"></div>
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="icon-holder">
+                    <i class="fa fa-code"></i>
+                </div>
+                <div class="content">
+                    <h3 class="sub-title">Debugging</h3>
+
+                    <p>For expert users, gVARVI offers three ways of debugging. Log files, graphic log console, and
+                        remote debugging (yes, you can debug gVARVI over the Internet).</p>
+                </div>
+                <!--//content-->
+            </div>
+            <!--//item-->
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="icon-holder">
+                    <i class="glyphicon glyphicon-wrench"></i>
+                </div>
+                <div class="content">
+                    <h3 class="sub-title">Demo mode</h3>
+
+                    <p>Sometimes you only will want to test if your stimuli playing works well. With demo mode, you
+                        don't have to put on your heart rate sensor to test an acquisition.</p>
+                </div>
+                <!--//content-->
+            </div>
+            <!--//item-->
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <div class="icon-holder">
+                    <i class="fa fa-github"></i>
+                </div>
+                <div class="content">
+                    <h3 class="sub-title">Open source</h3>
+
+                    <p>You can redistribute gVARVI and/or modify
+                        it under the terms of the GPL license. Feel free to fork and improve it.</p>
+                </div>
+                <!--//content-->
+            </div>
+            <!--//item-->
+        </div>
+        <!--//row-->
+    </div>
+    <!--//container-->
+</section>
+<!--//about-->
+
+<!-- ******FEATURES****** -->
+<section id="features" class="features section">
+    <div class="container text-center">
+        <h2 class="title">What you can do with gVARVI?</h2>
+        <ul class="feature-list list-unstyled">
+            <li><i class="fa fa-check"></i> Create custom activities (with or without multimedia stimuli)</li>
+            <li><i class="fa fa-check"></i> Plot heart rate data acquired in an intuitive graphic</li>
+            <li><i class="fa fa-check"></i> Open recent acquisitions</li>
+            <li><i class="fa fa-check"></i> Open acquisition results with <a href="https://milegroup.github.io/ghrv/">gHRV</a>
+                tool
+            </li>
+            <li><i class="fa fa-check"></i> Automatic search for updates</li>
+            <li><i class="fa fa-check"></i> Test acquisition devices performance showing real-time data</li>
+            <li><i class="fa fa-check"></i> Import and export activities to/from a self-contained activity file</li>
+            <li><i class="fa fa-check"></i> Variety of audio, image and video formats supported</li>
+        </ul>
+    </div>
+    <!--//container-->
+</section>
+<!--//features-->
+
+<!-- ******DOCS****** -->
+<section id="docs" class="docs section">
+    <div class="container">
+        <div class="docs-inner">
+            <h2 class="title text-center">Docs and resources</h2>
+
+            <div class="block">
+                <h3 class="sub-title text-center">Full Documentation</h3>
+
+                <p>We provide you a detailed user manual for gVARVI application. Here we explain all gVARVI features,
+                    the available types of
+                    activity, the steps you must follow to install it and a complete operation guide.</p>
+
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="doc/user_manual.pdf" target="_blank">User manual (.PDF)</a>
+                </p>
+            </div>
+            <!--//block-->
+            <div class="block">
+                <h3 class="sub-title text-center">Resources</h3>
+
+                <p>If you want to try gVARVI and you don't want to spend some minutes creating an activity, download this file,
+                    and import it directly into gVARVI.</p>
+
+                <p>We propose you a "sound presentation" activity. The first tag of the activity was a relaxing sound and the second one
+                    was a scaring one. We also accompanied both sounds with images to increase each feeling. For example, relaxing
+                    sound was accompanied by a mix of beautiful landscapes, zen pictures, and people in relaxing poses. On the other hand,
+                    scary sound was accompanied by haunted houses, devilish dolls and people with scary faces. Sounds were about 3:30 minutes
+                    long and each sound had associated about 20 pictures, so each picture was 10 seconds long.</p>
+
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="resources/relax-scary.tar" target="_blank">Activity file (.TAR)</a>
+                </p>
+            </div>
+            <!--//block-->
+
+        </div>
+        <!--//doc-inner-->
+    </div>
+    <!--//container-->
+</section>
+<!--//features-->
+
+<!-- ******PACKAGES****** -->
+<section id="packages" class="packages section">
+    <div class="container">
+        <div class="packages-inner">
+            <h2 class="title text-center">Packages</h2>
+
+            <div class="block">
+
+                <p>For now, ubuntu/debian linux package is available at version 0.5.1. You can use it to install gVARVI with dpkg utility or
+                other graphical tool such as Ubuntu Software Center, Muon or GDebi. </p>
+
+                <p class="text-center">
+                    <a class="btn btn-cta-primary" href="packages/gvarvi-0.5.1.deb" target="_blank">gVARVI package (.DEB)</a>
+                </p>
+            </div>
+
+        </div>
+        <!--//packages-inner-->
+    </div>
+    <!--//container-->
+</section>
+<!--//packages-->
+
+<!-- ******LICENSE****** -->
+<section id="license" class="license section">
+    <div class="container">
+        <div class="license-inner">
+            <h2 class="title text-center">License</h2>
+
+            <div class="info">
+                <p>This program is free software: you can redistribute it and/or modify
+                    it under the terms of the GNU General Public License as published by
+                    the Free Software Foundation, either version 3 of the License, or
+                    (at your option) any later version.</p>
+
+                <p>This program is distributed in the hope that it will be useful,
+                    but WITHOUT ANY WARRANTY; without even the implied warranty of
+                    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+                    GNU General Public License for more details.</p>
+
+                <p>You should have received a copy of the GNU General Public License
+                    along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
+                </p>
+
+            </div>
+            <!--//info-->
+            <div class="cta-container">
+                <div class="speech-bubble">
+                    <p class="intro">Feel free to colaborate on gVARVI development. Visit our GitHub repository <a
+                            href="https://github.com/milegroup/gVarvi">here</a></p>
+
+                    <div class="icon-holder  text-center"><i class="fa fa-smile-o"></i></div>
+                </div>
+                <!--//speech-bubble-->
+            </div>
+            <!--//btn-container-->
+        </div>
+        <!--//cta-container-->
+    </div>
+    <!--//license-inner-->
+    </div><!--//container-->
+</section>
+<!--//how-->
+
+<!-- ******FOOTER****** -->
+<footer class="footer">
+    <div class="container text-center">
+        <small class="copyright">Template designed by <a href="http://themes.3rdwavemedia.com"
+                                                                                 target="_blank">Xiaoying Riley</a> for
+            developers
+        </small>
+    </div>
+    <!--//container-->
+</footer>
+<!--//footer-->
+
+<!-- Javascript -->
+<script type="text/javascript" src="assets/plugins/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="assets/plugins/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="assets/plugins/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+<script type="text/javascript" src="assets/plugins/prism/prism.js"></script>
+<script type="text/javascript" src="assets/js/main.js"></script>
+</body>
+</html> 
+
