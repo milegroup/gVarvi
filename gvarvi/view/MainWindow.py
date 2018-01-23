@@ -348,8 +348,8 @@ the lack of specific tools for this purpose.""")
         info.SetName('gVarvi')
         info.SetVersion(VERSION)
         info.SetDescription(description)
-        info.SetCopyright('(C) 2015-2016 MileGroup')
-        info.SetWebSite('http://milegroup.net/')
+        info.SetCopyright('(C) 2018 Lia2 research group')
+        info.SetWebSite('http://lia.ei.uvigo.es')
         info.SetLicence(licence)
         info.SetDevelopers(['Leandro Rodríguez-Liñares'.decode('utf-8'),
                             'Arturo Méndez'.decode('utf-8'),
