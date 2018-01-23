@@ -1,4 +1,4 @@
 # gvarvi-web
 Website of gVARVI application
 
-Available at [gvarvi.milegroup.net](http://gvarvi.milegroup.net)
+Available at [milegroup.github.io/gVarvi/](https://milegroup.github.io/gVarvi/)

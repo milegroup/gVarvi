@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------
    gVARVI: graphic heart rate Variability Adquisition in Response to audioVisual stImuli
-   Copyright (C) 2015  Milegroup - Dpt. Informatics
+    Copyright (C) 2018  Lia2 Research Group - Dpt. Computing
       University of Vigo - Spain
-      www.milegroup.net
+      https://milegroup.github.io/gVarvi/
 
    Author:
      - Leandro Rodríguez-Liñares
